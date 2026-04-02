@@ -58,7 +58,8 @@ Step 4 — Set update_date
   Set update_date = today's date on every row you INSERT or UPDATE.
 
 OUTPUT FORMAT
-Return ONLY a valid JSON object. No prose, no markdown fences, nothing outside the JSON.
+Return ONLY a valid JSON object. No markdown, no code fences, no backticks, 
+no ```json wrapper. Raw JSON only, starting with { and ending with }
 
 {
   "change_manifest": {
