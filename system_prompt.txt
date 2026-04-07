@@ -245,3 +245,5 @@ If run_metadata.cancels_regulation_codes contains any codes, the
   every row of those codes found in the provided library data.
 If no rows are found in the library for a cancelled code, add a
   note in human_review_flags.notes only.
+ Never include effective_repeal_date in regulation_master_ops fields.
+  The regulation_master table does not have this column.
