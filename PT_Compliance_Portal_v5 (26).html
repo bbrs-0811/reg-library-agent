@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phillip Trustee — Regulatory Obligations Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+:root {
+  --navy:    #1c2e4a;
+  --navy2:   #2a4169;
+  --teal:    #2c5f5a;
+  --cream:   #f7f4ef;
+  --cream2:  #f0ece4;
+  --cream3:  #e8e2d8;
+  --ink:     #1a1a1a;
+  --ink2:    #3d3d3d;
+  --ink3:    #6b6b6b;
+  --amber:   #8c6d2f;
+  --amber-bg:#fdf5e6;
+  --red:     #7a2525;
+  --red-bg:  #fdf0f0;
+  --green:   #2a5c3f;
+  --green-bg:#eef6f1;
+  --orange:  #c8521a;
+  --orange2: #a84415;
+  --orange-bg: #fdf3ec;
+  --rule:    #d4cdc2;
+  --rule2:   #e8e2d8;
+  --serif:   'Libre Baskerville', Georgia, serif;
+  --sans:    'Source Sans 3', 'Segoe UI', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); font-size: 13px; background: var(--cream); color: var(--ink); line-height: 1.5; }
+
+/* ── Shell ── */
+.shell { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── Sidebar ── */
+.sidebar { width: 220px; background: var(--navy); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid var(--navy2); border-top: 4px solid var(--orange); }
+.sidebar-mark { padding: 20px 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-mark h1 { font-family: var(--serif); font-size: 14px; font-weight: 700; line-height: 1.4; letter-spacing: 0.01em; }
+.sidebar-mark p { font-size: 10px; opacity: 0.5; margin-top: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
+.nav { padding: 14px 0; flex: 1; }
+.nav-sect { padding: 10px 18px 4px; font-size: 9px; font-weight: 600; opacity: 0.35; text-transform: uppercase; letter-spacing: 0.08em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 18px; cursor: pointer; font-size: 12px; font-weight: 400; opacity: 0.65; transition: all 0.12s; border-left: 2px solid transparent; letter-spacing: 0.01em; }
+.nav-item:hover { opacity: 0.9; background: rgba(255,255,255,0.06); }
+.nav-item.on { opacity: 1; background: rgba(255,255,255,0.08); border-left-color: var(--orange); }
+.nav-pip { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); flex-shrink: 0; }
+.nav-item.on .nav-pip { background: var(--orange); }
+.sidebar-foot { padding: 14px 18px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 10px; opacity: 0.4; line-height: 1.6; }
+
+/* ── Content ── */
+.content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-width: 0; background: var(--cream); }
+
+/* ── Topbar ── */
+.topbar { background: var(--cream); border-bottom: 3px solid var(--orange); padding: 14px 24px 12px; display: flex; align-items: flex-end; justify-content: space-between; flex-shrink: 0; }
+.topbar-left h2 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--navy); letter-spacing: -0.01em; }
+.topbar-left p { font-size: 11px; color: var(--ink3); margin-top: 2px; letter-spacing: 0.01em; }
+.topbar-right { display: flex; gap: 8px; align-items: center; }
+
+/* ── Status bar ── */
+.statusbar { padding: 5px 24px; font-size: 11px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--rule2); flex-shrink: 0; background: var(--cream2); }
+.statusbar.ok { color: var(--green); }
+.statusbar.loading { color: var(--ink3); }
+.statusbar.warn { color: var(--amber); }
+.sdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.sdot.g { background: var(--green); }
+.sdot.b { background: var(--ink3); }
+.sdot.a { background: var(--amber); }
+
+/* ── Page ── */
+.page { padding: 20px 24px; flex: 1; }
+.tab { display: none; }
+.tab.on { display: block; }
+
+/* ── Buttons ── */
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--rule); background: var(--cream); color: var(--ink2); font-family: var(--sans); letter-spacing: 0.01em; transition: all 0.12s; }
+.btn:hover { background: var(--cream2); border-color: var(--ink3); }
+.btn.primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+.btn.primary:hover { background: var(--orange2); border-color: var(--orange2); }
+.btn.danger { background: var(--red-bg); color: var(--red); border-color: #e8c4c4; }
+.btn.danger:hover { background: #fae0e0; }
+.btn.small { padding: 3px 9px; font-size: 11px; }
+
+/* ── Card ── */
+.card { background: #fff; border: 1px solid var(--rule); margin-bottom: 16px; }
+.card-head { padding: 11px 16px; border-bottom: 1px solid var(--rule2); display: flex; align-items: center; justify-content: space-between; }
+.card-head-title { font-family: var(--serif); font-size: 13px; font-weight: 700; color: var(--navy); }
+
+/* ── KPI strip ── */
+.kpi-strip { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 16px; }
+.kpi { background: #fff; padding: 12px 16px; }
+.kpi-click { cursor: pointer; transition: background 0.12s; }
+.kpi-l { font-size: 9px; font-weight: 600; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+.kpi-val { display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; line-height: 1; margin-bottom: 4px; }
+.kpi-n { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); }
+.kpi-n.gr { color: var(--green); }
+.kpi-n.am { color: var(--amber); }
+.kpi-n.or { color: var(--orange); }
+.kpi-denom { font-family: var(--serif); font-size: 11px; color: var(--ink3); font-weight: 400; }
+.kpi-pipe { font-size: 11px; color: var(--rule); margin: 0 2px; }
+.kpi-s { font-size: 10px; color: var(--ink3); }
+.kpi-prog { height: 3px; background: var(--cream3); margin-top: 7px; }
+.kpi-prog-f { height: 100%; background: var(--green); transition: width 0.4s; }
+
+/* ── Filters ── */
+.filters { display: flex; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--rule2); flex-wrap: wrap; background: var(--cream2); align-items: center; }
+.filters input, .filters select { padding: 5px 9px; border: 1px solid var(--rule); font-size: 12px; color: var(--ink); background: #fff; outline: none; font-family: var(--sans); height: 30px; }
+.filters input:focus, .filters select:focus { border-color: var(--navy); }
+.filters input { min-width: 200px; }
+.filter-label { font-size: 10px; font-weight: 600; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.filter-clear { font-size: 11px; color: var(--ink3); cursor: pointer; text-decoration: underline; white-space: nowrap; display: none; }
+.filter-clear:hover { color: var(--red); }
+.filter-clear.visible { display: inline; }
+
+/* ── Table ── */
+.tbl-wrap { overflow-x: auto; }
+table.data { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.data th { background: var(--navy); color: #fff; padding: 9px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+table.data td { padding: 9px 12px; border-bottom: 1px solid var(--rule2); vertical-align: middle; color: var(--ink2); }
+table.data tr:last-child td { border-bottom: none; }
+table.data tr:hover td { background: var(--cream); }
+table.data tr.gap-row td { background: var(--amber-bg); }
+table.data tr.gap-row:hover td { background: #fbefd5; }
+table.data tr.orphan-row td { background: var(--red-bg); }
+table.data tr.orphan-row:hover td { background: #fae4e4; }
+table.data tr.editing-row td { background: #f7f9fc; }
+table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--navy2); }
+
+/* ── Status badges ── */
+.pill { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.03em; border: 1px solid; }
+.pill.cov { background: var(--green-bg); color: var(--green); border-color: #b8dac8; }
+.pill.gap { background: var(--amber-bg); color: var(--amber); border-color: #e0c98a; }
+.pill.active { background: var(--green-bg); color: var(--green); border-color: #b8dac8; }
+.pill.deleted { background: var(--red-bg); color: var(--red); border-color: #e8c4c4; }
+.pill.type { background: var(--cream2); color: var(--navy); border-color: var(--rule); }
+
+.row-count { padding: 8px 16px; font-size: 11px; color: var(--ink3); border-top: 1px solid var(--rule2); background: var(--cream2); display: flex; align-items: center; gap: 12px; }
+.empty { padding: 48px 24px; text-align: center; color: var(--ink3); font-size: 12px; }
+.empty-icon { font-size: 28px; margin-bottom: 8px; opacity: 0.3; }
+.empty-msg { font-style: italic; }
+
+/* ── Expand row ── */
+.expand-trigger { cursor: pointer; }
+.expand-trigger:hover td { background: var(--cream2) !important; }
+.expand-caret { display: inline-block; transition: transform 0.15s; color: var(--ink3); font-size: 10px; margin-left: 4px; }
+.expand-caret.open { transform: rotate(90deg); }
+.expand-detail { display: none; }
+.expand-detail.open { display: table-row; }
+.expand-detail td { background: #fff !important; padding: 12px 16px 14px 32px !important; border-bottom: 2px solid var(--rule2) !important; }
+.dept-group { margin-bottom: 10px; }
+.dept-group:last-child { margin-bottom: 0; }
+.dept-label { display: inline-block; padding: 2px 10px; background: var(--navy); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+.stale-line { background: var(--amber-bg); border-left-color: var(--amber) !important; }
+.chapter-line { padding: 3px 0 3px 12px; font-size: 12px; color: var(--ink2); border-left: 2px solid var(--rule); margin-bottom: 2px; }
+.chapter-line strong { color: var(--navy); margin-right: 6px; }
+.add-mapping-link { display: inline-block; margin-top: 8px; font-size: 11px; color: var(--navy2); text-decoration: underline; cursor: pointer; font-style: italic; }
+
+/* ── Inline editing ── */
+.inline-input { width: 100%; padding: 4px 7px; border: 1px solid var(--navy2); font-size: 12px; font-family: var(--sans); background: #fff; outline: none; color: var(--ink); }
+.inline-input:focus { border-color: var(--navy); box-shadow: 0 0 0 2px rgba(28,46,74,0.1); }
+.inline-select { width: 100%; padding: 4px 7px; border: 1px solid var(--navy2); font-size: 12px; font-family: var(--sans); background: #fff; outline: none; color: var(--ink); cursor: pointer; }
+.edit-actions { display: flex; gap: 5px; }
+
+/* ── Inner tabs (Page 1) ── */
+.rf-tab-bar { display: flex; gap: 0; border-bottom: 2px solid var(--navy); background: var(--cream2); }
+.rf-inner-tab { padding: 9px 18px; font-size: 11px; font-weight: 500; cursor: pointer; color: var(--ink3); border-right: 1px solid var(--rule); margin-bottom: -2px; border-bottom: 2px solid transparent; letter-spacing: 0.01em; transition: all 0.12s; white-space: nowrap; background: transparent; }
+.rf-inner-tab:hover { color: var(--ink); background: var(--cream); }
+.rf-inner-tab.on { color: var(--navy); font-weight: 600; border-bottom-color: var(--orange); background: #fff; }
+.rf-pane { display: none; }
+.rf-pane.on { display: block; margin-top: 16px; }
+
+/* ── Regulatory Framework ── */
+.rf-meta { padding: 14px 16px 12px; border-bottom: 1px solid var(--rule2); background: var(--cream); }
+.rf-meta h2 { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--navy); }
+.rf-meta p { font-size: 11px; color: var(--ink3); margin-top: 3px; }
+.rf-meta .source { font-size: 10px; color: var(--ink3); margin-top: 6px; font-style: italic; border-top: 1px solid var(--rule2); padding-top: 6px; }
+.rf-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.rf-table th { background: var(--navy); color: #fff; padding: 7px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.rf-table td { padding: 8px 12px; border-bottom: 1px solid var(--rule2); vertical-align: top; color: var(--ink2); line-height: 1.55; }
+.rf-table tr:hover td { background: var(--cream); }
+.rf-cat-row td { background: var(--orange) !important; color: #fff !important; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 5px 12px !important; }
+.rf-na-row td { color: var(--ink3) !important; font-style: italic; background: var(--cream2) !important; }
+.rf-rule-name { font-weight: 600; color: var(--navy); }
+.rf-ref { font-size: 11px; font-weight: 600; color: var(--teal); white-space: nowrap; }
+.rf-desc { color: var(--ink2); max-width: 540px; }
+.rf-badge { display: inline-block; padding: 1px 6px; font-size: 10px; font-weight: 600; border: 1px solid; margin-right: 4px; }
+.rf-badge.cancelled { background: var(--red-bg); color: var(--red); border-color: #e8c4c4; }
+.rf-badge.na { background: var(--cream2); color: var(--ink3); border-color: var(--rule); }
+.rf-add-row td { background: #f0f6ff; border-bottom: 2px solid var(--navy2); }
+.rf-edit-row td { background: #f7f9fc; }
+.rf-search { padding: 10px 16px; border-bottom: 1px solid var(--rule2); background: var(--cream2); display: flex; gap: 8px; align-items: center; }
+.rf-search input { padding: 5px 9px; border: 1px solid var(--rule); font-size: 12px; color: var(--ink); background: #fff; outline: none; font-family: var(--sans); min-width: 220px; }
+.rf-search input:focus { border-color: var(--navy); }
+
+/* ── Section divider ── */
+.sect-div { padding: 8px 16px; background: var(--cream2); border-bottom: 1px solid var(--rule2); border-left: 3px solid var(--orange); font-size: 10px; font-weight: 600; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between; }
+.sect-div.amber { border-left-color: var(--amber); background: #fdf8ee; }
+.sect-div.red   { border-left-color: var(--red);   background: #fdf3f3; }
+.sect-badge { display: inline-block; padding: 1px 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; border: 1px solid; }
+.sect-badge.amber { background: var(--amber-bg); color: var(--amber); border-color: #e0c98a; }
+.sect-badge.red   { background: var(--red-bg);   color: var(--red);   border-color: #e8c4c4; }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 20px; right: 24px; padding: 9px 16px; font-size: 12px; font-weight: 500; z-index: 200; display: none; align-items: center; gap: 8px; border: 1px solid; font-family: var(--sans); }
+.toast.ok { background: var(--green-bg); color: var(--green); border-color: #b8dac8; display: flex; }
+.toast.err { background: var(--red-bg); color: var(--red); border-color: #e8c4c4; display: flex; }
+.toast.hide { display: none !important; }
+
+.mono { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 10px; }
+.muted { color: var(--ink3); }
+.strong { font-weight: 600; color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-mark">
+      <h1>Phillip Trustee<br>Pte. Ltd.</h1>
+      <p>Regulatory Obligations</p>
+    </div>
+    <nav class="nav">
+      <div class="nav-sect">Reference</div>
+      <div class="nav-item on" onclick="go('framework',this)"><span class="nav-pip"></span>Regulatory Framework</div>
+      <div class="nav-sect">Library</div>
+      <div class="nav-item" onclick="go('regs',this)"><span class="nav-pip"></span>Reg Library (PT)</div>
+      <div class="nav-item" onclick="go('register',this)"><span class="nav-pip"></span>Regulation Register</div>
+      <div class="nav-item" onclick="go('ocm',this)"><span class="nav-pip"></span>OCM Mappings</div>
+      <div class="nav-sect">Analysis</div>
+      <div class="nav-item" onclick="go('gaps',this)"><span class="nav-pip"></span>Coverage Gaps</div>
+    </nav>
+    <div class="sidebar-foot">Group Compliance Division<br>Refreshed: <span id="last-t">—</span></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2 id="pg-title">Regulatory Framework</h2>
+        <p id="pg-sub">MAS regulatory obligations applicable to Phillip Trustee Pte. Ltd.</p>
+      </div>
+      <div class="topbar-right" id="pg-actions">
+        <button class="btn small" onclick="loadAll()">&#8635; Refresh</button>
+      </div>
+    </div>
+    <div class="statusbar loading" id="sbar"><span class="sdot b" id="sdot"></span><span id="smsg">Connecting...</span></div>
+
+
+    <div class="page">
+
+      <!-- ═══ PAGE 1 — REGULATORY FRAMEWORK ═══ -->
+      <div class="tab on" id="tab-framework">
+        <!-- Inner tab bar -->
+        <div class="rf-tab-bar">
+          <div class="rf-inner-tab on" onclick="rfTab('overview',this)">Overview</div>
+          <div class="rf-inner-tab" onclick="rfTab('lc',this)">Licence Conditions <span style="font-size:9px;background:var(--orange);color:#fff;padding:1px 5px;margin-left:4px">TC000078</span></div>
+          <div class="rf-inner-tab" onclick="rfTab('approvals',this)">Approvals</div>
+          <div class="rf-inner-tab" onclick="rfTab('notifications',this)">Notifications</div>
+          <div class="rf-inner-tab" onclick="rfTab('submissions',this)">Submissions</div>
+          <div class="rf-inner-tab" onclick="rfTab('techrisks',this)">Technology Risk</div>
+          <div class="rf-inner-tab" onclick="rfTab('channels',this)">Channels</div>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div class="rf-pane on" id="rfp-overview">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Phillip Trustee Pte. Ltd. — MAS Regulatory Obligations</h2>
+              <p>Licensed Trust Company &nbsp;·&nbsp; Resident Manager / Executive Director: Tan Teck Lee &nbsp;·&nbsp; Incorporated in Singapore</p>
+              <div class="source">Source: MAS Compliance Toolkit v2.2 (30 Jan 2026) + MAS Regulations &amp; Guidance Directory &nbsp;·&nbsp; <span id="rf-total">—</span> regulations tracked</div>
+            </div>
+            <div class="rf-search">
+              <input type="text" id="rf-q" placeholder="Search regulation, reference or description..." oninput="renderRF()">
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table" id="rf-tbl">
+                <thead><tr>
+                  <th style="width:210px">Regulation / Rule</th>
+                  <th style="width:120px">Reference</th>
+                  <th>Description</th>
+                </tr></thead>
+                <tbody id="rf-body"></tbody>
+              </table>
+            </div>
+            <div class="row-count" id="rf-count"></div>
+          </div>
+        </div>
+
+        <!-- LICENCE CONDITIONS -->
+        <div class="rf-pane" id="rfp-lc">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Licence Conditions — TC000078</h2>
+              <p>Issued 18 March 2025 &nbsp;·&nbsp; Supersedes version of 25 January 2025 &nbsp;·&nbsp; Signed: Lim Tuang Lee, Assistant Managing Director, Capital Markets Group</p>
+              <div class="source">Trust Companies Act &nbsp;·&nbsp; 10 conditions attached to Phillip Trustee Pte. Ltd.'s trust business licence</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table">
+                <thead><tr>
+                  <th style="width:40px">No.</th>
+                  <th style="width:180px">Subject</th>
+                  <th>Condition</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">1</td><td class="rf-rule-name">Conflicts of Interest</td><td class="rf-desc">Conduct business to avoid conflicts of interest; where conflicts arise, resolve them fairly and equitably.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">2</td><td class="rf-rule-name">Professional Indemnity Insurance</td><td class="rf-desc">Immediately inform MAS of any claim against PII cover. If claim ≥10% of aggregate coverage, furnish new PII within one month. Must maintain minimum PII coverage per TCA-G02.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">3</td><td class="rf-rule-name">Independent Audit</td><td class="rf-desc">Produce books to independent auditors selected by MAS. All audit expenses borne by the licensee.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">4</td><td class="rf-rule-name">Letter of Responsibility / Undertaking</td><td class="rf-desc">Provide MAS with Letter of Responsibility and Letter of Undertaking in such form as required. Ensure these remain in force for the duration of the licence.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">5</td><td class="rf-rule-name">AML/CFT Inspection Access</td><td class="rf-desc">Permit MAS to inspect books from time to time for monitoring compliance with AML/CFT directions, regulations and MAS Notices (under s.27B MAS Act).</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">6</td><td class="rf-rule-name">AML/CFT Information Furnishing</td><td class="rf-desc">Furnish MAS with any information required for monitoring compliance with AML/CFT measures and MAS Notices.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">7</td><td class="rf-rule-name">Minimum PII Coverage</td><td class="rf-desc">Maintain minimum professional indemnity insurance coverage as set out in the Guidelines on Criteria for the Grant of a Trust Business Licence (TCA-G02).</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">8</td><td class="rf-rule-name">Foreign Jurisdiction Compliance</td><td class="rf-desc">Satisfy compliance with all relevant laws in foreign jurisdictions before offering products/services to investors residing there.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">9</td><td class="rf-rule-name">Foreign Law Compliance</td><td class="rf-desc">Licensee and staff shall at all times comply with all foreign laws and regulations applicable to their activities.</td></tr>
+                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">10</td><td class="rf-rule-name">Immediate Notification Triggers</td><td class="rf-desc">Immediately notify MAS upon becoming aware of: (a) material adverse development affecting financial soundness, reputation or ability to carry on trust business; (b) resident manager/director no longer fit and proper; (c) controller/substantial shareholder no longer fit and proper; (d) likely inability to conduct business prudently due to controller influence.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- APPROVALS -->
+        <div class="rf-pane" id="rfp-approvals">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Pre-Approval Requirements</h2>
+              <p>Matters requiring MAS approval before action is taken &nbsp;·&nbsp; S/N 1–6</p>
+              <div class="source">Source: MAS Compliance Toolkit for the Trust Industry v2.2 (30 Jan 2026)</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table">
+                <thead><tr>
+                  <th style="width:35px">S/N</th>
+                  <th style="width:260px">Requirement</th>
+                  <th style="width:220px">Form to Submit</th>
+                  <th style="width:150px">Deadline</th>
+                  <th style="width:150px">Legislative Reference</th>
+                  <th style="width:90px">Channel</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">1</td><td class="rf-rule-name">Grant of trust business licence</td><td>Form 1 – Application for a Trust Business Licence under Section 4</td><td>Prior to conducting trust business</td><td class="rf-ref">Section 4 TCA</td><td>Email</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">2</td><td class="rf-rule-name">Approval as 20%/50%/indirect controller</td><td>Form 3 – Application for Approval of Controller under Section 17(1)</td><td>Prior to becoming a controller</td><td class="rf-ref">Section 17 TCA</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">3</td><td class="rf-rule-name">Appointment of resident manager or director</td><td>Form 4 – Appointment of Resident Manager or Director under Section 13 and Regulation 9</td><td>Prior to appointment</td><td class="rf-ref">s.13 TCA; Reg 9 TCR</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">4</td><td class="rf-rule-name">Acquire or hold >20% shares or voting power in a corporation</td><td>No prescribed form</td><td>Prior to acquisition or control</td><td class="rf-ref">Section 21 TCA</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">5</td><td class="rf-rule-name">Transfer whole or part of trust business</td><td>No prescribed form</td><td>Prior to transfer</td><td class="rf-ref">Section 21I TCA</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">6</td><td class="rf-rule-name">Disclose MAS/foreign regulator inspection or investigation reports</td><td>No prescribed form</td><td>Prior to disclosure</td><td class="rf-ref">Section 48(2)(d) TCA</td><td>MAS-Tx</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="rf-pane" id="rfp-notifications">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Notification Obligations</h2>
+              <p>Matters requiring notification to MAS — most are immediate &nbsp;·&nbsp; S/N 7–14</p>
+              <div class="source">Source: MAS Compliance Toolkit for the Trust Industry v2.2 (30 Jan 2026)</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table">
+                <thead><tr>
+                  <th style="width:35px">S/N</th>
+                  <th style="width:280px">Requirement</th>
+                  <th style="width:220px">Form to Submit</th>
+                  <th style="width:130px">Deadline</th>
+                  <th style="width:150px">Legislative Reference</th>
+                  <th style="width:90px">Channel</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">7</td><td class="rf-rule-name">Change of particulars (cessation, ceased resident manager/controller, civil/criminal proceedings, name/address change, ceased to fulfil non-financial requirements)</td><td>Form 2 – Notice of Change of Particulars under Section 9 and Regulation 5</td><td>Within 14 days of change</td><td class="rf-ref">s.9(1) TCA; Regs 5 &amp; 7 TCR</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">8</td><td class="rf-rule-name">Person becomes controller of a foreign-incorporated licensed trust company</td><td>No prescribed form</td><td>As soon as practicable after control</td><td class="rf-ref">Section 16 TCA</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">9</td><td class="rf-rule-name">Cease to fulfil minimum financial / NAV requirements</td><td>Form 2 – Notice of Change of Particulars</td><td>Immediate</td><td class="rf-ref">s.9(1)(e) TCA; Reg 13 TCR</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">10</td><td class="rf-rule-name">Insolvent or likely insolvent; unable to meet obligations; suspended or likely to suspend payments</td><td>No prescribed form</td><td>Immediate</td><td class="rf-ref">Section 21B TCA</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">11</td><td class="rf-rule-name">Any matter likely to materially adversely affect financial position</td><td>No prescribed form (Form 2 for S/N 9 items)</td><td>Immediate</td><td class="rf-ref">s.9(1)(e) TCA; Reg 13 TCR; LC</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">12</td><td class="rf-rule-name">Claim made or likely to be made against professional indemnity insurance</td><td>No prescribed form</td><td>Immediate</td><td class="rf-ref">Licence condition</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">13</td><td class="rf-rule-name">Company or officer involved in investigation, disciplinary action, breach of laws, or matter affecting fit and proper criteria</td><td>No prescribed form</td><td>Immediate</td><td class="rf-ref">Licence condition</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">14</td><td class="rf-rule-name">System malfunction or IT security incident with severe/widespread operational impact or material impact on customer service</td><td>Refer to Circular on FI Incident Reporting</td><td>As soon as possible; not later than 1 hour upon discovery</td><td class="rf-ref">s.29(1) FSM Act (FSM-N25)</td><td>Call/Email</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBMISSIONS -->
+        <div class="rf-pane" id="rfp-submissions">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Regulatory Submissions</h2>
+              <p>Regular returns and reports to be submitted to MAS &nbsp;·&nbsp; S/N 15–19</p>
+              <div class="source">Source: MAS Compliance Toolkit for the Trust Industry v2.2 (30 Jan 2026)</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table">
+                <thead><tr>
+                  <th style="width:35px">S/N</th>
+                  <th style="width:260px">Requirement</th>
+                  <th style="width:220px">Form to Submit</th>
+                  <th style="width:200px">Deadline</th>
+                  <th style="width:150px">Legislative Reference</th>
+                  <th style="width:90px">Channel</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">15</td><td class="rf-rule-name">Breakdown of net asset value or qualifying assets</td><td>Form 5 – Maintenance of Net Asset Value and Qualifying Assets under Regulation 12</td><td>Within 14 days from grant of licence; thereafter within 5 months from FY-end</td><td class="rf-ref">s.28 TCA; Regs 12 &amp; 19 TCR</td><td>MASNET</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">16</td><td class="rf-rule-name">Information on assets under trusteeship and/or trust administration</td><td>Form 6 – Omnibus Statement of Trust Accounts under Regulation 19(1)</td><td>Within 60 days from end of calendar year</td><td class="rf-ref">s.28 TCA; Reg 19 TCR</td><td>MASNET</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">17</td><td class="rf-rule-name">Auditor's report on the licensed trust company's business</td><td>Form 7 – Auditor's Report under Regulation 19</td><td>Within 5 months from FY-end</td><td class="rf-ref">s.28 TCA; Reg 19 TCR</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">18</td><td class="rf-rule-name">Annual profit and loss account and balance-sheet</td><td>Profit and Loss Account and Balance-Sheet</td><td>Within 5 months from FY-end</td><td class="rf-ref">Section 30 TCA</td><td>MAS-Tx</td></tr>
+                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">19</td><td class="rf-rule-name">Root cause and impact analysis report for IT incident (executive summary, root cause, impact on compliance/operations/customers, remedial measures)</td><td>Incident Reporting Template</td><td>Initial: ≤24 hours from discovery · Final: within 14 days from discovery</td><td class="rf-ref">s.29(1) FSM Act (FSM-N25)</td><td>MAS-Tx</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TECHNOLOGY RISK -->
+        <div class="rf-pane" id="rfp-techrisks">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Technology Risk Management Obligations</h2>
+              <p>CMG-N02 (TRM) and CMG-N03 (Cyber Hygiene) cancelled 10 May 2024 — replaced by FSM Act notices below</p>
+              <div class="source">Source: FSM-N25 (Technology Risk Management) · FSM-N26 (Cyber Hygiene) · MAS TRM Guidelines</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table">
+                <thead><tr>
+                  <th style="width:90px">Notice</th>
+                  <th style="width:220px">Title</th>
+                  <th>Key Requirements</th>
+                </tr></thead>
+                <tbody>
+                  <tr class="rf-cat-row"><td colspan="3">MAS NOTICES (MANDATORY)</td></tr>
+                  <tr><td class="rf-ref">FSM-N25</td><td class="rf-rule-name">Technology Risk Management</td><td class="rf-desc">Framework to identify critical systems · High availability for critical systems · RTO ≤4 hours per critical system · Notify MAS within 1 hour of incident · Root cause report within 14 days · IT controls to protect customer information</td></tr>
+                  <tr><td class="rf-ref">FSM-N26</td><td class="rf-rule-name">Cyber Hygiene</td><td class="rf-desc">Secure all administrative accounts · Apply security patches in timely manner · Establish baseline security standards · Deploy network security devices · Implement anti-malware measures · Multi-factor authentication for privileged access</td></tr>
+                  <tr class="rf-cat-row"><td colspan="3">MAS TRM GUIDELINES — BEST PRACTICE STANDARDS</td></tr>
+                  <tr><td class="rf-ref">TRM §3</td><td class="rf-rule-name">Board &amp; Senior Management Oversight</td><td class="rf-desc">Board approves TRM framework; designate senior management responsibility for IT risk</td></tr>
+                  <tr><td class="rf-ref">TRM §4</td><td class="rf-rule-name">IT Risk Management Framework</td><td class="rf-desc">Comprehensive framework: risk identification, assessment, mitigation, monitoring, reporting</td></tr>
+                  <tr><td class="rf-ref">TRM §5–6</td><td class="rf-rule-name">System Availability &amp; Recovery</td><td class="rf-desc">High availability targets; RTO ≤4 hours for critical systems; regular DR testing; documented BCP/DRP</td></tr>
+                  <tr><td class="rf-ref">TRM §8</td><td class="rf-rule-name">Cyber Threat Management</td><td class="rf-desc">Cyber surveillance, threat intelligence, incident response capabilities</td></tr>
+                  <tr><td class="rf-ref">TRM §9</td><td class="rf-rule-name">Access Control &amp; Authentication</td><td class="rf-desc">Least privilege; MFA for privileged/remote access; regular access reviews</td></tr>
+                  <tr><td class="rf-ref">TRM §11</td><td class="rf-rule-name">Vulnerability Assessment &amp; Pen Testing</td><td class="rf-desc">Regular VA/PT of internet-facing and critical systems; prompt remediation</td></tr>
+                  <tr><td class="rf-ref">FSM-N25 §6</td><td class="rf-rule-name">Customer Information Protection</td><td class="rf-desc">IT controls against unauthorised access/disclosure; data loss prevention</td></tr>
+                  <tr><td class="rf-ref">TRM §13</td><td class="rf-rule-name">IT Outsourcing &amp; Cloud Risk</td><td class="rf-desc">Due diligence; contractual safeguards; ongoing monitoring; exit strategies</td></tr>
+                  <tr><td class="rf-ref">FSM-N25 §5</td><td class="rf-rule-name">Incident Notification &amp; Reporting</td><td class="rf-desc">1-hour phone notification → 24-hour initial report → 14-day final report · MAS RO (office hours) or 24hr line: 6229 9526/9527</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHANNELS -->
+        <div class="rf-pane" id="rfp-channels">
+          <div class="card">
+            <div class="rf-meta">
+              <h2>Submission Channels</h2>
+              <p>How to submit approvals, notifications and returns to MAS</p>
+              <div class="source">Do not encrypt attachments for FormSG/MAS-Tx. For email: encrypt using AES 256+, password (min 12 chars) via separate channel.</div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="rf-table">
+                <thead><tr>
+                  <th style="width:100px">Channel</th>
+                  <th style="width:220px">URL / Contact</th>
+                  <th style="width:280px">Used For</th>
+                  <th>Notes</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td class="rf-rule-name">Email</td><td><a href="/cdn-cgi/l/email-protection#0f786a6d626e7c7b6a7d4f626e7c21686079217c68" style="color:var(--teal)"><span class="__cf_email__" data-cfemail="8cfbe9eee1edfff8e9fecce1edffa2ebe3faa2ffeb">[email&#160;protected]</span></a></td><td>Initial trust business licence application (Form 1)</td><td class="rf-desc">For entities without assigned MAS review officer</td></tr>
+                  <tr><td class="rf-rule-name">MAS-Tx</td><td><a href="https://mastx.mas.gov.sg/login/" target="_blank" style="color:var(--teal)">mastx.mas.gov.sg</a></td><td>Primary portal for most approvals, notifications and submissions under the TCA</td><td class="rf-desc">View due dates, email reminders, submission copies. User access can be limited by category.</td></tr>
+                  <tr><td class="rf-rule-name">MASNET</td><td><a href="https://masnet.mas.gov.sg/portal/auth/login/" target="_blank" style="color:var(--teal)">masnet.mas.gov.sg</a></td><td>Regular data returns: Net Asset Value/Qualifying Assets (Form 5), Trust Accounts Annual Return (Form 6)</td><td class="rf-desc">—</td></tr>
+                  <tr><td class="rf-rule-name">MAS Website</td><td><a href="https://www.mas.gov.sg/contact-us" target="_blank" style="color:var(--teal)">mas.gov.sg/contact-us</a></td><td>Entities without assigned MAS review officer</td><td class="rf-desc">—</td></tr>
+                  <tr><td class="rf-rule-name">FormSG</td><td>Various (per form)</td><td>Specific forms as directed</td><td class="rf-desc">Do NOT encrypt uploaded attachments</td></tr>
+                  <tr><td class="rf-rule-name">Call / Email</td><td>MAS RO (office hours)<br>24hr BCM line: <strong>6229 9526/9527</strong></td><td>IT security incident notifications (within 1 hour)</td><td class="rf-desc">Call MAS Duty Officer outside office hours</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ PAGE 2 — REG LIBRARY ═══ -->
+      <div class="tab" id="tab-regs">
+        <div class="kpi-strip">
+
+          <!-- Tile 1: Library Rows -->
+          <div class="kpi">
+            <div class="kpi-l">Library Rows</div>
+            <div class="kpi-val"><span class="kpi-n or" id="k-total">—</span></div>
+            <div class="kpi-s">rows where PT = y</div>
+          </div>
+
+          <!-- Tile 2: Coverage Gaps -->
+          <div class="kpi kpi-click" id="k-gap-tile" onclick="go('gaps',document.querySelector('.nav-item:nth-child(6)'))" onmouseenter="this.style.background='var(--amber-bg)'" onmouseleave="this.style.background=''">
+            <div class="kpi-l">Coverage Gaps &nbsp;↗</div>
+            <div class="kpi-val">
+              <span class="kpi-n am" id="k-gap-codes">—</span>
+              <span class="kpi-denom">/ <span id="k-gap-codes-total">—</span> codes &nbsp;<span id="k-gap-pct"></span></span>
+            </div>
+            <div class="kpi-val" style="margin-top:3px">
+              <span class="kpi-n am" style="font-size:18px" id="k-gap">—</span>
+              <span class="kpi-denom">/ <span id="k-gap-total">—</span> rows &nbsp;<span id="k-gap-row-pct"></span></span>
+            </div>
+            <div class="kpi-s">codes · rows with no OCM mapping</div>
+          </div>
+
+          <!-- Tile 3: OCM Mappings -->
+          <div class="kpi">
+            <div class="kpi-l">OCM Mappings</div>
+            <div class="kpi-val"><span class="kpi-n bl" id="k-ocm-count">—</span></div>
+            <div class="kpi-s">chapter-to-regulation mappings</div>
+          </div>
+
+          <!-- Tile 4: Review Pending -->
+          <div class="kpi kpi-click" onclick="go('ocm',document.querySelector('.nav-item:nth-child(4)'));setTimeout(()=>{document.getElementById('o-stale').value='stale';renderOCM();},100)" onmouseenter="this.style.background='var(--orange-bg)'" onmouseleave="this.style.background=''">
+            <div class="kpi-l">Review Pending &nbsp;↗</div>
+            <div class="kpi-val"><span class="kpi-n" style="color:var(--orange)" id="k-review">—</span></div>
+            <div class="kpi-s">OCM mappings needing review</div>
+          </div>
+
+        </div>
+        <div class="card">
+          <div class="filters">
+            <input type="text" id="r-q" placeholder="Search ID, code, section title..." oninput="renderRegs();updateClearBtn('r-clear')">
+            <select id="r-type" onchange="renderRegs();updateClearBtn('r-clear')"><option value="">All types</option></select>
+            <select id="r-st" onchange="renderRegs();updateClearBtn('r-clear')"><option value="">All statuses</option><option>Active</option><option>Deleted</option></select>
+            <select id="r-topic" onchange="renderRegs();populateSubtopic();updateClearBtn('r-clear')"><option value="">All topics</option></select>
+            <select id="r-subtopic" onchange="renderRegs();updateClearBtn('r-clear')"><option value="">All sub-topics</option></select>
+            <select id="r-ocm" onchange="renderRegs();updateClearBtn('r-clear')"><option value="">All coverage</option><option value="cov">✓ Covered only</option><option value="gap">⚠ Gaps only</option></select>
+            <span class="filter-clear" id="r-clear" onclick="clearFilters('regs')">✕ Clear filters</span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="data">
+              <thead><tr>
+                <th style="width:145px">Regulation ID</th>
+                <th style="width:80px">Code</th>
+                <th style="width:200px">Regulation / Section</th>
+                <th style="width:70px">Type</th>
+                <th style="width:60px">Status</th>
+                <th style="width:95px">Coverage</th>
+                <th style="width:160px">Department(s) &amp; Chapter(s)</th>
+              </tr></thead>
+              <tbody id="r-body"></tbody>
+            </table>
+          </div>
+          <div class="row-count" id="r-count"></div>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE 3 — OCM MAPPINGS ═══ -->
+      <div class="tab" id="tab-ocm">
+        <div class="card">
+          <div class="filters">
+            <input type="text" id="o-q" placeholder="Search department, chapter, process, code..." oninput="renderOCM();updateClearBtn('o-clear')">
+            <select id="o-dept" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All departments</option></select>
+            <select id="o-chap" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All chapters</option></select>
+            <select id="o-code" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All regulation codes</option></select>
+            <select id="o-stale" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All mappings</option><option value="stale">Needs review</option><option value="ok">Up to date</option></select>
+            <span class="filter-clear" id="o-clear" onclick="clearFilters('ocm')">✕ Clear filters</span>
+            <button class="btn small primary" onclick="ocmAddRow()" style="margin-left:auto">+ Add Mapping</button>
+          </div>
+          <div class="tbl-wrap">
+            <table class="data" id="ocm-tbl">
+              <thead><tr>
+                <th style="width:130px">Department</th>
+                <th style="width:65px">Chapter</th>
+                <th style="width:210px">Process</th>
+                <th style="width:110px">Regulation Code</th>
+                <th style="width:200px">Regulation ID / Section</th>
+                <th>Notes</th>
+                <th style="width:90px">Actions</th>
+              </tr></thead>
+              <tbody id="o-body"></tbody>
+            </table>
+          </div>
+          <div class="row-count" id="o-count"></div>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE 5 (tab-gaps) — COVERAGE GAPS ═══ -->
+      <div class="tab" id="tab-gaps">
+        <div style="background:var(--cream2);border:1px solid var(--rule);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--ink2);line-height:1.65">
+          <strong style="color:var(--navy)">How to read this page:</strong>
+          Section 1 lists regulation codes in the PT library with no OCM entry — these are genuine compliance gaps that need a department and chapter assigned.
+          Section 2 lists OCM entries referencing codes that don't exist in the PT library — these are data quality issues to clean up.
+        </div>
+        <div class="card">
+        <div class="sect-div amber">
+            <span>&#9650; Regulations with no OCM mapping</span>
+            <span id="g1-count" class="sect-badge amber"></span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="data">
+              <thead><tr>
+                <th style="width:90px">Code</th>
+                <th style="width:260px">Regulation</th>
+                <th style="width:80px">Type</th>
+                <th style="width:70px">Status</th>
+                <th style="width:100px">Quick Add</th>
+              </tr></thead>
+              <tbody id="g1-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sect-div red">
+            <span>&#9650; OCM mappings referencing regulations outside Phillip Trustee</span>
+            <span id="g2-count" class="sect-badge red"></span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="data">
+              <thead><tr>
+                <th style="width:110px">Department</th>
+                <th style="width:65px">Chapter</th>
+                <th style="width:200px">Process</th>
+                <th style="width:100px">Reg Code</th>
+                <th style="width:160px">Regulation ID</th>
+                <th style="width:80px">Issue</th>
+              </tr></thead>
+              <tbody id="g2-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE 5 — REGULATION REGISTER ═══ -->
+      <div class="tab" id="tab-register">
+        <div class="card">
+          <div class="filters">
+            <input type="text" id="rr-q" placeholder="Search code or regulation name..." oninput="renderRegister();updateClearBtn('rr-clear')">
+            <select id="rr-type" onchange="renderRegister();updateClearBtn('rr-clear')"><option value="">All types</option></select>
+            <select id="rr-st" onchange="renderRegister();updateClearBtn('rr-clear')"><option value="">All statuses</option><option>Active</option><option>Deleted</option></select>
+            <select id="rr-cov" onchange="renderRegister();updateClearBtn('rr-clear')"><option value="">All coverage</option><option value="cov">✓ Covered only</option><option value="gap">⚠ Gaps only</option></select>
+            <span class="filter-clear" id="rr-clear" onclick="clearFilters('register')">✕ Clear filters</span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="data" id="rr-tbl">
+              <thead><tr>
+                <th style="width:110px">Code</th>
+                <th>Regulation</th>
+                <th style="width:80px">Type</th>
+                <th style="width:65px">Status</th>
+                <th style="width:90px" title="Sections covered / total sections in library">Sections <span style="font-size:9px;opacity:0.6">ⓘ</span></th>
+                <th style="width:90px">Coverage</th>
+              </tr></thead>
+              <tbody id="rr-body"></tbody>
+            </table>
+          </div>
+          <div class="row-count" id="rr-count"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast hide" id="toast"></div>
+
+<script>
+const SB   = "https://bqmcwmwfcochzkcuvwso.supabase.co/rest/v1";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbWN3bXdmY29jaHprY3V2d3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0ODMyMDQsImV4cCI6MjA5MDA1OTIwNH0.g-ZkIZWgyCWdv-1irdoG5ZIvI5kx-2SlSpJr2zaNWCI";
+const SVC  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbWN3bXdmY29jaHprY3V2d3NvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDQ4MzIwNCwiZXhwIjoyMDkwMDU5MjA0fQ.IlDV02a167FzrQ5tHDPRy6X-e1NgicJqx7i0rF-Ekuk";
+const RH   = {"apikey":ANON,"Authorization":"Bearer "+ANON};
+const WH   = {"apikey":SVC,"Authorization":"Bearer "+SVC,"Content-Type":"application/json","Prefer":"return=representation"};
+
+let regs=[], ocmData=[], rfData=[], rfDirty=false, auditChanges={};
+
+// ── Default RF data (used if JSON not found) ─────────────────────────────
+const RF_DEFAULT = [
+  {id:"cat-1",type:"cat",name:"TRUST BUSINESS LICENCE"},
+  {id:"r-1",type:"row",rule:"Trust Business",ref:"TCA s.4",desc:"Provision of trust services: acting as trustee, trust administration, estate/will services. Licence required prior to conducting trust business. Annual licence fee: S$4,000.",na:false},
+  {id:"cat-2",type:"cat",name:"PRIMARY LEGISLATION"},
+  {id:"r-2",type:"row",rule:"Trust Companies Act 2005 (TCA)",ref:"TCA",desc:"Core statute governing licensing, conduct, financial requirements, controllers, resident managers, inspections, and offences for trust companies in Singapore.",na:false},
+  {id:"r-3",type:"row",rule:"Trustees Act 1967",ref:"Trustees Act",desc:"Underlying trust law in Singapore governing trustee powers, duties, and liabilities.",na:false},
+  {id:"r-4",type:"row",rule:"Financial Services and Markets Act 2022 (FSM Act)",ref:"FSM Act",desc:"Cross-sector statute for technology risk management and incident reporting (Notices FSM-N25 and FSM-N26). Also the basis for targeted financial sanctions regulations.",na:false},
+  {id:"r-5",type:"row",rule:"Companies Act 1967",ref:"CA 1967",desc:"General corporate governance obligations applicable to all Singapore-incorporated companies.",na:false},
+  {id:"r-6",type:"row",rule:"Personal Data Protection Act 2012",ref:"PDPA 2012",desc:"Data privacy and protection obligations. AML/CFT compliance carve-out permits collection/use of personal data without consent.",na:false},
+  {id:"r-7",type:"row",rule:"Corruption, Drug Trafficking & Other Serious Crimes Act",ref:"CDSA",desc:"Suspicious transaction reporting obligations; tipping-off offences (s.48 and s.57).",na:false},
+  {id:"r-8",type:"row",rule:"Terrorism (Suppression of Financing) Act",ref:"TSOFA",desc:"Terrorism financing reporting obligations and asset-freezing requirements.",na:false},
+  {id:"cat-3",type:"cat",name:"SUBSIDIARY LEGISLATION — TRUST COMPANIES"},
+  {id:"r-9",type:"row",rule:"Trust Companies Regulations (TCR)",ref:"TCR",desc:"Financial requirements, resident manager/director appointments, conduct of business, record keeping, annual returns.",na:false},
+  {id:"r-10",type:"row",rule:"Trust Companies (Exemption) Regulations (TER)",ref:"TER",desc:"Exemptions from licensing; notification obligations for exempt trust companies.",na:false},
+  {id:"r-11",type:"row",rule:"Trust Companies (Appeals) Regulations 2025",ref:"TCA Appeals Regs",desc:"Procedures for appeals to an Appeal Advisory Committee under the TCA. Effective 14 Aug 2025.",na:false},
+  {id:"cat-4",type:"cat",name:"MAS NOTICES — APPLICABLE TO LICENSED TRUST COMPANIES"},
+  {id:"r-12",type:"row",rule:"Notice on Effecting Arrangements through Licensed Trust Companies",ref:"TCA-N01",desc:"Requirements when entering arrangements with specified persons to create or act as trustee for an express trust.",na:false},
+  {id:"r-13",type:"row",rule:"Notice on Prevention of Money Laundering and Countering the Financing of Terrorism",ref:"TCA-N03",desc:"CDD, ongoing monitoring, STR, record keeping, internal policies, compliance, audit and training. Revised 30 Jun 2025.",na:false},
+  {id:"r-14",type:"row",rule:"Notice on Reporting of Suspicious Activities and Incidents of Fraud",ref:"TCA-N04",desc:"Requirements on when and how to report suspicious activities and incidents of fraud to MAS.",na:false},
+  {id:"r-15",type:"row",rule:"Notice on Technology Risk Management",ref:"FSM-N25",desc:"Framework to identify critical systems; high availability; RTO ≤4 hours; incident notification ≤1 hour; annual DR testing.",na:false},
+  {id:"r-16",type:"row",rule:"Notice on Cyber Hygiene",ref:"FSM-N26",desc:"Secure all administrative accounts; timely security patching; anti-malware; multi-factor authentication (MFA).",na:false},
+  {id:"cat-5",type:"cat",name:"MAS GUIDELINES — TRUST COMPANY SPECIFIC"},
+  {id:"r-17",type:"row",rule:"Guidelines on Licence Application and Payment of Fees",ref:"TCA-G01",desc:"Administrative procedures for applying for a trust business licence. Application fee: S$1,000. Annual licence fee: S$4,000.",na:false},
+  {id:"r-18",type:"row",rule:"Guidelines on Criteria for the Grant of a Trust Business Licence",ref:"TCA-G02",desc:"Admission criteria: minimum capital ≥S$250,000, qualifying assets, resident managers (≥2, one with ≥5 years).",na:false},
+  {id:"r-19",type:"row",rule:"Guidelines on Standards of Conduct for Licensed Trust Companies",ref:"TCA-G03",desc:"Integrity, competency of officers, due care and diligence, complaints handling, compliance with all applicable laws.",na:false},
+  {id:"r-20",type:"row",rule:"Guidelines on Scope of Regulation",ref:"TCA-G04",desc:"Guidance on scope of regulation and exemption under the Trust Companies Act.",na:false},
+  {id:"r-21",type:"row",rule:"Guidelines to Notice TCA-N03 (AML/CFT)",ref:"TCA-N03 GL",desc:"Practical guidance on CDD, risk assessment, STR filing (within 5 business days), three lines of defence model. Revised 30 Jun 2025.",na:false},
+  {id:"cat-6",type:"cat",name:"MAS GUIDELINES — FIT & PROPER / GOVERNANCE"},
+  {id:"r-22",type:"row",rule:"Guidelines on Fit and Proper Criteria",ref:"FSG-G01",desc:"Criteria for directors, resident managers, shareholders, and controllers. Revised 30 May 2025.",na:false},
+  {id:"r-23",type:"row",rule:"Guidelines on Individual Accountability and Conduct",ref:"IAC GL",desc:"Senior manager accountability and conduct standards. Five high-level outcomes for FIs.",na:false},
+  {id:"r-24",type:"row",rule:"Guidelines on Risk Management Practices — Board and Senior Management",ref:"RMP (Board)",desc:"Role of the Board of Directors and senior management in risk management and corporate governance.",na:false},
+  {id:"cat-7",type:"cat",name:"MAS GUIDELINES — OPERATIONAL / OUTSOURCING / BCM"},
+  {id:"r-25",type:"row",rule:"Guidelines on Business Continuity Management",ref:"BCM GL",desc:"Business continuity planning, disaster recovery, operational resilience. Revised 6 Jun 2022.",na:false},
+  {id:"r-26",type:"row",rule:"Guidelines on Outsourcing",ref:"Outsourcing GL",desc:"Due diligence; contractual safeguards; ongoing monitoring; exit strategies. Maintain outsourcing register. Revised 24 Jan 2025.",na:false},
+  {id:"cat-8",type:"cat",name:"STANDARD CORPORATE LICENCE CONDITIONS"},
+  {id:"r-27",type:"row",rule:"Fitness & Propriety — Notification to MAS",ref:"TC-0G08",desc:"Immediately notify MAS when the company becomes aware of any investigation, disciplinary action, breach of law, or matter affecting fit and proper criteria.",na:false},
+  {id:"r-28",type:"row",rule:"Minimum Financial Requirements — Ongoing",ref:"LC; TCR Reg 12–13",desc:"Maintain minimum paid-up capital or net asset value ≥ S$250,000. Immediately notify MAS if thresholds are breached.",na:false},
+  {id:"r-29",type:"row",rule:"Resident Manager — Minimum Appointments",ref:"LC; TCA s.13",desc:"Maintain at least 2 MAS-approved resident managers at all times. At least one must have ≥5 years of relevant experience.",na:false},
+  {id:"r-30",type:"row",rule:"AML/CFT Programme",ref:"LC; TCA-N03",desc:"Implement and maintain a robust AML/CFT programme including CDD, EDD, ongoing monitoring, STR within 5 business days, record keeping 5 years.",na:false},
+];
+
+function rfTab(name, el){
+  document.querySelectorAll('.rf-inner-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.rf-pane').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('rfp-'+name).classList.add('on');
+}
+
+function updateClearBtn(id){
+  const btn=document.getElementById(id);
+  if(!btn) return;
+  const form=btn.closest('.filters');
+  if(!form) return;
+  const active=[...form.querySelectorAll('input,select')].some(el=>el.value!=='');
+  btn.classList.toggle('visible',active);
+}
+
+function clearFilters(page){
+  if(page==='regs'){
+    ['r-q','r-type','r-st','r-topic','r-subtopic','r-ocm'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    renderRegs(); updateClearBtn('r-clear');
+  } else if(page==='ocm'){
+    ['o-q','o-dept','o-chap','o-code'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    renderOCM(); updateClearBtn('o-clear');
+  } else if(page==='register'){
+    ['rr-q','rr-type','rr-st','rr-cov'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    renderRegister(); updateClearBtn('rr-clear');
+  }
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────
+const PAGE_META = {
+  framework:{title:"Regulatory Framework",sub:"Reference document — regulations, licence conditions, approvals, notifications and submission channels"},
+  regs:{title:"Reg Library (PT)",sub:"All 860 library rows where Phillip Trustee = y · Click any row to expand section detail and OCM coverage"},
+  register:{title:"Regulation Register",sub:"One entry per regulation code · Click to expand all sections and see who covers each one"},
+  ocm:{title:"OCM Mappings",sub:"Source of truth — maps departments and chapters to regulation codes · Edit inline, save directly to Supabase"},
+  gaps:{title:"Coverage Gaps",sub:"Regulations with no OCM mapping · OCM entries referencing unknown codes"},
+};
+function go(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('on');
+  if(el) el.classList.add('on');
+  const m=PAGE_META[name];
+  document.getElementById('pg-title').textContent=m.title;
+  document.getElementById('pg-sub').textContent=m.sub;
+  if(name==='gaps') renderGaps();
+  if(name==='register') renderRegister();
+}
+
+// ── Status bar ────────────────────────────────────────────────────────────
+function setStat(cls,dc,msg){
+  const b=document.getElementById('sbar');
+  b.className='statusbar '+cls;
+  document.getElementById('sdot').className='sdot '+dc;
+  document.getElementById('smsg').textContent=msg;
+}
+
+// ── Load all data ────────────────────────────────────────────────────────
+async function loadAll(){
+  setStat('loading','b','Loading...');
+  try{
+    const [r1,r2]=await Promise.all([
+      fetch(`${SB}/regulatory_library?phillip_trustee=eq.y&select=regulation_id,regulation_code,regulation,regulator,content_type,regulation_reference,section_title,description,status,implementation_date,topic,sub_topic,url,update_date&order=regulation_id.asc&limit=2000`,{headers:RH}),
+      fetch(`${SB}/ocm_mappings?entity=eq.phillip_trustee&select=*&order=department.asc,chapter.asc`,{headers:RH}),
+    ]);
+    if(!r1.ok||!r2.ok) throw new Error();
+    regs=await r1.json();
+    ocmData=await r2.json();
+    rfData=[...RF_DEFAULT];
+    // Fetch audit_log separately so it never breaks main load
+    auditChanges={};
+    try{
+      const ra=await fetch(`${SB}/audit_log?select=regulation_code,run_timestamp,scenario&run_status=eq.success&order=run_timestamp.desc&limit=500`,{headers:RH});
+      if(ra.ok){
+        const auditRows=await ra.json();
+        auditRows.filter(row=>['B','C','D','E','F'].includes(row.scenario)).forEach(row=>{
+          if(!auditChanges[row.regulation_code]||row.run_timestamp>auditChanges[row.regulation_code]){
+            auditChanges[row.regulation_code]=row.run_timestamp;
+          }
+        });
+      }
+    }catch(e){ /* audit_log unavailable - staleness badges disabled */ }
+
+    const t=new Date().toLocaleTimeString('en-SG');
+    setStat('ok','g',`Connected · ${regs.length} library rows · ${ocmData.length} OCM mappings · ${t}`);
+    document.getElementById('last-t').textContent=t;
+  }catch(e){
+    console.error('loadAll failed:', e, e.message, e.stack);
+    setStat('warn','a','Connection issue — check console for details: '+e.message);
+  }
+  populateFilters();
+  updateKPIs();
+  renderRF();
+  renderRegs();
+  renderOCM();
+}
+
+// ── SharePoint JSON (RF data) ─────────────────────────────────────────────
+function renderRF(){
+  const q=(document.getElementById('rf-q').value||'').toLowerCase();
+  let total=0, shown=0;
+  let html='';
+  rfData.forEach((item,idx)=>{
+    if(item.type==='cat'){
+      if(q){
+        let hasMatch=false;
+        for(let i=idx+1;i<rfData.length;i++){
+          if(rfData[i].type==='cat') break;
+          const r=rfData[i];
+          if([r.rule,r.ref,r.desc].join(' ').toLowerCase().includes(q)){hasMatch=true;break;}
+        }
+        if(!hasMatch) return;
+      }
+      html+=`<tr class="rf-cat-row"><td colspan="3">${item.name}</td></tr>`;
+    } else if(item.type==='row'){
+      total++;
+      if(q&&![item.rule,item.ref,item.desc].join(' ').toLowerCase().includes(q)) return;
+      shown++;
+      const naClass=item.na?'rf-na-row':'';
+      html+=`<tr class="${naClass}">
+        <td class="rf-rule-name">${item.rule}</td>
+        <td class="rf-ref">${item.ref}</td>
+        <td class="rf-desc">${item.desc}</td>
+      </tr>`;
+    }
+  });
+  document.getElementById('rf-body').innerHTML=html||'<tr><td colspan="3" class="empty">No regulations match your search.</td></tr>';
+  document.getElementById('rf-total').textContent=total;
+  document.getElementById('rf-count').textContent=q?`Showing ${shown} of ${total} regulations`:`${total} regulations`;
+}
+
+function rfAddRow(){
+  const id='nr-'+Date.now();
+  rfData.push({id,type:'new-row',rule:'',ref:'',desc:'',na:false});
+  renderRF();
+  setTimeout(()=>document.getElementById('nrule-'+id)?.focus(),50);
+}
+function rfAddCategory(){
+  const id='nc-'+Date.now();
+  rfData.push({id,type:'new-cat',name:''});
+  renderRF();
+  setTimeout(()=>document.getElementById('ncat-'+id)?.focus(),50);
+}
+function rfSaveNewRow(id){
+  const rule=document.getElementById('nrule-'+id)?.value.trim();
+  const ref=document.getElementById('nref-'+id)?.value.trim();
+  const desc=document.getElementById('ndesc-'+id)?.value.trim();
+  if(!rule) return;
+  const idx=rfData.findIndex(r=>r.id===id);
+  rfData[idx]={id:'r-'+Date.now(),type:'row',rule,ref,desc,na:false};
+  markDirty(); renderRF();
+}
+function rfSaveNewCat(id){
+  const name=document.getElementById('ncat-'+id)?.value.trim();
+  if(!name) return;
+  const idx=rfData.findIndex(r=>r.id===id);
+  rfData[idx]={id:'cat-'+Date.now(),type:'cat',name};
+  markDirty(); renderRF();
+}
+function rfEditRow(id){
+  const idx=rfData.findIndex(r=>r.id===id);
+  rfData[idx]={...rfData[idx],type:'edit-row'};
+  renderRF();
+  setTimeout(()=>document.getElementById('erule-'+id)?.focus(),50);
+}
+function rfEditCat(id){
+  const idx=rfData.findIndex(r=>r.id===id);
+  rfData[idx]={...rfData[idx],type:'edit-cat'};
+  renderRF();
+}
+function rfSaveEditRow(id){
+  const rule=document.getElementById('erule-'+id)?.value.trim();
+  const ref=document.getElementById('eref-'+id)?.value.trim();
+  const desc=document.getElementById('edesc-'+id)?.value.trim();
+  const idx=rfData.findIndex(r=>r.id===id);
+  rfData[idx]={...rfData[idx],type:'row',rule,ref,desc};
+  markDirty(); renderRF();
+}
+function rfSaveEditCat(id){
+  const name=document.getElementById('ecat-'+id)?.value.trim();
+  const idx=rfData.findIndex(r=>r.id===id);
+  rfData[idx]={...rfData[idx],type:'cat',name};
+  markDirty(); renderRF();
+}
+function rfCancelEdit(id){
+  const idx=rfData.findIndex(r=>r.id===id);
+  const orig=rfData[idx];
+  rfData[idx]={...orig,type:orig.type.replace('edit-','')};
+  renderRF();
+}
+function rfCancelItem(id){
+  rfData=rfData.filter(r=>r.id!==id);
+  renderRF();
+}
+function rfDeleteItem(id){
+  if(!confirm('Delete this item?')) return;
+  rfData=rfData.filter(r=>r.id!==id);
+  markDirty(); renderRF();
+}
+
+// ── Reg Library ────────────────────────────────────────────────────────────
+function getCoverage(code, regulation_id){
+  // If regulation_id provided, return mappings that either:
+  // 1. Match the specific regulation_id (precise pin), OR
+  // 2. Have null regulation_id for this code (blanket coverage)
+  if(regulation_id){
+    return ocmData.filter(r=>r.regulation_code===code&&(r.regulation_id===regulation_id||!r.regulation_id));
+  }
+  return ocmData.filter(r=>r.regulation_code===code);
+}
+function getUniqCodes(){return[...new Set(regs.map(r=>r.regulation_code))];}
+function getOcmCodes(){return new Set(ocmData.map(r=>r.regulation_code));}
+
+function updateKPIs(){
+  const codes=getUniqCodes(), oc=getOcmCodes();
+  const covCodes=codes.filter(c=>oc.has(c)).length;
+  const gapCodes=codes.length-covCodes;
+  const codePct=codes.length>0?Math.round(covCodes/codes.length*100):0;
+  const covRows=regs.filter(r=>oc.has(r.regulation_code)).length;
+  const gapRows=regs.length-covRows;
+  const rowPct=regs.length>0?Math.round(covRows/regs.length*100):0;
+  document.getElementById('k-total').textContent=regs.length;
+  const ocmCountEl=document.getElementById('k-ocm-count');
+  if(ocmCountEl) ocmCountEl.textContent=ocmData.length;
+  const reviewCount=ocmData.filter(r=>{const lc=auditChanges[r.regulation_code];return lc&&r.last_reviewed_at&&new Date(lc)>new Date(r.last_reviewed_at);}).length;
+  const reviewEl=document.getElementById('k-review');
+  if(reviewEl) reviewEl.textContent=reviewCount;
+  document.getElementById('k-gap-codes').textContent=gapCodes;
+  document.getElementById('k-gap-codes-total').textContent=codes.length;
+  const gapPctEl=document.getElementById('k-gap-pct');
+  if(gapPctEl) gapPctEl.textContent=codes.length>0?`(${Math.round(gapCodes/codes.length*100)}%)`:'';
+  const gapRowEl=document.getElementById('k-gap');
+  if(gapRowEl) gapRowEl.textContent=gapRows;
+  const gapRowTotalEl=document.getElementById('k-gap-total');
+  if(gapRowTotalEl) gapRowTotalEl.textContent=regs.length;
+  const gapRowPctEl=document.getElementById('k-gap-row-pct');
+  if(gapRowPctEl) gapRowPctEl.textContent=regs.length>0?`(${Math.round(gapRows/regs.length*100)}%)`:'';
+  const kbar=document.getElementById('k-bar'); if(kbar) kbar.style.width=codePct+'%';
+}
+
+function populateFilters(){
+  const types=[...new Set(regs.map(r=>r.content_type).filter(Boolean))].sort();
+  document.getElementById('r-type').innerHTML='<option value="">All types</option>'+types.map(t=>`<option>${t}</option>`).join('');
+  const topics=[...new Set(regs.map(r=>r.topic).filter(Boolean))].sort();
+  document.getElementById('r-topic').innerHTML='<option value="">All topics</option>'+topics.map(t=>`<option>${t}</option>`).join('');
+  const depts=[...new Set(ocmData.map(r=>r.department).filter(Boolean))].sort();
+  document.getElementById('o-dept').innerHTML='<option value="">All departments</option>'+depts.map(d=>`<option>${d}</option>`).join('');
+  const chaps=[...new Set(ocmData.map(r=>r.chapter).filter(Boolean))].sort((a,b)=>{const n=x=>parseInt(x)||0;return n(a)-n(b)||a.localeCompare(b);});
+  document.getElementById('o-chap').innerHTML='<option value="">All chapters</option>'+chaps.map(c=>`<option>${c}</option>`).join('');
+  const codes=getUniqCodes().sort();
+  document.getElementById('o-code').innerHTML='<option value="">All regulation codes</option>'+codes.map(c=>`<option>${c}</option>`).join('');
+  document.getElementById('rr-type').innerHTML='<option value="">All types</option>'+types.map(t=>`<option>${t}</option>`).join('');
+}
+
+function populateSubtopic(){
+  const topic=document.getElementById('r-topic').value;
+  const subs=[...new Set(regs.filter(r=>!topic||r.topic===topic).map(r=>r.sub_topic).filter(Boolean))].sort();
+  document.getElementById('r-subtopic').innerHTML='<option value="">All sub-topics</option>'+subs.map(s=>`<option>${s}</option>`).join('');
+}
+
+function isCodeStale(code){
+  const lc=auditChanges[code];
+  if(!lc) return false;
+  const ocmRows=ocmData.filter(r=>r.regulation_code===code&&r.last_reviewed_at);
+  if(!ocmRows.length) return false;
+  return ocmRows.some(r=>new Date(lc)>new Date(r.last_reviewed_at));
+}
+
+async function markAllReviewed(code,event){
+  if(event) event.stopPropagation();
+  const ids=ocmData.filter(r=>r.regulation_code===code).map(r=>r.id);
+  if(!ids.length) return;
+  try{
+    const now=new Date().toISOString();
+    await Promise.all(ids.map(id=>
+      fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'PATCH',headers:WH,body:JSON.stringify({last_reviewed_at:now,updated_at:now})})
+    ));
+    const now2=new Date().toISOString();
+    ocmData.forEach(r=>{ if(r.regulation_code===code){ r.last_reviewed_at=now2; r.updated_at=now2; } });
+    toast('ok',`All OCM mappings for ${code} marked as reviewed.`);
+    renderRegs(); renderOCM(); renderRegister();
+  }catch(e){toast('err','Update failed.');}
+}
+
+
+function renderRegs(){
+  const q=(document.getElementById('r-q').value||'').toLowerCase();
+  const ft=document.getElementById('r-type').value;
+  const fs=document.getElementById('r-st').value;
+  const ftopic=document.getElementById('r-topic').value;
+  const fsub=document.getElementById('r-subtopic').value;
+  const focm=document.getElementById('r-ocm').value;
+  const oc=getOcmCodes();
+
+  let rows=regs.filter(r=>{
+    if(ft&&r.content_type!==ft) return false;
+    if(fs&&r.status!==fs) return false;
+    if(ftopic&&r.topic!==ftopic) return false;
+    if(fsub&&r.sub_topic!==fsub) return false;
+    const cov=getCoverage(r.regulation_code);
+    if(focm==='cov'&&cov.length===0) return false;
+    if(focm==='gap'&&cov.length>0) return false;
+    if(q&&![r.regulation_id,r.regulation_code,r.regulation,r.section_title,r.content_type].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  // Group by regulation_code for expand
+  const seen=new Set();
+  const tbody=document.getElementById('r-body');
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" class="empty"><div class="empty-icon">⚗</div><div class="empty-msg">No regulations match your filters. Try adjusting or <span style="cursor:pointer;text-decoration:underline;color:var(--navy)" onclick="clearFilters('regs')">clearing all filters</span>.</div></td></tr>`;document.getElementById('r-count').innerHTML='';return;}
+
+  let html='';
+  rows.forEach(r=>{
+    const cov=getCoverage(r.regulation_code, r.regulation_id);
+    const covered=cov.length>0;
+    const isGap=!covered;
+    // Group by dept
+    const deptMap={};
+    cov.forEach(m=>{
+      const d=m.department||'Unassigned';
+      if(!deptMap[d]) deptMap[d]=[];
+      deptMap[d].push(m);
+    });
+    const deptCount=[...new Set(cov.map(m=>m.department||'Unassigned'))].length;
+    const chapCount=[...new Set(cov.map(m=>m.chapter))].length;
+    const expandId='exp-'+r.regulation_id.replace(/[^a-z0-9]/gi,'_');
+    const codeStale=isCodeStale(r.regulation_code);
+    const staleIndicator=codeStale?` <span style="padding:1px 5px;font-size:10px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid #e0c98a">&#9888; Review</span>`:'';
+    const summary=covered?`${deptCount} dept · ${chapCount} ch${staleIndicator}`:`<span style="color:var(--amber)">No mapping</span>`;
+
+    html+=`<tr class="expand-trigger ${isGap?'gap-row':''}" onclick="toggleExpand('${expandId}',this)">
+      <td class="mono">${r.regulation_id||''}</td>
+      <td class="strong">${r.regulation_code||''}</td>
+      <td style="max-width:200px"><div style="font-weight:500;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.regulation||''}">${r.regulation||''}</div><div style="font-size:11px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.section_title||''}</div></td>
+      <td><span class="pill type">${r.content_type||''}</span></td>
+      <td><span class="pill ${r.status==='Active'?'active':'deleted'}">${r.status||''}</span></td>
+      <td><span class="pill ${covered?'cov':'gap'}">${covered?'&#10003; Covered':'&#9888; Gap'}</span></td>
+      <td style="font-size:12px">${summary}<span class="expand-caret" id="caret-${expandId}">&#9658;</span></td>
+    </tr>
+    <tr class="expand-detail" id="${expandId}">
+      <td colspan="7">
+        <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule2)">${r.section_title||r.regulation_reference||r.regulation||''}</div>`;
+
+    if(covered){
+      Object.entries(deptMap).forEach(([dept,mappings])=>{
+        html+=`<div class="dept-group"><div class="dept-label">${dept}</div>`;
+        mappings.forEach(m=>{
+          const regRow=regs.find(r2=>r2.regulation_id===m.regulation_id);
+          const secTitle=regRow?regRow.section_title||regRow.regulation_reference||'':'';
+          const mStale=auditChanges[m.regulation_code]&&m.last_reviewed_at&&new Date(auditChanges[m.regulation_code])>new Date(m.last_reviewed_at);
+          html+=`<div class="chapter-line ${mStale?'stale-line':''}"><strong>Chapter ${m.chapter}</strong>${m.process}${secTitle?` <span class="muted">— ${secTitle}</span>`:''}${m.notes?` <span class="muted" style="font-style:italic">· ${m.notes}</span>`:''}${mStale?' <span style="padding:1px 5px;font-size:10px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid #e0c98a">&#9888; Review</span>':''}</div>`;
+        });
+        html+=`</div>`;
+      });
+    } else {
+      html+=`<span class="muted" style="font-style:italic">No OCM chapter mapping for ${r.regulation_code}.</span>
+      <span class="add-mapping-link" onclick="event.stopPropagation();ocmAddRowForCode('${r.regulation_code}')">+ Add OCM mapping</span>`;
+    }
+    html+=`</td></tr>`;
+  });
+
+  tbody.innerHTML=html;
+  const oc2=getOcmCodes();
+  const gapRowCount=rows.filter(r=>!oc2.has(r.regulation_code)).length;
+  const gapNote=gapRowCount>0?` · <span style="color:var(--amber);font-weight:500">${gapRowCount} gap row${gapRowCount!==1?'s':''}</span>`:'';
+  document.getElementById('r-count').innerHTML=`Showing ${rows.length} of ${regs.length} rows${gapNote}`;
+}
+
+function toggleExpand(id,row){
+  const detail=document.getElementById(id);
+  const caret=document.getElementById('caret-'+id);
+  const open=detail.classList.contains('open');
+  detail.classList.toggle('open',!open);
+  if(caret) caret.classList.toggle('open',!open);
+}
+
+// ── OCM Mappings ────────────────────────────────────────────────────────────
+function renderOCM(){
+  const q=(document.getElementById('o-q').value||'').toLowerCase();
+  const fd=document.getElementById('o-dept').value;
+  const fc=document.getElementById('o-chap').value;
+  const fcode=document.getElementById('o-code').value;
+  const libIds=new Set(regs.map(r=>r.regulation_id));
+  const libCodes=new Set(regs.map(r=>r.regulation_code));
+
+  let rows=ocmData.filter(r=>{
+    if(fd&&r.department!==fd) return false;
+    if(fc&&r.chapter!==fc) return false;
+    if(fcode&&r.regulation_code!==fcode) return false;
+    if(q&&![r.department||'',r.chapter,r.process,r.regulation_code,r.regulation_id||'',r.notes||''].join(' ').toLowerCase().includes(q)) return false;
+    const fstale=(document.getElementById('o-stale')?.value||'');
+    if(fstale){const lc=auditChanges[r.regulation_code]||null;const isS=lc&&r.last_reviewed_at&&new Date(lc)>new Date(r.last_reviewed_at);if(fstale==='stale'&&!isS)return false;if(fstale==='ok'&&isS)return false;}
+    return true;
+  });
+
+  const tbody=document.getElementById('o-body');
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" class="empty"><div class="empty-icon">📋</div><div class="empty-msg">${ocmData.length===0?'No OCM mappings yet. Click <strong>+ Add Mapping</strong> to create the first one.':'No mappings match your filters. Try adjusting or <span style=\'cursor:pointer;text-decoration:underline;color:var(--navy)\' onclick=\'clearFilters("ocm")\'>clearing all filters</span>.'}</div></td></tr>`;document.getElementById('o-count').innerHTML='';return;}
+
+  let html='';
+  rows.forEach(r=>{
+    if(r._editing){
+      const codes=getUniqCodes().sort();
+      html+=`<tr class="editing-row" data-ocm-id="${r.id}">
+        <td><input class="inline-input" id="ed-dept-${r.id}" value="${r.department||''}" placeholder="Department"></td>
+        <td><input class="inline-input" id="ed-chap-${r.id}" value="${r.chapter||''}" placeholder="e.g. 6a"></td>
+        <td><input class="inline-input" id="ed-proc-${r.id}" value="${r.process||''}" placeholder="Process name"></td>
+        <td>
+          <select class="inline-select" id="ed-code-${r.id}" onchange="ocmCodeSelected('${r.id}',true)">
+            <option value="">Select code...</option>
+            ${codes.map(c=>`<option ${c===r.regulation_code?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </td>
+        <td>
+          <select class="inline-select" id="ed-rid-${r.id}">
+            <option value="">Select section...</option>
+            ${regs.filter(x=>x.regulation_code===r.regulation_code).map(x=>`<option value="${x.regulation_id}" ${x.regulation_id===r.regulation_id?'selected':''}>${x.regulation_id} — ${x.section_title||x.regulation_reference||''}</option>`).join('')}
+          </select>
+        </td>
+        <td><input class="inline-input" id="ed-notes-${r.id}" value="${r.notes||''}" placeholder="Notes (optional)"></td>
+        <td><div class="edit-actions">
+          <button class="btn small primary" onclick="ocmSaveEdit('${r.id}')">Save</button>
+          <button class="btn small" onclick="ocmCancelEdit('${r.id}')">✕</button>
+          <button class="btn small danger" onclick="ocmDelete('${r.id}')">Del</button>
+        </div></td>
+      </tr>`;
+    } else if(r._new){
+      const codes=getUniqCodes().sort();
+      html+=`<tr class="new-row" data-ocm-id="${r.id}">
+        <td><input class="inline-input" id="new-dept-${r.id}" value="${r.department||''}" placeholder="Department"></td>
+        <td><input class="inline-input" id="new-chap-${r.id}" value="${r.chapter||''}" placeholder="e.g. 6a"></td>
+        <td><input class="inline-input" id="new-proc-${r.id}" value="${r.process||''}" placeholder="Process name"></td>
+        <td>
+          <label style="font-size:10px;color:var(--ink3);display:flex;align-items:center;gap:4px;cursor:pointer;margin-bottom:3px"><input type="checkbox" id="new-free-${r.id}" ${r._freetext?'checked':''} onchange="ocmToggleFree('${r.id}',false)" style="width:auto;margin:0"> Not in library</label>
+          ${r._freetext?`<input class="inline-input" id="new-code-${r.id}" value="${r.regulation_code||''}" placeholder="Type code e.g. INT-POL-01">`:`<select class="inline-select" id="new-code-${r.id}" onchange="ocmCodeSelected('${r.id}',false)"><option value="">Select code...</option>${codes.map(c=>`<option ${c===r.regulation_code?'selected':''}>${c}</option>`).join('')}</select>`}
+        </td>
+        <td>
+          ${r._freetext?`<input class="inline-input" id="new-rid-${r.id}" value="${r.regulation_id||''}" placeholder="Reference e.g. Para 3">`:`<select class="inline-select" id="new-rid-${r.id}"><option value="">Select section...</option>${r.regulation_code?regs.filter(x=>x.regulation_code===r.regulation_code).map(x=>`<option value="${x.regulation_id}">${x.regulation_id} — ${x.section_title||x.regulation_reference||''}</option>`).join(''):''}</select>`}
+        </td>
+        <td><input class="inline-input" id="new-notes-${r.id}" value="${r.notes||''}" placeholder="Notes (optional)"></td>
+        <td><div class="edit-actions">
+          <button class="btn small primary" onclick="ocmSaveNew('${r.id}')">Save</button>
+          <button class="btn small" onclick="ocmCancelNew('${r.id}')">✕</button>
+        </div></td>
+      </tr>`;
+    } else {
+      const regRow=regs.find(x=>x.regulation_id===r.regulation_id);
+      const secTitle=regRow?regRow.section_title||regRow.regulation_reference||'':'';
+      const inLib=libCodes.has(r.regulation_code);
+      // Use audit_log last change time — more reliable than update_date
+      const lastChanged=auditChanges[r.regulation_code];
+      const stale=lastChanged&&r.last_reviewed_at&&new Date(lastChanged)>new Date(r.last_reviewed_at);
+      const staleTag=stale?`<span style="margin-left:6px;padding:1px 6px;font-size:10px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid #e0c98a" title="Regulation updated after last review">&#9888; Review</span>`:'';
+      const notInLibTag=!inLib&&r.regulation_code?`<br><span style="display:inline-block;margin-top:3px;padding:1px 6px;font-size:10px;font-weight:600;background:var(--red-bg);color:var(--red);border:1px solid #e8c4c4">Not in library</span>`:'';
+      const lastReviewed=r.last_reviewed_at?new Date(r.last_reviewed_at).toLocaleDateString('en-SG',{day:'2-digit',month:'short',year:'numeric'}):'Never';
+      html+=`<tr data-ocm-id="${r.id}" style="${stale?'background:var(--amber-bg)':''}">
+        <td style="font-weight:500">${r.department||'—'}</td>
+        <td style="font-weight:700;color:var(--navy)">${r.chapter}</td>
+        <td style="font-size:12px">${r.process}${staleTag}</td>
+        <td><span class="strong">${r.regulation_code}</span>${notInLibTag}</td>
+        <td style="font-size:11px;color:var(--ink3)">${r.regulation_id||'—'}${secTitle?`<br><span style="color:var(--ink3)">${secTitle}</span>`:''}</td>
+        <td style="font-size:11px;color:var(--ink3)">${r.notes||'—'}</td>
+        <td>
+          <button class="btn small" onclick="ocmStartEdit('${r.id}')">Edit</button>
+          ${stale?`<div style="display:flex;gap:4px;margin-top:3px">
+            <button class="btn small" style="font-size:10px;border-color:var(--amber);color:var(--amber)" onclick="ocmMarkReviewed('${r.id}')">Mark reviewed</button>
+            <button class="btn small" style="font-size:10px;border-color:var(--amber);color:var(--amber)" onclick="markAllReviewed('${r.regulation_code}',event)" title="Mark all OCM rows for ${r.regulation_code} as reviewed">Mark all</button>
+          </div>`:''}
+          <div style="font-size:10px;color:var(--ink3);margin-top:2px">Reviewed: ${lastReviewed}</div>
+        </td>
+      </tr>`;
+    }
+  });
+  tbody.innerHTML=html;
+  const depts=[...new Set(rows.map(r=>r.department).filter(Boolean))].length;
+  const codes=[...new Set(rows.map(r=>r.regulation_code).filter(Boolean))].length;
+  document.getElementById('o-count').innerHTML=`${rows.length} of ${ocmData.length} mappings &nbsp;·&nbsp; ${depts} department${depts!==1?'s':''} &nbsp;·&nbsp; ${codes} regulation code${codes!==1?'s':''}`;
+}
+
+async function ocmMarkReviewed(id){
+  try{
+    const now=new Date().toISOString();
+    const res=await fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'PATCH',headers:WH,body:JSON.stringify({last_reviewed_at:now,updated_at:now})});
+    if(!res.ok) throw new Error();
+    const idx=ocmData.findIndex(r=>r.id===id);
+    if(idx!==-1) ocmData[idx]={...ocmData[idx],last_reviewed_at:now,updated_at:now};
+    toast('ok','Marked as reviewed.');
+    renderRegs(); renderOCM(); renderRegister();
+  }catch(e){toast('err','Update failed.');}
+}
+
+function ocmCodeSelected(id, isEdit){
+  const pre=isEdit?'ed':'new';
+  const code=document.getElementById(`${pre}-code-${id}`)?.value;
+  const sel=document.getElementById(`${pre}-rid-${id}`);
+  if(!sel) return;
+  sel.innerHTML='<option value="">Select section...</option>'+
+    regs.filter(r=>r.regulation_code===code).map(r=>`<option value="${r.regulation_id}">${r.regulation_id} — ${r.section_title||r.regulation_reference||''}</option>`).join('');
+}
+
+function ocmAddRow(){
+  const id='new-'+Date.now();
+  ocmData.unshift({id,_new:true,department:'',chapter:'',process:'',regulation_code:'',regulation_id:'',notes:'',entity:'phillip_trustee'});
+  renderOCM();
+  setTimeout(()=>document.getElementById('new-dept-'+id)?.focus(),50);
+}
+function ocmAddRowForCode(code){
+  go('ocm',document.querySelector('.nav-item:nth-child(5)'));
+  setTimeout(()=>{
+    const id='new-'+Date.now();
+    ocmData.unshift({id,_new:true,department:'',chapter:'',process:'',regulation_code:code,regulation_id:'',notes:'',entity:'phillip_trustee'});
+    renderOCM();
+    setTimeout(()=>document.getElementById('new-dept-'+id)?.focus(),50);
+  },100);
+}
+function ocmStartEdit(id){
+  const idx=ocmData.findIndex(r=>r.id===id);
+  ocmData[idx]={...ocmData[idx],_editing:true};
+  renderOCM();
+}
+function ocmCancelEdit(id){
+  const idx=ocmData.findIndex(r=>r.id===id);
+  delete ocmData[idx]._editing;
+  ocmData[idx]={...ocmData[idx]};
+  renderOCM();
+}
+function ocmCancelNew(id){
+  ocmData=ocmData.filter(r=>r.id!==id);
+  renderOCM();
+}
+
+async function ocmSaveNew(id){
+  const dept=document.getElementById('new-dept-'+id)?.value.trim();
+  const chap=document.getElementById('new-chap-'+id)?.value.trim();
+  const proc=document.getElementById('new-proc-'+id)?.value.trim();
+  const code=document.getElementById('new-code-'+id)?.value;
+  const rid=document.getElementById('new-rid-'+id)?.value;
+  const notes=document.getElementById('new-notes-'+id)?.value.trim();
+  if(!chap||!proc||!code){toast('err','Chapter, process and regulation code are required.');return;}
+  try{
+    const now=new Date().toISOString();const body={entity:'phillip_trustee',department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,last_reviewed_at:now};
+    const res=await fetch(`${SB}/ocm_mappings`,{method:'POST',headers:WH,body:JSON.stringify(body)});
+    if(!res.ok) throw new Error();
+    toast('ok','Mapping added.');
+    await loadAll();
+  }catch(e){toast('err','Save failed.');}
+}
+
+async function ocmSaveEdit(id){
+  const dept=document.getElementById('ed-dept-'+id)?.value.trim();
+  const chap=document.getElementById('ed-chap-'+id)?.value.trim();
+  const proc=document.getElementById('ed-proc-'+id)?.value.trim();
+  const code=document.getElementById('ed-code-'+id)?.value;
+  const rid=document.getElementById('ed-rid-'+id)?.value;
+  const notes=document.getElementById('ed-notes-'+id)?.value.trim();
+  if(!chap||!proc||!code){toast('err','Chapter, process and regulation code are required.');return;}
+  try{
+    const now=new Date().toISOString();const body={department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,updated_at:now,last_reviewed_at:now};
+    const res=await fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'PATCH',headers:WH,body:JSON.stringify(body)});
+    if(!res.ok) throw new Error();
+    toast('ok','Mapping updated.');
+    await loadAll();
+  }catch(e){toast('err','Update failed.');}
+}
+
+async function ocmDelete(id){
+  if(!confirm('Delete this OCM mapping?')) return;
+  try{
+    const res=await fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'DELETE',headers:WH});
+    if(!res.ok) throw new Error();
+    toast('ok','Mapping deleted.');
+    await loadAll();
+  }catch(e){toast('err','Delete failed.');}
+  // Register filters (same type list as regs)
+  document.getElementById('rr-type').innerHTML='<option value="">All types</option>'+types.map(t=>`<option>${t}</option>`).join('');
+}
+
+// ── Regulation Register ──────────────────────────────────────────────────────
+function renderRegister(){
+  const q=(document.getElementById('rr-q').value||'').toLowerCase();
+  const ft=document.getElementById('rr-type').value;
+  const fs=document.getElementById('rr-st').value;
+  const fcov=document.getElementById('rr-cov')?.value||'';
+  const oc=getOcmCodes();
+
+  // Deduplicate by regulation_code — one entry per code
+  const codeMap={};
+  regs.forEach(r=>{
+    if(!codeMap[r.regulation_code]){
+      codeMap[r.regulation_code]={
+        code:r.regulation_code,
+        regulation:r.regulation,
+        description:r.description,
+        content_type:r.content_type,
+        status:r.status,
+        regulator:r.regulator,
+        sections:0
+      };
+    }
+    codeMap[r.regulation_code].sections++;
+  });
+  // Count covered sections per code:
+  // - If any OCM row for the code has regulation_id = null → all sections covered
+  // - Otherwise count distinct regulation_ids explicitly linked
+  const linkedSections={};
+  const codeNullMapped=new Set();
+  ocmData.forEach(m=>{
+    if(!m.regulation_id){
+      codeNullMapped.add(m.regulation_code);
+    } else {
+      if(!linkedSections[m.regulation_code]) linkedSections[m.regulation_code]=new Set();
+      linkedSections[m.regulation_code].add(m.regulation_id);
+    }
+  });
+
+  let entries=Object.values(codeMap);
+
+  // Apply filters
+  entries=entries.filter(e=>{
+    if(ft&&e.content_type!==ft) return false;
+    if(fs&&e.status!==fs) return false;
+    if(fcov==='cov'&&!oc.has(e.code)) return false;
+    if(fcov==='gap'&&oc.has(e.code)) return false;
+    if(q&&![e.code,e.regulation,e.regulator].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  // Group by regulator
+  const regulatorOrder=[...new Set(Object.values(codeMap).map(e=>e.regulator||'Other'))].sort();
+  const grouped={};
+  entries.forEach(e=>{
+    const reg=e.regulator||'Other';
+    if(!grouped[reg]) grouped[reg]=[];
+    grouped[reg].push(e);
+  });
+
+  const tbody=document.getElementById('rr-body');
+  if(!entries.length){
+    tbody.innerHTML=`<tr><td colspan="6" class="empty"><div class="empty-icon">📑</div><div class="empty-msg">No regulations match your filters. <span style="cursor:pointer;text-decoration:underline;color:var(--navy)" onclick="clearFilters('register')">Clear filters</span>.</div></td></tr>`;
+    document.getElementById('rr-count').innerHTML='';
+    return;
+  }
+
+  let html='';
+  regulatorOrder.forEach(reg=>{
+    const group=grouped[reg];
+    if(!group||!group.length) return;
+    html+=`<tr><td colspan="6" style="background:var(--navy2);color:#fff;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:5px 12px">${reg}</td></tr>`;
+    group.forEach(e=>{
+      const nullMapped=codeNullMapped.has(e.code);
+      // Count sections actually covered — respecting regulation_id pinning
+      const allSections=regs.filter(r=>r.regulation_code===e.code);
+      const coveredSections=allSections.filter(s=>getCoverage(e.code,s.regulation_id).length>0).length;
+      const covered=coveredSections>0;
+      const secFrac=coveredSections>0
+        ?`<span style="font-weight:600;color:var(--navy)">${coveredSections}</span><span class="muted"> / ${e.sections}</span>`
+        :`<span class="muted">0 / ${e.sections}</span>`;
+      const eid='rr-'+e.code.replace(/[^a-z0-9]/gi,'_');
+      // All sections for this code
+      const sections=regs.filter(r=>r.regulation_code===e.code);
+      html+=`<tr class="expand-trigger" onclick="toggleExpand('${eid}',this)">
+        <td class="strong">${e.code}<span class="expand-caret" id="caret-${eid}">&#9658;</span></td>
+        <td style="font-weight:500;color:var(--navy)">${e.regulation||'—'}<div style="font-size:11px;color:var(--ink3);font-weight:400;margin-top:2px;line-height:1.5">${e.description||''}</div></td>
+        <td><span class="pill type">${e.content_type||'—'}</span></td>
+        <td><span class="pill ${e.status==='Active'?'active':'deleted'}">${e.status||'—'}</span></td>
+        <td style="font-size:12px">${secFrac}</td>
+        <td style="white-space:nowrap"><span class="pill ${covered?'cov':'gap'}">${covered?'&#10003; Covered':'&#9888; Gap'}</span>${isCodeStale(e.code)?` <span style="padding:1px 5px;font-size:10px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid #e0c98a">&#9888; Review</span>`:''}</td>
+      </tr>
+      <tr class="expand-detail" id="${eid}">
+        <td colspan="6" style="padding:0 !important;background:#fff !important;border-bottom:2px solid var(--rule2) !important">
+          ${nullMapped?`<div style="padding:6px 16px 6px 32px;font-size:11px;color:var(--teal);background:#eef5f4;border-bottom:1px solid #a8ccc8;font-style:italic">Covered via code-level OCM mapping — all sections included</div>`:''}
+          ${isCodeStale(e.code)?`<div style="padding:8px 16px 8px 32px;background:var(--amber-bg);border-bottom:1px solid #e0c98a;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;color:var(--amber);font-weight:600">&#9888; This regulation was amended — please review OCM mappings</span><button class="btn small" style="font-size:10px;border-color:var(--amber);color:var(--amber)" onclick="markAllReviewed('${e.code}',event)">Mark all reviewed</button></div>`:''}
+          <table style="width:100%;border-collapse:collapse;font-size:12px">
+            <thead><tr style="background:var(--cream2)">
+              <th style="padding:6px 16px 6px 32px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.05em;width:160px;border-bottom:1px solid var(--rule2)">Regulation ID</th>
+              <th style="padding:6px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.05em;width:200px;border-bottom:1px solid var(--rule2)">Section</th>
+              <th style="padding:6px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--rule2)">Covered by</th>
+            </tr></thead>
+            <tbody>
+              ${sections.map(s=>{
+                // Find OCM rows that cover this section:
+                // 1. Rows with matching regulation_id (specific pin)
+                // 2. Rows with matching regulation_code + null regulation_id (blanket)
+                const coveringOcm=getCoverage(e.code,s.regulation_id);
+                const isCovered=coveringOcm.length>0;
+                const coverText=coveringOcm.length>0
+                  ? coveringOcm.map(m=>{const ms=auditChanges[m.regulation_code]&&m.last_reviewed_at&&new Date(auditChanges[m.regulation_code])>new Date(m.last_reviewed_at);return`<span style="display:inline-block;margin-right:8px"><span style="font-weight:600;color:var(--navy)">${m.department||'—'}</span> <span class="muted">· Ch ${m.chapter}</span>${m.process?` <span class="muted">· ${m.process}</span>`:''}${ms?' <span style="padding:1px 4px;font-size:10px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid #e0c98a">&#9888;</span>':''}</span>`;}).join('<br>')
+                  : `<span style="color:var(--ink3);font-style:italic">Not covered</span>`;
+                return`<tr style="border-bottom:1px solid var(--rule2)">
+                  <td style="padding:7px 16px 7px 32px;font-family:monospace;font-size:10px;color:var(--ink3)">${s.regulation_id}</td>
+                  <td style="padding:7px 12px;font-weight:500;color:var(--navy)">${s.section_title||s.regulation_reference||'—'}</td>
+                  <td style="padding:7px 12px;line-height:1.7">${coverText}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </td>
+      </tr>`;
+    });
+  });
+
+  tbody.innerHTML=html;
+  const covCount=entries.filter(e=>oc.has(e.code)).length;
+  const regulatorCount=[...new Set(entries.map(e=>e.regulator||'Other'))].length;
+  document.getElementById('rr-count').innerHTML=
+    `${entries.length} regulation${entries.length!==1?'s':''} across ${regulatorCount} regulator${regulatorCount!==1?'s':''} &nbsp;·&nbsp; `+
+    `<span style="color:var(--green);font-weight:500">&#10003; ${covCount} covered</span> &nbsp;·&nbsp; `+
+    `<span style="color:var(--amber);font-weight:500">&#9888; ${entries.length-covCount} gaps</span>`;
+}
+
+
+function renderGaps(){
+  const codes=getUniqCodes();
+  const oc=getOcmCodes();
+  const ptIds=new Set(regs.map(r=>r.regulation_id));
+  const ptCodes=new Set(regs.map(r=>r.regulation_code));
+
+  // Section 1 — no OCM mapping
+  const gaps=codes.filter(c=>!oc.has(c));
+  document.getElementById('g1-count').textContent=gaps.length+' gap'+(gaps.length!==1?'s':'');
+  const g1=document.getElementById('g1-body');
+  if(!gaps.length){
+    g1.innerHTML=`<tr><td colspan="5" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">All applicable regulations have at least one OCM mapping.</div></td></tr>`;
+  } else {
+    g1.innerHTML=gaps.map(c=>{
+      const row=regs.find(r=>r.regulation_code===c)||{};
+      return`<tr class="gap-row">
+        <td class="strong">${c}</td>
+        <td><div style="font-weight:500;color:var(--navy)">${row.regulation||'—'}</div></td>
+        <td><span class="pill type">${row.content_type||'—'}</span></td>
+        <td><span class="pill ${row.status==='Active'?'active':'deleted'}">${row.status||'—'}</span></td>
+        <td><button class="btn small primary" onclick="ocmAddRowForCode('${c}')">+ Add OCM</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Section 2 — orphaned mappings
+  const orphans=ocmData.filter(m=>{
+    if(m.regulation_id && !ptIds.has(m.regulation_id)) return true;
+    if(!ptCodes.has(m.regulation_code)) return true;
+    return false;
+  });
+  document.getElementById('g2-count').textContent=orphans.length+' orphan'+(orphans.length!==1?'s':'');
+  const g2=document.getElementById('g2-body');
+  if(!orphans.length){
+    g2.innerHTML=`<tr><td colspan="6" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">All OCM mappings reference valid Phillip Trustee regulations.</div></td></tr>`;
+  } else {
+    g2.innerHTML=orphans.map(m=>{
+      const inPTCodes=ptCodes.has(m.regulation_code);
+      const issue=!inPTCodes?'Code not in PT library':'Regulation ID not found';
+      return`<tr class="orphan-row">
+        <td style="font-weight:500">${m.department||'—'}</td>
+        <td style="font-weight:700;color:var(--navy)">${m.chapter}</td>
+        <td style="font-size:11px">${m.process}</td>
+        <td class="strong">${m.regulation_code}</td>
+        <td class="mono" style="font-size:10px">${m.regulation_id||'—'}</td>
+        <td><span class="pill gap">${issue}</span></td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+
+function toast(type,msg){
+  const t=document.getElementById('toast');
+  t.className='toast '+type;
+  t.textContent=(type==='ok'?'✓ ':'✗ ')+msg;
+  setTimeout(()=>t.className='toast hide',3500);
+}
+
+loadAll();
+</script>
+</body>
+</html>
