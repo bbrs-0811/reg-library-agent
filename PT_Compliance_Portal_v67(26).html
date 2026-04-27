@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phillip Trustee — Regulatory Obligations Portal</title>
+<title>Phillip Group — Compliance Obligations Portal</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 
@@ -40,6 +40,7 @@ body { font-family: var(--sans); font-size: 13px; background: var(--cream); colo
 
 /* ── Sidebar ── */
 .sidebar { width: 220px; background: var(--navy); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; border-right: 1px solid var(--navy2); border-top: 4px solid var(--orange); }
+#entity-selector option { background: #fff; color: var(--navy); font-size: 12px; padding: 6px 8px; }
 .sidebar-mark { padding: 20px 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
 .sidebar-mark h1 { font-family: var(--serif); font-size: 14px; font-weight: 700; line-height: 1.4; letter-spacing: 0.01em; }
 .sidebar-mark p { font-size: 10px; opacity: 0.5; margin-top: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -91,7 +92,7 @@ body { font-family: var(--sans); font-size: 13px; background: var(--cream); colo
 .card-head-title { font-family: var(--serif); font-size: 13px; font-weight: 700; color: var(--navy); }
 
 /* ── KPI strip ── */
-.kpi-strip { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 16px; }
+.kpi-strip { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 16px; }
 .kpi { background: #fff; padding: 12px 16px; }
 .kpi-click { cursor: pointer; transition: background 0.12s; }
 .kpi-l { font-size: 9px; font-weight: 600; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
@@ -221,14 +222,24 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-mark">
-      <h1>Phillip Trustee<br>Pte. Ltd.</h1>
-      <p>Regulatory Obligations</p>
+      <h1 id="entity-name">Phillip Trustee<br>Pte. Ltd.</h1>
+      <p id="entity-type">Regulatory Obligations</p>
+      <select id="entity-selector" onchange="switchEntity(this.value)" style="margin-top:10px;width:100%;padding:7px 28px 7px 10px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);font-size:12px;font-family:var(--sans);cursor:pointer;outline:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path fill=%22%23fff%22 d=%22M6 9L1 4h10z%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:10px">
+        <option value="pspl" selected>Phillip Securities</option>
+        <option value="pnpl">Phillip Nova</option>
+        <option value="phillip_trustee">Phillip Trustee</option>
+        <option value="pcm">Phillip Capital Management</option>
+        <option value="psr">Phillip Securities Research</option>
+        <option value="ppe">Phillip Private Equity</option>
+        <option value="phillip_financial">Phillip Financial</option>
+        <option value="quann_prestige">Quann Prestige</option>
+      </select>
     </div>
     <nav class="nav">
       <div class="nav-sect">Reference</div>
       <div class="nav-item on" onclick="go('framework',this)"><span class="nav-pip"></span>Regulatory Framework</div>
       <div class="nav-sect">Library</div>
-      <div class="nav-item" onclick="go('regs',this)"><span class="nav-pip"></span>Reg Library (PT)</div>
+      <div class="nav-item" onclick="go('regs',this)"><span class="nav-pip"></span>Reg Library (<span id="nav-entity-short">PT</span>)</div>
       <div class="nav-item" onclick="go('register',this)"><span class="nav-pip"></span>Regulation Register</div>
       <div class="nav-item" onclick="go('ocm',this)"><span class="nav-pip"></span>OCM Mappings</div>
       <div class="nav-sect">Analysis</div>
@@ -254,258 +265,54 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
     <div class="page">
 
       <!-- ═══ PAGE 1 — REGULATORY FRAMEWORK ═══ -->
+      <!-- ═══ PAGE 1 — REGULATORY FRAMEWORK (data-driven) ═══ -->
       <div class="tab on" id="tab-framework">
-        <!-- Inner tab bar -->
         <div class="rf-tab-bar">
-          <div class="rf-inner-tab on" onclick="rfTab('overview',this)">Overview</div>
-          <div class="rf-inner-tab" onclick="rfTab('lc',this)">Licence Conditions <span style="font-size:9px;background:var(--orange);color:#fff;padding:1px 5px;margin-left:4px">TC000078</span></div>
-          <div class="rf-inner-tab" onclick="rfTab('approvals',this)">Approvals</div>
-          <div class="rf-inner-tab" onclick="rfTab('notifications',this)">Notifications</div>
-          <div class="rf-inner-tab" onclick="rfTab('submissions',this)">Submissions</div>
-          <div class="rf-inner-tab" onclick="rfTab('techrisks',this)">Technology Risk</div>
-          <div class="rf-inner-tab" onclick="rfTab('channels',this)">Channels</div>
+          <div class="rf-inner-tab on" data-rfv2="overview" onclick="rfTab('overview',this)">Overview</div>
+          <div class="rf-inner-tab"    data-rfv2="conditions" onclick="rfTab('conditions',this)">Licence Conditions</div>
+          <div class="rf-inner-tab"    data-rfv2="obligations" onclick="rfTab('obligations',this)">Obligations</div>
+          <div class="rf-inner-tab"    data-rfv2="channels" onclick="rfTab('channels',this)">Submission Channels</div>
         </div>
 
-        <!-- OVERVIEW -->
-        <div class="rf-pane on" id="rfp-overview">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Phillip Trustee Pte. Ltd. — MAS Regulatory Obligations</h2>
-              <p>Licensed Trust Company &nbsp;·&nbsp; Resident Manager / Executive Director: Tan Teck Lee &nbsp;·&nbsp; Incorporated in Singapore</p>
-              <div class="source">Source: MAS Compliance Toolkit v2.2 (30 Jan 2026) + MAS Regulations &amp; Guidance Directory &nbsp;·&nbsp; <span id="rf-total">—</span> regulations tracked</div>
-            </div>
-            <div class="rf-search">
-              <input type="text" id="rf-q" placeholder="Search regulation, reference or description..." oninput="renderRF()">
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table" id="rf-tbl">
-                <thead><tr>
-                  <th style="width:210px">Regulation / Rule</th>
-                  <th style="width:120px">Reference</th>
-                  <th>Description</th>
-                </tr></thead>
-                <tbody id="rf-body"></tbody>
-              </table>
-            </div>
-            <div class="row-count" id="rf-count"></div>
-          </div>
+        <div id="rfv2-loading" class="rf-meta" style="display:none;color:var(--ink3);padding:24px 20px">
+          Loading regulatory data…
         </div>
 
-        <!-- LICENCE CONDITIONS -->
-        <div class="rf-pane" id="rfp-lc">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Licence Conditions — TC000078</h2>
-              <p>Issued 18 March 2025 &nbsp;·&nbsp; Supersedes version of 25 January 2025 &nbsp;·&nbsp; Signed: Lim Tuang Lee, Assistant Managing Director, Capital Markets Group</p>
-              <div class="source">Trust Companies Act &nbsp;·&nbsp; 10 conditions attached to Phillip Trustee Pte. Ltd.'s trust business licence</div>
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table">
-                <thead><tr>
-                  <th style="width:40px">No.</th>
-                  <th style="width:180px">Subject</th>
-                  <th>Condition</th>
-                </tr></thead>
-                <tbody>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">1</td><td class="rf-rule-name">Conflicts of Interest</td><td class="rf-desc">Conduct business to avoid conflicts of interest; where conflicts arise, resolve them fairly and equitably.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">2</td><td class="rf-rule-name">Professional Indemnity Insurance</td><td class="rf-desc">Immediately inform MAS of any claim against PII cover. If claim ≥10% of aggregate coverage, furnish new PII within one month. Must maintain minimum PII coverage per TCA-G02.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">3</td><td class="rf-rule-name">Independent Audit</td><td class="rf-desc">Produce books to independent auditors selected by MAS. All audit expenses borne by the licensee.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">4</td><td class="rf-rule-name">Letter of Responsibility / Undertaking</td><td class="rf-desc">Provide MAS with Letter of Responsibility and Letter of Undertaking in such form as required. Ensure these remain in force for the duration of the licence.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">5</td><td class="rf-rule-name">AML/CFT Inspection Access</td><td class="rf-desc">Permit MAS to inspect books from time to time for monitoring compliance with AML/CFT directions, regulations and MAS Notices (under s.27B MAS Act).</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">6</td><td class="rf-rule-name">AML/CFT Information Furnishing</td><td class="rf-desc">Furnish MAS with any information required for monitoring compliance with AML/CFT measures and MAS Notices.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">7</td><td class="rf-rule-name">Minimum PII Coverage</td><td class="rf-desc">Maintain minimum professional indemnity insurance coverage as set out in the Guidelines on Criteria for the Grant of a Trust Business Licence (TCA-G02).</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">8</td><td class="rf-rule-name">Foreign Jurisdiction Compliance</td><td class="rf-desc">Satisfy compliance with all relevant laws in foreign jurisdictions before offering products/services to investors residing there.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">9</td><td class="rf-rule-name">Foreign Law Compliance</td><td class="rf-desc">Licensee and staff shall at all times comply with all foreign laws and regulations applicable to their activities.</td></tr>
-                  <tr><td style="font-weight:700;color:var(--navy);text-align:center">10</td><td class="rf-rule-name">Immediate Notification Triggers</td><td class="rf-desc">Immediately notify MAS upon becoming aware of: (a) material adverse development affecting financial soundness, reputation or ability to carry on trust business; (b) resident manager/director no longer fit and proper; (c) controller/substantial shareholder no longer fit and proper; (d) likely inability to conduct business prudently due to controller influence.</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- APPROVALS -->
-        <div class="rf-pane" id="rfp-approvals">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Pre-Approval Requirements</h2>
-              <p>Matters requiring MAS approval before action is taken &nbsp;·&nbsp; S/N 1–6</p>
-              <div class="source">Source: MAS Compliance Toolkit for the Trust Industry v2.2 (30 Jan 2026)</div>
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table">
-                <thead><tr>
-                  <th style="width:35px">S/N</th>
-                  <th style="width:260px">Requirement</th>
-                  <th style="width:220px">Form to Submit</th>
-                  <th style="width:150px">Deadline</th>
-                  <th style="width:150px">Legislative Reference</th>
-                  <th style="width:90px">Channel</th>
-                </tr></thead>
-                <tbody>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">1</td><td class="rf-rule-name">Grant of trust business licence</td><td>Form 1 – Application for a Trust Business Licence under Section 4</td><td>Prior to conducting trust business</td><td class="rf-ref">Section 4 TCA</td><td>Email</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">2</td><td class="rf-rule-name">Approval as 20%/50%/indirect controller</td><td>Form 3 – Application for Approval of Controller under Section 17(1)</td><td>Prior to becoming a controller</td><td class="rf-ref">Section 17 TCA</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">3</td><td class="rf-rule-name">Appointment of resident manager or director</td><td>Form 4 – Appointment of Resident Manager or Director under Section 13 and Regulation 9</td><td>Prior to appointment</td><td class="rf-ref">s.13 TCA; Reg 9 TCR</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">4</td><td class="rf-rule-name">Acquire or hold >20% shares or voting power in a corporation</td><td>No prescribed form</td><td>Prior to acquisition or control</td><td class="rf-ref">Section 21 TCA</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">5</td><td class="rf-rule-name">Transfer whole or part of trust business</td><td>No prescribed form</td><td>Prior to transfer</td><td class="rf-ref">Section 21I TCA</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">6</td><td class="rf-rule-name">Disclose MAS/foreign regulator inspection or investigation reports</td><td>No prescribed form</td><td>Prior to disclosure</td><td class="rf-ref">Section 48(2)(d) TCA</td><td>MAS-Tx</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- NOTIFICATIONS -->
-        <div class="rf-pane" id="rfp-notifications">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Notification Obligations</h2>
-              <p>Matters requiring notification to MAS — most are immediate &nbsp;·&nbsp; S/N 7–14</p>
-              <div class="source">Source: MAS Compliance Toolkit for the Trust Industry v2.2 (30 Jan 2026)</div>
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table">
-                <thead><tr>
-                  <th style="width:35px">S/N</th>
-                  <th style="width:280px">Requirement</th>
-                  <th style="width:220px">Form to Submit</th>
-                  <th style="width:130px">Deadline</th>
-                  <th style="width:150px">Legislative Reference</th>
-                  <th style="width:90px">Channel</th>
-                </tr></thead>
-                <tbody>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">7</td><td class="rf-rule-name">Change of particulars (cessation, ceased resident manager/controller, civil/criminal proceedings, name/address change, ceased to fulfil non-financial requirements)</td><td>Form 2 – Notice of Change of Particulars under Section 9 and Regulation 5</td><td>Within 14 days of change</td><td class="rf-ref">s.9(1) TCA; Regs 5 &amp; 7 TCR</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">8</td><td class="rf-rule-name">Person becomes controller of a foreign-incorporated licensed trust company</td><td>No prescribed form</td><td>As soon as practicable after control</td><td class="rf-ref">Section 16 TCA</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">9</td><td class="rf-rule-name">Cease to fulfil minimum financial / NAV requirements</td><td>Form 2 – Notice of Change of Particulars</td><td>Immediate</td><td class="rf-ref">s.9(1)(e) TCA; Reg 13 TCR</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">10</td><td class="rf-rule-name">Insolvent or likely insolvent; unable to meet obligations; suspended or likely to suspend payments</td><td>No prescribed form</td><td>Immediate</td><td class="rf-ref">Section 21B TCA</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">11</td><td class="rf-rule-name">Any matter likely to materially adversely affect financial position</td><td>No prescribed form (Form 2 for S/N 9 items)</td><td>Immediate</td><td class="rf-ref">s.9(1)(e) TCA; Reg 13 TCR; LC</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">12</td><td class="rf-rule-name">Claim made or likely to be made against professional indemnity insurance</td><td>No prescribed form</td><td>Immediate</td><td class="rf-ref">Licence condition</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">13</td><td class="rf-rule-name">Company or officer involved in investigation, disciplinary action, breach of laws, or matter affecting fit and proper criteria</td><td>No prescribed form</td><td>Immediate</td><td class="rf-ref">Licence condition</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">14</td><td class="rf-rule-name">System malfunction or IT security incident with severe/widespread operational impact or material impact on customer service</td><td>Refer to Circular on FI Incident Reporting</td><td>As soon as possible; not later than 1 hour upon discovery</td><td class="rf-ref">s.29(1) FSM Act (FSM-N25)</td><td>Call/Email</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- SUBMISSIONS -->
-        <div class="rf-pane" id="rfp-submissions">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Regulatory Submissions</h2>
-              <p>Regular returns and reports to be submitted to MAS &nbsp;·&nbsp; S/N 15–19</p>
-              <div class="source">Source: MAS Compliance Toolkit for the Trust Industry v2.2 (30 Jan 2026)</div>
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table">
-                <thead><tr>
-                  <th style="width:35px">S/N</th>
-                  <th style="width:260px">Requirement</th>
-                  <th style="width:220px">Form to Submit</th>
-                  <th style="width:200px">Deadline</th>
-                  <th style="width:150px">Legislative Reference</th>
-                  <th style="width:90px">Channel</th>
-                </tr></thead>
-                <tbody>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">15</td><td class="rf-rule-name">Breakdown of net asset value or qualifying assets</td><td>Form 5 – Maintenance of Net Asset Value and Qualifying Assets under Regulation 12</td><td>Within 14 days from grant of licence; thereafter within 5 months from FY-end</td><td class="rf-ref">s.28 TCA; Regs 12 &amp; 19 TCR</td><td>MASNET</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">16</td><td class="rf-rule-name">Information on assets under trusteeship and/or trust administration</td><td>Form 6 – Omnibus Statement of Trust Accounts under Regulation 19(1)</td><td>Within 60 days from end of calendar year</td><td class="rf-ref">s.28 TCA; Reg 19 TCR</td><td>MASNET</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">17</td><td class="rf-rule-name">Auditor's report on the licensed trust company's business</td><td>Form 7 – Auditor's Report under Regulation 19</td><td>Within 5 months from FY-end</td><td class="rf-ref">s.28 TCA; Reg 19 TCR</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">18</td><td class="rf-rule-name">Annual profit and loss account and balance-sheet</td><td>Profit and Loss Account and Balance-Sheet</td><td>Within 5 months from FY-end</td><td class="rf-ref">Section 30 TCA</td><td>MAS-Tx</td></tr>
-                  <tr><td style="text-align:center;color:var(--navy);font-weight:700">19</td><td class="rf-rule-name">Root cause and impact analysis report for IT incident (executive summary, root cause, impact on compliance/operations/customers, remedial measures)</td><td>Incident Reporting Template</td><td>Initial: ≤24 hours from discovery · Final: within 14 days from discovery</td><td class="rf-ref">s.29(1) FSM Act (FSM-N25)</td><td>MAS-Tx</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- TECHNOLOGY RISK -->
-        <div class="rf-pane" id="rfp-techrisks">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Technology Risk Management Obligations</h2>
-              <p>CMG-N02 (TRM) and CMG-N03 (Cyber Hygiene) cancelled 10 May 2024 — replaced by FSM Act notices below</p>
-              <div class="source">Source: FSM-N25 (Technology Risk Management) · FSM-N26 (Cyber Hygiene) · MAS TRM Guidelines</div>
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table">
-                <thead><tr>
-                  <th style="width:90px">Notice</th>
-                  <th style="width:220px">Title</th>
-                  <th>Key Requirements</th>
-                </tr></thead>
-                <tbody>
-                  <tr class="rf-cat-row"><td colspan="3">MAS NOTICES (MANDATORY)</td></tr>
-                  <tr><td class="rf-ref">FSM-N25</td><td class="rf-rule-name">Technology Risk Management</td><td class="rf-desc">Framework to identify critical systems · High availability for critical systems · RTO ≤4 hours per critical system · Notify MAS within 1 hour of incident · Root cause report within 14 days · IT controls to protect customer information</td></tr>
-                  <tr><td class="rf-ref">FSM-N26</td><td class="rf-rule-name">Cyber Hygiene</td><td class="rf-desc">Secure all administrative accounts · Apply security patches in timely manner · Establish baseline security standards · Deploy network security devices · Implement anti-malware measures · Multi-factor authentication for privileged access</td></tr>
-                  <tr class="rf-cat-row"><td colspan="3">MAS TRM GUIDELINES — BEST PRACTICE STANDARDS</td></tr>
-                  <tr><td class="rf-ref">TRM §3</td><td class="rf-rule-name">Board &amp; Senior Management Oversight</td><td class="rf-desc">Board approves TRM framework; designate senior management responsibility for IT risk</td></tr>
-                  <tr><td class="rf-ref">TRM §4</td><td class="rf-rule-name">IT Risk Management Framework</td><td class="rf-desc">Comprehensive framework: risk identification, assessment, mitigation, monitoring, reporting</td></tr>
-                  <tr><td class="rf-ref">TRM §5–6</td><td class="rf-rule-name">System Availability &amp; Recovery</td><td class="rf-desc">High availability targets; RTO ≤4 hours for critical systems; regular DR testing; documented BCP/DRP</td></tr>
-                  <tr><td class="rf-ref">TRM §8</td><td class="rf-rule-name">Cyber Threat Management</td><td class="rf-desc">Cyber surveillance, threat intelligence, incident response capabilities</td></tr>
-                  <tr><td class="rf-ref">TRM §9</td><td class="rf-rule-name">Access Control &amp; Authentication</td><td class="rf-desc">Least privilege; MFA for privileged/remote access; regular access reviews</td></tr>
-                  <tr><td class="rf-ref">TRM §11</td><td class="rf-rule-name">Vulnerability Assessment &amp; Pen Testing</td><td class="rf-desc">Regular VA/PT of internet-facing and critical systems; prompt remediation</td></tr>
-                  <tr><td class="rf-ref">FSM-N25 §6</td><td class="rf-rule-name">Customer Information Protection</td><td class="rf-desc">IT controls against unauthorised access/disclosure; data loss prevention</td></tr>
-                  <tr><td class="rf-ref">TRM §13</td><td class="rf-rule-name">IT Outsourcing &amp; Cloud Risk</td><td class="rf-desc">Due diligence; contractual safeguards; ongoing monitoring; exit strategies</td></tr>
-                  <tr><td class="rf-ref">FSM-N25 §5</td><td class="rf-rule-name">Incident Notification &amp; Reporting</td><td class="rf-desc">1-hour phone notification → 24-hour initial report → 14-day final report · MAS RO (office hours) or 24hr line: 6229 9526/9527</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- CHANNELS -->
-        <div class="rf-pane" id="rfp-channels">
-          <div class="card">
-            <div class="rf-meta">
-              <h2>Submission Channels</h2>
-              <p>How to submit approvals, notifications and returns to MAS</p>
-              <div class="source">Do not encrypt attachments for FormSG/MAS-Tx. For email: encrypt using AES 256+, password (min 12 chars) via separate channel.</div>
-            </div>
-            <div class="tbl-wrap">
-              <table class="rf-table">
-                <thead><tr>
-                  <th style="width:100px">Channel</th>
-                  <th style="width:220px">URL / Contact</th>
-                  <th style="width:280px">Used For</th>
-                  <th>Notes</th>
-                </tr></thead>
-                <tbody>
-                  <tr><td class="rf-rule-name">Email</td><td><a href="/cdn-cgi/l/email-protection#0f786a6d626e7c7b6a7d4f626e7c21686079217c68" style="color:var(--teal)"><span class="__cf_email__" data-cfemail="8cfbe9eee1edfff8e9fecce1edffa2ebe3faa2ffeb">[email&#160;protected]</span></a></td><td>Initial trust business licence application (Form 1)</td><td class="rf-desc">For entities without assigned MAS review officer</td></tr>
-                  <tr><td class="rf-rule-name">MAS-Tx</td><td><a href="https://mastx.mas.gov.sg/login/" target="_blank" style="color:var(--teal)">mastx.mas.gov.sg</a></td><td>Primary portal for most approvals, notifications and submissions under the TCA</td><td class="rf-desc">View due dates, email reminders, submission copies. User access can be limited by category.</td></tr>
-                  <tr><td class="rf-rule-name">MASNET</td><td><a href="https://masnet.mas.gov.sg/portal/auth/login/" target="_blank" style="color:var(--teal)">masnet.mas.gov.sg</a></td><td>Regular data returns: Net Asset Value/Qualifying Assets (Form 5), Trust Accounts Annual Return (Form 6)</td><td class="rf-desc">—</td></tr>
-                  <tr><td class="rf-rule-name">MAS Website</td><td><a href="https://www.mas.gov.sg/contact-us" target="_blank" style="color:var(--teal)">mas.gov.sg/contact-us</a></td><td>Entities without assigned MAS review officer</td><td class="rf-desc">—</td></tr>
-                  <tr><td class="rf-rule-name">FormSG</td><td>Various (per form)</td><td>Specific forms as directed</td><td class="rf-desc">Do NOT encrypt uploaded attachments</td></tr>
-                  <tr><td class="rf-rule-name">Call / Email</td><td>MAS RO (office hours)<br>24hr BCM line: <strong>6229 9526/9527</strong></td><td>IT security incident notifications (within 1 hour)</td><td class="rf-desc">Call MAS Duty Officer outside office hours</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
+        <div class="rf-pane on" id="rfv2-pane-overview"></div>
+        <div class="rf-pane"    id="rfv2-pane-conditions"></div>
+        <div class="rf-pane"    id="rfv2-pane-obligations"></div>
+        <div class="rf-pane"    id="rfv2-pane-channels"></div>
       </div>
 
-      <!-- ═══ PAGE 2 — REG LIBRARY ═══ -->
-      <div class="tab" id="tab-regs">
+            <div class="tab" id="tab-regs">
         <div class="kpi-strip">
 
           <!-- Tile 1: Library Rows -->
           <div class="kpi">
             <div class="kpi-l">Library Rows</div>
             <div class="kpi-val"><span class="kpi-n or" id="k-total">—</span></div>
-            <div class="kpi-s">rows where PT = y</div>
+            <div class="kpi-s" id="k-total-sub">rows where PT = y</div>
           </div>
 
-          <!-- Tile 2: Coverage Gaps -->
-          <div class="kpi kpi-click" id="k-gap-tile" onclick="go('gaps',document.querySelector('.nav-item:nth-child(6)'))" onmouseenter="this.style.background='var(--amber-bg)'" onmouseleave="this.style.background=''">
+          <!-- Tile 2: Coverage Gaps (spans 2 columns for side-by-side metrics) -->
+          <div class="kpi kpi-click" id="k-gap-tile" style="grid-column:span 2" onclick="go('gaps',document.querySelector('.nav-item:nth-child(6)'))" onmouseenter="this.style.background='var(--amber-bg)'" onmouseleave="this.style.background=''">
             <div class="kpi-l">Coverage Gaps &nbsp;↗</div>
-            <div class="kpi-val">
-              <span class="kpi-n am" id="k-gap-codes">—</span>
-              <span class="kpi-denom">/ <span id="k-gap-codes-total">—</span> codes &nbsp;<span id="k-gap-pct"></span></span>
+            <div style="display:flex;align-items:flex-start;gap:28px;margin-top:2px">
+              <div>
+                <div class="kpi-val">
+                  <span class="kpi-n am" id="k-gap-codes">—</span>
+                  <span class="kpi-denom">/ <span id="k-gap-codes-total">—</span> codes &nbsp;<span id="k-gap-pct"></span></span>
+                </div>
+                <div class="kpi-s" style="margin-top:4px">codes with no OCM mapping</div>
+              </div>
+              <div style="border-left:1px solid var(--rule);padding-left:28px">
+                <div class="kpi-val">
+                  <span class="kpi-n am" id="k-gap">—</span>
+                  <span class="kpi-denom">/ <span id="k-gap-total">—</span> rows &nbsp;<span id="k-gap-row-pct"></span></span>
+                </div>
+                <div class="kpi-s" style="margin-top:4px">rows with no OCM mapping</div>
+              </div>
             </div>
-            <div class="kpi-val" style="margin-top:3px">
-              <span class="kpi-n am" style="font-size:18px" id="k-gap">—</span>
-              <span class="kpi-denom">/ <span id="k-gap-total">—</span> rows &nbsp;<span id="k-gap-row-pct"></span></span>
-            </div>
-            <div class="kpi-s">codes · rows with no OCM mapping</div>
           </div>
 
           <!-- Tile 3: OCM Mappings -->
@@ -667,56 +474,79 @@ const SVC  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const RH   = {"apikey":ANON,"Authorization":"Bearer "+ANON};
 const WH   = {"apikey":SVC,"Authorization":"Bearer "+SVC,"Content-Type":"application/json","Prefer":"return=representation"};
 
-let regs=[], ocmData=[], rfData=[], rfDirty=false, auditChanges={};
+let regs=[], ocmData=[], auditChanges={};
 
-// ── Default RF data (used if JSON not found) ─────────────────────────────
-const RF_DEFAULT = [
-  {id:"cat-1",type:"cat",name:"TRUST BUSINESS LICENCE"},
-  {id:"r-1",type:"row",rule:"Trust Business",ref:"TCA s.4",desc:"Provision of trust services: acting as trustee, trust administration, estate/will services. Licence required prior to conducting trust business. Annual licence fee: S$4,000.",na:false},
-  {id:"cat-2",type:"cat",name:"PRIMARY LEGISLATION"},
-  {id:"r-2",type:"row",rule:"Trust Companies Act 2005 (TCA)",ref:"TCA",desc:"Core statute governing licensing, conduct, financial requirements, controllers, resident managers, inspections, and offences for trust companies in Singapore.",na:false},
-  {id:"r-3",type:"row",rule:"Trustees Act 1967",ref:"Trustees Act",desc:"Underlying trust law in Singapore governing trustee powers, duties, and liabilities.",na:false},
-  {id:"r-4",type:"row",rule:"Financial Services and Markets Act 2022 (FSM Act)",ref:"FSM Act",desc:"Cross-sector statute for technology risk management and incident reporting (Notices FSM-N25 and FSM-N26). Also the basis for targeted financial sanctions regulations.",na:false},
-  {id:"r-5",type:"row",rule:"Companies Act 1967",ref:"CA 1967",desc:"General corporate governance obligations applicable to all Singapore-incorporated companies.",na:false},
-  {id:"r-6",type:"row",rule:"Personal Data Protection Act 2012",ref:"PDPA 2012",desc:"Data privacy and protection obligations. AML/CFT compliance carve-out permits collection/use of personal data without consent.",na:false},
-  {id:"r-7",type:"row",rule:"Corruption, Drug Trafficking & Other Serious Crimes Act",ref:"CDSA",desc:"Suspicious transaction reporting obligations; tipping-off offences (s.48 and s.57).",na:false},
-  {id:"r-8",type:"row",rule:"Terrorism (Suppression of Financing) Act",ref:"TSOFA",desc:"Terrorism financing reporting obligations and asset-freezing requirements.",na:false},
-  {id:"cat-3",type:"cat",name:"SUBSIDIARY LEGISLATION — TRUST COMPANIES"},
-  {id:"r-9",type:"row",rule:"Trust Companies Regulations (TCR)",ref:"TCR",desc:"Financial requirements, resident manager/director appointments, conduct of business, record keeping, annual returns.",na:false},
-  {id:"r-10",type:"row",rule:"Trust Companies (Exemption) Regulations (TER)",ref:"TER",desc:"Exemptions from licensing; notification obligations for exempt trust companies.",na:false},
-  {id:"r-11",type:"row",rule:"Trust Companies (Appeals) Regulations 2025",ref:"TCA Appeals Regs",desc:"Procedures for appeals to an Appeal Advisory Committee under the TCA. Effective 14 Aug 2025.",na:false},
-  {id:"cat-4",type:"cat",name:"MAS NOTICES — APPLICABLE TO LICENSED TRUST COMPANIES"},
-  {id:"r-12",type:"row",rule:"Notice on Effecting Arrangements through Licensed Trust Companies",ref:"TCA-N01",desc:"Requirements when entering arrangements with specified persons to create or act as trustee for an express trust.",na:false},
-  {id:"r-13",type:"row",rule:"Notice on Prevention of Money Laundering and Countering the Financing of Terrorism",ref:"TCA-N03",desc:"CDD, ongoing monitoring, STR, record keeping, internal policies, compliance, audit and training. Revised 30 Jun 2025.",na:false},
-  {id:"r-14",type:"row",rule:"Notice on Reporting of Suspicious Activities and Incidents of Fraud",ref:"TCA-N04",desc:"Requirements on when and how to report suspicious activities and incidents of fraud to MAS.",na:false},
-  {id:"r-15",type:"row",rule:"Notice on Technology Risk Management",ref:"FSM-N25",desc:"Framework to identify critical systems; high availability; RTO ≤4 hours; incident notification ≤1 hour; annual DR testing.",na:false},
-  {id:"r-16",type:"row",rule:"Notice on Cyber Hygiene",ref:"FSM-N26",desc:"Secure all administrative accounts; timely security patching; anti-malware; multi-factor authentication (MFA).",na:false},
-  {id:"cat-5",type:"cat",name:"MAS GUIDELINES — TRUST COMPANY SPECIFIC"},
-  {id:"r-17",type:"row",rule:"Guidelines on Licence Application and Payment of Fees",ref:"TCA-G01",desc:"Administrative procedures for applying for a trust business licence. Application fee: S$1,000. Annual licence fee: S$4,000.",na:false},
-  {id:"r-18",type:"row",rule:"Guidelines on Criteria for the Grant of a Trust Business Licence",ref:"TCA-G02",desc:"Admission criteria: minimum capital ≥S$250,000, qualifying assets, resident managers (≥2, one with ≥5 years).",na:false},
-  {id:"r-19",type:"row",rule:"Guidelines on Standards of Conduct for Licensed Trust Companies",ref:"TCA-G03",desc:"Integrity, competency of officers, due care and diligence, complaints handling, compliance with all applicable laws.",na:false},
-  {id:"r-20",type:"row",rule:"Guidelines on Scope of Regulation",ref:"TCA-G04",desc:"Guidance on scope of regulation and exemption under the Trust Companies Act.",na:false},
-  {id:"r-21",type:"row",rule:"Guidelines to Notice TCA-N03 (AML/CFT)",ref:"TCA-N03 GL",desc:"Practical guidance on CDD, risk assessment, STR filing (within 5 business days), three lines of defence model. Revised 30 Jun 2025.",na:false},
-  {id:"cat-6",type:"cat",name:"MAS GUIDELINES — FIT & PROPER / GOVERNANCE"},
-  {id:"r-22",type:"row",rule:"Guidelines on Fit and Proper Criteria",ref:"FSG-G01",desc:"Criteria for directors, resident managers, shareholders, and controllers. Revised 30 May 2025.",na:false},
-  {id:"r-23",type:"row",rule:"Guidelines on Individual Accountability and Conduct",ref:"IAC GL",desc:"Senior manager accountability and conduct standards. Five high-level outcomes for FIs.",na:false},
-  {id:"r-24",type:"row",rule:"Guidelines on Risk Management Practices — Board and Senior Management",ref:"RMP (Board)",desc:"Role of the Board of Directors and senior management in risk management and corporate governance.",na:false},
-  {id:"cat-7",type:"cat",name:"MAS GUIDELINES — OPERATIONAL / OUTSOURCING / BCM"},
-  {id:"r-25",type:"row",rule:"Guidelines on Business Continuity Management",ref:"BCM GL",desc:"Business continuity planning, disaster recovery, operational resilience. Revised 6 Jun 2022.",na:false},
-  {id:"r-26",type:"row",rule:"Guidelines on Outsourcing",ref:"Outsourcing GL",desc:"Due diligence; contractual safeguards; ongoing monitoring; exit strategies. Maintain outsourcing register. Revised 24 Jan 2025.",na:false},
-  {id:"cat-8",type:"cat",name:"STANDARD CORPORATE LICENCE CONDITIONS"},
-  {id:"r-27",type:"row",rule:"Fitness & Propriety — Notification to MAS",ref:"TC-0G08",desc:"Immediately notify MAS when the company becomes aware of any investigation, disciplinary action, breach of law, or matter affecting fit and proper criteria.",na:false},
-  {id:"r-28",type:"row",rule:"Minimum Financial Requirements — Ongoing",ref:"LC; TCR Reg 12–13",desc:"Maintain minimum paid-up capital or net asset value ≥ S$250,000. Immediately notify MAS if thresholds are breached.",na:false},
-  {id:"r-29",type:"row",rule:"Resident Manager — Minimum Appointments",ref:"LC; TCA s.13",desc:"Maintain at least 2 MAS-approved resident managers at all times. At least one must have ≥5 years of relevant experience.",na:false},
-  {id:"r-30",type:"row",rule:"AML/CFT Programme",ref:"LC; TCA-N03",desc:"Implement and maintain a robust AML/CFT programme including CDD, EDD, ongoing monitoring, STR within 5 business days, record keeping 5 years.",na:false},
-];
 
-function rfTab(name, el){
-  document.querySelectorAll('.rf-inner-tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.rf-pane').forEach(p=>p.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('rfp-'+name).classList.add('on');
-}
+const ENTITIES = {
+  phillip_trustee: {
+    name: "Phillip Trustee Pte. Ltd.",
+    short: "Phillip Trustee",
+    type: "Licensed Trust Company",
+    column: "phillip_trustee",
+    entity: "phillip_trustee",
+    source: "MAS Compliance Toolkit v2.2 (30 Jan 2026)"
+  },
+  psr: {
+    name: "Phillip Securities Research Pte. Ltd.",
+    short: "PSR",
+    type: "Licensed Financial Adviser",
+    column: "psr",
+    entity: "psr",
+    source: "MAS Compliance Toolkit for Financial Advisers (v3.9, 10 Feb 2026)"
+  },
+  pcm: {
+    name: "Phillip Capital Management (S) Ltd",
+    short: "PCM",
+    type: "CMS Licence (Fund Management) · Exempt Financial Adviser",
+    column: "pcm",
+    entity: "pcm",
+    source: "MAS Compliance Toolkit for LFMCs (rev. 30 Jan 2026) · MAS Compliance Toolkit for Financial Advisers (v3.9, 10 Feb 2026)"
+  },
+  pnpl: {
+    name: "Phillip Nova Pte. Ltd.",
+    short: "PNPL",
+    type: "CMS Licence (Dealing in Capital Markets Products — Futures & Derivatives)",
+    column: "pnpl",
+    entity: "pnpl",
+    source: "Group Compliance Division — PNPL OCM (Mar 2026)"
+  },
+  pspl: {
+    name: "Phillip Securities Pte. Ltd.",
+    short: "PSPL",
+    type: "CMS Licence (Dealing in Securities) · SGX Member",
+    column: "pspl",
+    entity: "pspl",
+    source: "Group Compliance Division — PSPL OCM (Dec 2025)"
+  },
+  ppe: {
+    name: "Phillip Private Equity Pte. Ltd.",
+    short: "PPE",
+    type: "CMS Licence (Fund Management) · VCC-eligible",
+    column: "ppe",
+    entity: "ppe",
+    source: "Group Compliance Division — PPE OCM (Mar 2026)"
+  },
+  quann_prestige: {
+    name: "Quann (Singapore) Pte. Ltd.",
+    short: "Quann",
+    type: "LFMC · Exempt FA",
+    column: "quann_prestige",
+    entity: "quann_prestige",
+    source: "MAS Compliance Toolkit (multiple)"
+  },
+  phillip_financial: {
+    name: "Phillip Financial Pte. Ltd.",
+    short: "PFN",
+    type: "Margin Financing · Phillip Securities Affiliate",
+    column: "phillip_financial",
+    entity: "phillip_financial",
+    source: "Group Compliance Division — PFN OCM (Mar 2026)"
+  }
+};
+
+let currentEntity = 'pspl';
+
+
 
 function updateClearBtn(id){
   const btn=document.getElementById(id);
@@ -740,6 +570,13 @@ function clearFilters(page){
   }
 }
 
+
+// ── PSR RF data ───────────────────────────────────────────────────────────
+
+// ── PCM RF data (structured by tab, rendered dynamically) ────────────────
+
+// Map entity key to RF data
+
 // ── Navigation ────────────────────────────────────────────────────────────
 const PAGE_META = {
   framework:{title:"Regulatory Framework",sub:"Reference document — regulations, licence conditions, approvals, notifications and submission channels"},
@@ -748,6 +585,8 @@ const PAGE_META = {
   ocm:{title:"OCM Mappings",sub:"Source of truth — maps departments and chapters to regulation codes · Edit inline, save directly to Supabase"},
   gaps:{title:"Coverage Gaps",sub:"Regulations with no OCM mapping · OCM entries referencing unknown codes"},
 };
+
+
 function go(name,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
@@ -773,13 +612,12 @@ async function loadAll(){
   setStat('loading','b','Loading...');
   try{
     const [r1,r2]=await Promise.all([
-      fetch(`${SB}/regulatory_library?phillip_trustee=eq.y&select=regulation_id,regulation_code,regulation,regulator,content_type,regulation_reference,section_title,description,status,implementation_date,topic,sub_topic,url,update_date&order=regulation_id.asc&limit=2000`,{headers:RH}),
-      fetch(`${SB}/ocm_mappings?entity=eq.phillip_trustee&select=*&order=department.asc,chapter.asc`,{headers:RH}),
+      fetch(`${SB}/regulatory_library?${ENTITIES[currentEntity].column}=eq.y&select=regulation_id,regulation_code,regulation,regulator,content_type,regulation_reference,section_title,description,status,implementation_date,topic,sub_topic,url,update_date&order=regulation_id.asc&limit=5000`,{headers:RH}),
+      fetch(`${SB}/ocm_mappings?entity=eq.${ENTITIES[currentEntity].entity}&select=*&order=department.asc,chapter.asc&limit=10000`,{headers:RH}),
     ]);
     if(!r1.ok||!r2.ok) throw new Error();
     regs=await r1.json();
     ocmData=await r2.json();
-    rfData=[...RF_DEFAULT];
     // Fetch audit_log separately so it never breaks main load
     auditChanges={};
     try{
@@ -803,113 +641,13 @@ async function loadAll(){
   }
   populateFilters();
   updateKPIs();
-  renderRF();
+  if(window.rfDataDriven) rfDataDriven.load(currentEntity);
   renderRegs();
   renderOCM();
 }
 
 // ── SharePoint JSON (RF data) ─────────────────────────────────────────────
-function renderRF(){
-  const q=(document.getElementById('rf-q').value||'').toLowerCase();
-  let total=0, shown=0;
-  let html='';
-  rfData.forEach((item,idx)=>{
-    if(item.type==='cat'){
-      if(q){
-        let hasMatch=false;
-        for(let i=idx+1;i<rfData.length;i++){
-          if(rfData[i].type==='cat') break;
-          const r=rfData[i];
-          if([r.rule,r.ref,r.desc].join(' ').toLowerCase().includes(q)){hasMatch=true;break;}
-        }
-        if(!hasMatch) return;
-      }
-      html+=`<tr class="rf-cat-row"><td colspan="3">${item.name}</td></tr>`;
-    } else if(item.type==='row'){
-      total++;
-      if(q&&![item.rule,item.ref,item.desc].join(' ').toLowerCase().includes(q)) return;
-      shown++;
-      const naClass=item.na?'rf-na-row':'';
-      html+=`<tr class="${naClass}">
-        <td class="rf-rule-name">${item.rule}</td>
-        <td class="rf-ref">${item.ref}</td>
-        <td class="rf-desc">${item.desc}</td>
-      </tr>`;
-    }
-  });
-  document.getElementById('rf-body').innerHTML=html||'<tr><td colspan="3" class="empty">No regulations match your search.</td></tr>';
-  document.getElementById('rf-total').textContent=total;
-  document.getElementById('rf-count').textContent=q?`Showing ${shown} of ${total} regulations`:`${total} regulations`;
-}
 
-function rfAddRow(){
-  const id='nr-'+Date.now();
-  rfData.push({id,type:'new-row',rule:'',ref:'',desc:'',na:false});
-  renderRF();
-  setTimeout(()=>document.getElementById('nrule-'+id)?.focus(),50);
-}
-function rfAddCategory(){
-  const id='nc-'+Date.now();
-  rfData.push({id,type:'new-cat',name:''});
-  renderRF();
-  setTimeout(()=>document.getElementById('ncat-'+id)?.focus(),50);
-}
-function rfSaveNewRow(id){
-  const rule=document.getElementById('nrule-'+id)?.value.trim();
-  const ref=document.getElementById('nref-'+id)?.value.trim();
-  const desc=document.getElementById('ndesc-'+id)?.value.trim();
-  if(!rule) return;
-  const idx=rfData.findIndex(r=>r.id===id);
-  rfData[idx]={id:'r-'+Date.now(),type:'row',rule,ref,desc,na:false};
-  markDirty(); renderRF();
-}
-function rfSaveNewCat(id){
-  const name=document.getElementById('ncat-'+id)?.value.trim();
-  if(!name) return;
-  const idx=rfData.findIndex(r=>r.id===id);
-  rfData[idx]={id:'cat-'+Date.now(),type:'cat',name};
-  markDirty(); renderRF();
-}
-function rfEditRow(id){
-  const idx=rfData.findIndex(r=>r.id===id);
-  rfData[idx]={...rfData[idx],type:'edit-row'};
-  renderRF();
-  setTimeout(()=>document.getElementById('erule-'+id)?.focus(),50);
-}
-function rfEditCat(id){
-  const idx=rfData.findIndex(r=>r.id===id);
-  rfData[idx]={...rfData[idx],type:'edit-cat'};
-  renderRF();
-}
-function rfSaveEditRow(id){
-  const rule=document.getElementById('erule-'+id)?.value.trim();
-  const ref=document.getElementById('eref-'+id)?.value.trim();
-  const desc=document.getElementById('edesc-'+id)?.value.trim();
-  const idx=rfData.findIndex(r=>r.id===id);
-  rfData[idx]={...rfData[idx],type:'row',rule,ref,desc};
-  markDirty(); renderRF();
-}
-function rfSaveEditCat(id){
-  const name=document.getElementById('ecat-'+id)?.value.trim();
-  const idx=rfData.findIndex(r=>r.id===id);
-  rfData[idx]={...rfData[idx],type:'cat',name};
-  markDirty(); renderRF();
-}
-function rfCancelEdit(id){
-  const idx=rfData.findIndex(r=>r.id===id);
-  const orig=rfData[idx];
-  rfData[idx]={...orig,type:orig.type.replace('edit-','')};
-  renderRF();
-}
-function rfCancelItem(id){
-  rfData=rfData.filter(r=>r.id!==id);
-  renderRF();
-}
-function rfDeleteItem(id){
-  if(!confirm('Delete this item?')) return;
-  rfData=rfData.filter(r=>r.id!==id);
-  markDirty(); renderRF();
-}
 
 // ── Reg Library ────────────────────────────────────────────────────────────
 function getCoverage(code, regulation_id){
@@ -994,6 +732,25 @@ async function markAllReviewed(code,event){
     renderRegs(); renderOCM(); renderRegister();
   }catch(e){toast('err','Update failed.');}
 }
+
+
+// ── PCM RF dynamic pane renderer ──────────────────────────────────────────
+function escapeHtml(s){
+  if(s==null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function linkifyUrl(s){
+  if(!s) return '';
+  const esc = escapeHtml(s);
+  if(/^https?:\/\//i.test(s)){
+    return `<a href="${esc}" target="_blank" style="color:var(--teal)">${esc.replace(/^https?:\/\//i,'')}</a>`;
+  }
+  if(/^mailto:/i.test(s)){
+    return `<a href="${esc}" style="color:var(--teal)">${esc.replace(/^mailto:/i,'')}</a>`;
+  }
+  return esc;
+}
+
 
 
 function renderRegs(){
@@ -1250,7 +1007,7 @@ async function ocmSaveNew(id){
   const notes=document.getElementById('new-notes-'+id)?.value.trim();
   if(!chap||!proc||!code){toast('err','Chapter, process and regulation code are required.');return;}
   try{
-    const now=new Date().toISOString();const body={entity:'phillip_trustee',department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,last_reviewed_at:now};
+    const now=new Date().toISOString();const body={entity:currentEntity,department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,last_reviewed_at:now};
     const res=await fetch(`${SB}/ocm_mappings`,{method:'POST',headers:WH,body:JSON.stringify(body)});
     if(!res.ok) throw new Error();
     toast('ok','Mapping added.');
@@ -1480,7 +1237,555 @@ function toast(type,msg){
   setTimeout(()=>t.className='toast hide',3500);
 }
 
-loadAll();
+// On initial load, call switchEntity() so all display labels (sidebar name, nav, RF header)
+// populate from ENTITIES[currentEntity] rather than showing the hardcoded HTML defaults.
+// switchEntity() internally calls loadAll().
+switchEntity(currentEntity);
+
+// ============================================================================
+//  RF tab switcher (data-driven version)
+// ============================================================================
+function rfTab(name, el){
+  document.querySelectorAll('#tab-framework .rf-inner-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('#tab-framework .rf-pane').forEach(p=>p.classList.remove('on'));
+  if(el) el.classList.add('on');
+  const pane = document.getElementById('rfv2-pane-'+name);
+  if(pane) pane.classList.add('on');
+}
+
+// ============================================================================
+//  switchEntity — simplified for data-driven RF
+// ============================================================================
+function switchEntity(key){
+  try {
+    currentEntity = key;
+    const e = ENTITIES[key];
+    if(!e){ console.error('Unknown entity:', key); return; }
+
+    const elName = document.getElementById('entity-name');
+    if(elName) elName.innerHTML = e.name.replace(' Pte. Ltd.','<br>Pte. Ltd.');
+
+    const elType = document.getElementById('entity-type');
+    if(elType) elType.textContent = e.type;
+
+    const elSub = document.getElementById('pg-sub');
+    if(elSub) elSub.textContent = e.type + ' — ' + e.name;
+
+    if(typeof PAGE_META !== 'undefined' && PAGE_META.regs){
+      PAGE_META.regs.title = 'Reg Library ('+e.short+')';
+      PAGE_META.regs.sub   = 'Applicable regulations for '+e.name+' · Click any row to expand coverage details';
+    }
+
+    const navShort = document.getElementById('nav-entity-short');
+    if(navShort) navShort.textContent = e.short;
+    const kSub = document.getElementById('k-total-sub');
+    if(kSub) kSub.textContent = 'rows where ' + e.short + ' = y';
+
+    const tabRegs = document.getElementById('tab-regs');
+    if(tabRegs && tabRegs.classList.contains('on')){
+      const pgT = document.getElementById('pg-title');
+      if(pgT) pgT.textContent = PAGE_META.regs.title;
+      if(elSub) elSub.textContent = PAGE_META.regs.sub;
+    }
+
+    // Reset RF to Overview tab
+    const firstTab = document.querySelector('#tab-framework .rf-inner-tab');
+    if(firstTab && typeof rfTab === 'function') rfTab('overview', firstTab);
+
+    // Trigger RF data-driven load directly
+    if(typeof rfDataDriven !== 'undefined' && rfDataDriven && rfDataDriven.load){
+      rfDataDriven.load(key);
+    }
+
+    // Also reload regs/ocm tabs data
+    if(typeof loadAll === 'function') loadAll();
+  } catch(err){
+    console.error('switchEntity error:', err);
+  }
+}
+
+// ============================================================================
+//  rfDataDriven — Regulatory Framework data-driven module
+// ----------------------------------------------------------------------------
+//  Pulls from Supabase tables:
+//    licence_profiles      → Overview tab
+//    licence_conditions    → Licence Conditions tab
+//    regulatory_obligations → Obligations tab (filtered by applies_to ∩ licence_types)
+//    submission_channels   → Submission Channels tab
+//
+//  Single batched fetch per entity, cached for the session.
+// ============================================================================
+const rfDataDriven = (function() {
+
+  let currentFilter = '';
+  let currentEntityKey = null;
+  let lastData = null;  // current entity's data
+
+  const URGENCY_RANK = {
+    immediate:1, within_n_days:2, prior_to_event:3, monthly:4,
+    quarterly:5, semi_annual:6, annual:7, ad_hoc:8
+  };
+  const URGENCY_LABEL = {
+    immediate:'Immediate', within_n_days:'Within N days', prior_to_event:'Prior to event',
+    monthly:'Monthly', quarterly:'Quarterly', semi_annual:'Semi-annual',
+    annual:'Annual', ad_hoc:'Ad-hoc'
+  };
+  const CATEGORY_LABEL = {
+    approval:'Approval', notification:'Notification', submission:'Submission',
+    incident_reporting:'Incident reporting', staff_notification:'Representative',
+    staff_misconduct:'Rep misconduct'
+  };
+
+  function esc(s){
+    if(s==null) return '';
+    return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  async function fetchJSON(path){
+    const r = await fetch(SB + '/' + path, { headers: RH });
+    if(!r.ok){
+      console.error('rfDataDriven fetch failed:', path, r.status);
+      return [];
+    }
+    return r.json();
+  }
+
+  // Always re-fetch on switch — no caching to avoid stale state
+  async function loadEntity(entity){
+    const [profile, conditions, obligations, channels] = await Promise.all([
+      fetchJSON(`licence_profiles?entity=eq.${entity}&select=*`),
+      fetchJSON(`licence_conditions?entity=eq.${entity}&select=*&order=condition_id.asc`),
+      fetchJSON(`regulatory_obligations?select=*&order=toolkit_source.asc,toolkit_section.asc,serial_no.asc`),
+      fetchJSON(`submission_channels?select=*&order=display_order.asc`),
+    ]);
+
+    const profileRow = profile[0] || null;
+    const licenceTypes = profileRow ? (profileRow.licence_types || []) : [];
+
+    const visibleObligations = obligations.filter(o =>
+      Array.isArray(o.applies_to) && o.applies_to.some(t => licenceTypes.includes(t))
+    );
+    const usedChannelIds = new Set(visibleObligations.map(o => o.mode_of_submission).filter(Boolean));
+    const visibleChannels = channels.filter(c => usedChannelIds.has(c.channel_id));
+
+    return {
+      profile: profileRow,
+      licenceTypes,
+      conditions,
+      obligations: visibleObligations,
+      channels: visibleChannels,
+    };
+  }
+
+  function formatActivities(acts){
+    if(!acts || typeof acts !== 'object') return [];
+    const groups = [];
+    for(const [key, val] of Object.entries(acts)){
+      const human = key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+      if(Array.isArray(val) && val.length > 0){
+        groups.push({ label: human, value: val.join(', ') });
+      } else if(val === true){
+        groups.push({ label: human, value: 'Yes' });
+      }
+    }
+    return groups;
+  }
+
+  // ─── OCM Coverage Lookup ──────────────────────────────────────
+  // Returns OCM rows that target a specific library entry, tagged with
+  // precision: 'precise' (regulation_id match) or 'broad' (regulation_code match).
+  function ocmLookup(regulationId, regulationCode, entity){
+    if(typeof ocmData === 'undefined' || !Array.isArray(ocmData)) return [];
+    const matches = [];
+    for(const om of ocmData){
+      if(om.entity !== entity) continue;
+      const isPrecise = om.regulation_id && om.regulation_id === regulationId;
+      const isBroad   = !isPrecise && om.regulation_code && om.regulation_code === regulationCode;
+      if(isPrecise || isBroad){
+        matches.push({ ...om, precision: isPrecise ? 'precise' : 'broad' });
+      }
+    }
+    matches.sort((a,b) => (a.precision === 'precise' ? -1 : 1));
+    return matches;
+  }
+
+  // Coverage block — shared by Conditions and Obligations detail panels.
+  function renderCoverageBlock(regulationId, regulationCode, entity){
+    const matches = ocmLookup(regulationId, regulationCode, entity);
+    if(matches.length === 0){
+      return `<div style="margin-top:10px;padding:10px 12px;background:#fff3e0;border-left:3px solid #f4a261;font-size:12px">
+        <strong style="color:#c25e1f">⚠ No chapter coverage assigned</strong>
+        <div class="muted" style="font-size:11px;margin-top:3px">Add a row in the OCM Mappings tab with regulation_id = <code>${esc(regulationId)}</code> to link a chapter.</div>
+      </div>`;
+    }
+    const rows = matches.map(m => {
+      const badge = m.precision === 'precise'
+        ? '<span style="background:#7cba3a;color:#fff;font-size:9px;padding:1px 5px;font-weight:600;letter-spacing:.05em">PRECISE</span>'
+        : '<span style="background:#bbb;color:#fff;font-size:9px;padding:1px 5px;font-weight:600;letter-spacing:.05em">BROAD</span>';
+      const dept = esc(m.department || '—');
+      const chap = esc(m.chapter || '');
+      const proc = m.process ? `<div class="muted" style="font-size:11px;margin-top:2px">${esc(m.process)}</div>` : '';
+      const notes = m.notes ? `<div class="muted" style="font-size:11px;margin-top:2px;font-style:italic">${esc(m.notes)}</div>` : '';
+      return `<div style="padding:6px 0;border-bottom:1px solid var(--rule2)">
+        <div style="display:flex;align-items:center;gap:8px"><strong>${dept}</strong> / Chapter ${chap} ${badge}</div>
+        ${proc}${notes}
+      </div>`;
+    }).join('');
+    return `<div style="margin-top:10px;padding:10px 12px;background:#f0f7e6;border-left:3px solid #7cba3a;font-size:12px">
+      <strong style="color:#3d7019">✓ Chapter coverage (${matches.length})</strong>
+      <div style="margin-top:6px">${rows}</div>
+    </div>`;
+  }
+
+  // ─── Render: Overview ─────────────────────────────────────────
+  function renderOverview(data){
+    const p = data.profile;
+    if(!p){
+      return `<div class="card"><div class="rf-meta" style="color:var(--ink3)">No profile data found.</div></div>`;
+    }
+    const ent = ENTITIES[p.entity] || {};
+
+    // Build the meta key-value rows
+    const rows = [];
+    rows.push(['Legal Name', esc(p.legal_name || '—')]);
+    rows.push(['Short Name', esc(p.short_name || '—')]);
+    rows.push(['Type', esc(ent.type || '—')]);
+    if(p.licence_types && p.licence_types.length){
+      rows.push(['Licence Classes', p.licence_types.map(t => `<span class="rf-badge na">${esc(t)}</span>`).join(' ')]);
+    }
+    if(p.licence_numbers && Object.keys(p.licence_numbers).length){
+      rows.push(['Licence Numbers', Object.entries(p.licence_numbers).map(([k,v]) => `<span class="rf-badge na">${esc(k)}: ${esc(v)}</span>`).join(' ')]);
+    }
+    if(p.ceo_name)              rows.push(['CEO', esc(p.ceo_name)]);
+    if(p.resident_manager_name) rows.push(['Resident Manager', esc(p.resident_manager_name)]);
+    if(p.base_capital_sgd)      rows.push(['Base Capital', `SGD ${Number(p.base_capital_sgd).toLocaleString()}` + (p.base_capital_requirement ? ` <span class="muted">(${esc(p.base_capital_requirement)})</span>` : '')]);
+    if(p.incorporated_jurisdiction) rows.push(['Incorporated In', esc(p.incorporated_jurisdiction)]);
+    if(p.effective_from)        rows.push(['Effective From', esc(p.effective_from)]);
+    if(p.toolkit_sources && p.toolkit_sources.length){
+      rows.push(['Toolkit Sources', p.toolkit_sources.map(t => `<span class="rf-badge na">${esc(t)}</span>`).join(' ')]);
+    }
+    if(p.source_reference)      rows.push(['Source Reference', `<span class="muted" style="font-style:italic">${esc(p.source_reference)}</span>`]);
+
+    const activityGroups = formatActivities(p.regulated_activities);
+    for(const g of activityGroups){
+      rows.push([g.label, esc(g.value)]);
+    }
+
+    if(p.notes) rows.push(['Notes', esc(p.notes)]);
+
+    return `
+      <div class="kpi-strip" style="grid-template-columns:repeat(4, minmax(0,1fr))">
+        <div class="kpi"><div class="kpi-l">Licence Types</div><div class="kpi-val"><span class="kpi-n">${data.licenceTypes.length}</span></div></div>
+        <div class="kpi"><div class="kpi-l">Standing Conditions</div><div class="kpi-val"><span class="kpi-n">${data.conditions.length}</span></div></div>
+        <div class="kpi"><div class="kpi-l">Applicable Obligations</div><div class="kpi-val"><span class="kpi-n or">${data.obligations.length}</span></div></div>
+        <div class="kpi"><div class="kpi-l">Channels in Use</div><div class="kpi-val"><span class="kpi-n">${data.channels.length}</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">Entity Details — ${esc(p.legal_name || p.short_name || p.entity)}</div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="data" style="width:100%;border-collapse:collapse;font-size:12px">
+            <tbody>
+              ${rows.map(([k,v]) => `
+                <tr>
+                  <td style="padding:8px 16px;width:200px;color:var(--ink3);font-weight:600;background:var(--cream);border-bottom:1px solid var(--rule2);vertical-align:top">${esc(k)}</td>
+                  <td style="padding:8px 16px;border-bottom:1px solid var(--rule2);vertical-align:top">${v}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // ─── Render: Licence Conditions ────────────────────────────────
+  function renderConditions(data){
+    if(!data.conditions || data.conditions.length === 0){
+      return `<div class="card"><div class="rf-meta" style="color:var(--ink3)">No licence conditions for this entity.</div></div>`;
+    }
+
+    // Sort by source_licence then condition_number for natural reading order
+    const sorted = [...data.conditions].sort((a,b) => {
+      const sa = (a.source_licence||'').localeCompare(b.source_licence||'');
+      if(sa !== 0) return sa;
+      const na = parseInt(a.condition_number||'0',10) || 0;
+      const nb = parseInt(b.condition_number||'0',10) || 0;
+      return na - nb;
+    });
+
+    const rows = sorted.map(c => {
+      const libCode = 'LC-' + (
+        c.entity === 'phillip_trustee'   ? 'PT' :
+        c.entity === 'phillip_financial' ? 'PFN' :
+        c.entity === 'quann_prestige'    ? 'QUANN' :
+        (c.entity || '').toUpperCase()
+      );
+      return `
+      <tr class="rfv2-cond-row" data-id="${esc(c.condition_id)}" onclick="rfDataDriven.toggleRow(this)" style="cursor:pointer">
+        <td style="width:14px;text-align:center;vertical-align:top"><span class="rfv2-arrow" style="color:var(--ink3);font-size:10px">▸</span></td>
+        <td class="mono" style="white-space:nowrap;vertical-align:top">${esc(c.condition_id)}</td>
+        <td style="vertical-align:top;font-size:11px">${esc(c.source_licence || '—')} #${esc(c.condition_number || '')}</td>
+        <td style="vertical-align:top"><span class="rf-badge na">${esc(c.condition_type || '')}</span></td>
+        <td style="vertical-align:top;font-weight:600">${esc(c.title || '—')}</td>
+        <td style="vertical-align:top;line-height:1.55">${esc((c.requirement_text || '').slice(0, 110))}${c.requirement_text && c.requirement_text.length > 110 ? '…' : ''}</td>
+        <td style="vertical-align:top;font-size:11px"><span class="rf-badge na">${esc(c.responsible_function || '—')}</span></td>
+      </tr>
+      <tr class="rfv2-cond-detail" data-detail-for="${esc(c.condition_id)}" style="display:none">
+        <td colspan="7" style="padding:14px 24px;background:var(--cream);border-left:3px solid var(--orange)">
+          <table style="width:100%;font-size:12px;border-collapse:collapse">
+            <tr><td class="muted" style="padding:3px 12px 3px 0;width:160px;vertical-align:top">Condition ID</td><td class="mono" style="padding:3px 0">${esc(c.condition_id)}</td></tr>
+            <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Source Licence</td><td style="padding:3px 0">${esc(c.source_licence || '—')} · Condition #${esc(c.condition_number || '—')}</td></tr>
+            <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Type</td><td style="padding:3px 0">${esc(c.condition_type || '—')}</td></tr>
+            <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Title</td><td style="padding:3px 0;font-weight:600">${esc(c.title || '—')}</td></tr>
+            <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Full Requirement</td><td style="padding:3px 0;line-height:1.6">${esc(c.requirement_text || '')}</td></tr>
+            ${c.verification_evidence ? `<tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Verification</td><td style="padding:3px 0">${esc(c.verification_evidence)}</td></tr>` : ''}
+            <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Responsible Function</td><td style="padding:3px 0"><span class="rf-badge na">${esc(c.responsible_function || '—')}</span></td></tr>
+            ${c.related_regulation_id ? `<tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Linked Regulation</td><td class="mono" style="padding:3px 0">${esc(c.related_regulation_id)}</td></tr>` : ''}
+          </table>
+          ${renderCoverageBlock(c.condition_id, libCode, c.entity)}
+        </td>
+      </tr>`;
+    }).join('');
+
+    return `
+      <div class="kpi-strip" style="grid-template-columns:repeat(3, minmax(0,1fr))">
+        <div class="kpi"><div class="kpi-l">Total Conditions</div><div class="kpi-val"><span class="kpi-n">${data.conditions.length}</span></div></div>
+        <div class="kpi"><div class="kpi-l">Source Licences</div><div class="kpi-val"><span class="kpi-n">${new Set(data.conditions.map(c=>c.source_licence).filter(Boolean)).size}</span></div></div>
+        <div class="kpi"><div class="kpi-l">Functions Involved</div><div class="kpi-val"><span class="kpi-n">${new Set(data.conditions.map(c=>c.responsible_function).filter(Boolean)).size}</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">Standing Licence Conditions</div>
+          <div class="muted" style="font-size:11px">Imposed at licence grant; remain in force throughout licence period</div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="rf-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th style="width:110px">ID</th>
+                <th style="width:120px">Source / #</th>
+                <th style="width:110px">Type</th>
+                <th style="width:200px">Title</th>
+                <th>Condition Text</th>
+                <th style="width:130px">Function</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // ─── Render: Obligations ───────────────────────────────────────
+  function renderObligations(data, filterCategory){
+    if(!data.obligations || data.obligations.length === 0){
+      return `<div class="card"><div class="rf-meta" style="color:var(--ink3)">No applicable obligations for this entity.</div></div>`;
+    }
+
+    const filtered = filterCategory
+      ? data.obligations.filter(o => o.category === filterCategory)
+      : data.obligations;
+
+    filtered.sort((a, b) => {
+      const ua = URGENCY_RANK[a.deadline_type] || 99;
+      const ub = URGENCY_RANK[b.deadline_type] || 99;
+      if(ua !== ub) return ua - ub;
+      return (a.toolkit_section || '').localeCompare(b.toolkit_section || '')
+          || (a.serial_no || 0) - (b.serial_no || 0);
+    });
+
+    // Build category options for filter
+    const counts = {};
+    for(const o of data.obligations) counts[o.category] = (counts[o.category] || 0) + 1;
+    const catOptions = ['<option value="">All categories (' + data.obligations.length + ')</option>']
+      .concat(Object.keys(CATEGORY_LABEL).map(k =>
+        `<option value="${k}"${filterCategory===k?' selected':''}>${CATEGORY_LABEL[k]} (${counts[k]||0})</option>`));
+
+    // Row builder with embedded urgency divider rows
+    let lastUrgency = null;
+    const tbodyRows = [];
+    for(const o of filtered){
+      const urg = o.deadline_type || 'unspecified';
+      if(urg !== lastUrgency){
+        tbodyRows.push(`
+          <tr class="rf-cat-row">
+            <td colspan="6">${esc(URGENCY_LABEL[urg] || urg)}</td>
+          </tr>`);
+        lastUrgency = urg;
+      }
+      const days = o.deadline_days ? ` (${o.deadline_days}d)` : '';
+      tbodyRows.push(`
+        <tr class="rfv2-ob-row" data-id="${esc(o.obligation_id)}" onclick="rfDataDriven.toggleRow(this)" style="cursor:pointer">
+          <td class="mono" style="vertical-align:top;font-size:10px">${esc(o.obligation_id)}</td>
+          <td style="vertical-align:top"><span class="rf-badge na">${esc(CATEGORY_LABEL[o.category] || o.category || '')}</span></td>
+          <td style="vertical-align:top;line-height:1.55">${esc((o.requirement_text || '').slice(0, 140))}${o.requirement_text && o.requirement_text.length > 140 ? '…' : ''}</td>
+          <td style="vertical-align:top;font-size:11px">${esc((o.form_name || '').slice(0, 35) || '—')}</td>
+          <td style="vertical-align:top;font-size:11px">${esc((o.regulatory_deadline || '').slice(0, 40) || '—')}${days}</td>
+          <td style="vertical-align:top"><span class="rf-badge na">${esc(o.mode_of_submission || '—')}</span></td>
+        </tr>
+        <tr class="rfv2-ob-detail" data-detail-for="${esc(o.obligation_id)}" style="display:none">
+          <td colspan="6" style="padding:14px 24px;background:var(--cream);border-left:3px solid var(--orange)">
+            <table style="width:100%;font-size:12px;border-collapse:collapse">
+              <tr><td class="muted" style="padding:3px 12px 3px 0;width:160px;vertical-align:top">Toolkit</td><td style="padding:3px 0">${esc(o.toolkit_source)} · Section ${esc(o.toolkit_section)} · S/N ${esc(o.serial_no)}</td></tr>
+              <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Full Requirement</td><td style="padding:3px 0">${esc(o.requirement_text || '')}</td></tr>
+              <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Form</td><td style="padding:3px 0">${esc(o.form_name || '—')}${o.form_url ? ` <a href="${esc(o.form_url)}" target="_blank" rel="noopener" style="color:var(--navy2);margin-left:6px">↗ Open</a>` : ''}</td></tr>
+              <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Deadline</td><td style="padding:3px 0">${esc(o.regulatory_deadline || '—')}</td></tr>
+              <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Legislative Reference</td><td style="padding:3px 0">${esc(o.legislative_reference || '—')}</td></tr>
+              <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">MAS-Tx</td><td style="padding:3px 0">${esc(o.mas_tx_category || '—')}${o.mas_tx_transaction ? ' → ' + esc(o.mas_tx_transaction) : ''}</td></tr>
+              <tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Applies To</td><td style="padding:3px 0">${(o.applies_to || []).map(t => `<span class="rf-badge na">${esc(t)}</span>`).join(' ')}</td></tr>
+              ${o.cross_reference_note ? `<tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Notes</td><td style="padding:3px 0">${esc(o.cross_reference_note)}</td></tr>` : ''}
+              ${o.footnote_text ? `<tr><td class="muted" style="padding:3px 12px 3px 0;vertical-align:top">Footnote</td><td style="padding:3px 0;font-size:11px">${esc(o.footnote_text)}</td></tr>` : ''}
+            </table>
+            ${renderCoverageBlock(o.obligation_id, 'OBL-' + o.toolkit_source, currentEntityKey)}
+          </td>
+        </tr>`);
+    }
+
+    const urgencyKpis = Object.entries(URGENCY_LABEL).map(([k,label]) => {
+      const n = data.obligations.filter(o => o.deadline_type === k).length;
+      if(n === 0) return '';
+      return `<div class="kpi"><div class="kpi-l">${label}</div><div class="kpi-val"><span class="kpi-n">${n}</span></div></div>`;
+    }).filter(Boolean).join('');
+
+    const visibleUrgencyCount = Object.keys(URGENCY_LABEL).filter(k => data.obligations.some(o => o.deadline_type === k)).length;
+    const colCount = Math.min(visibleUrgencyCount, 5);
+
+    return `
+      <div class="kpi-strip" style="grid-template-columns:repeat(${colCount}, minmax(0,1fr))">
+        ${urgencyKpis}
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">Regulatory Obligations</div>
+          <div class="muted" style="font-size:11px">Click any row to expand full detail · Sorted by urgency</div>
+        </div>
+        <div class="filters">
+          <label class="filter-label">Category</label>
+          <select onchange="rfDataDriven.filterCategory(this.value)">
+            ${catOptions.join('')}
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table class="rf-table">
+            <thead>
+              <tr>
+                <th style="width:110px">ID</th>
+                <th style="width:130px">Category</th>
+                <th>Requirement</th>
+                <th style="width:160px">Form</th>
+                <th style="width:170px">Deadline</th>
+                <th style="width:100px">Mode</th>
+              </tr>
+            </thead>
+            <tbody>${tbodyRows.join('')}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // ─── Render: Submission Channels ───────────────────────────────
+  function renderChannels(data){
+    if(!data.channels || data.channels.length === 0){
+      return `<div class="card"><div class="rf-meta" style="color:var(--ink3)">No submission channels in use.</div></div>`;
+    }
+
+    const counts = {};
+    for(const o of data.obligations){
+      counts[o.mode_of_submission] = (counts[o.mode_of_submission] || 0) + 1;
+    }
+
+    const rows = data.channels.map(c => `
+      <tr>
+        <td style="vertical-align:top"><span class="rf-rule-name">${esc(c.display_name || c.channel_id)}</span></td>
+        <td style="vertical-align:top">${esc(c.description || '—')}</td>
+        <td style="vertical-align:top">${c.login_url ? `<a href="${esc(c.login_url)}" target="_blank" rel="noopener" style="color:var(--navy2);font-size:11px">${esc(c.login_url)} ↗</a>` : '—'}</td>
+        <td style="text-align:right;vertical-align:top"><span class="rf-badge na">${counts[c.channel_id] || 0}</span></td>
+      </tr>
+    `).join('');
+
+    return `
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-title">Submission Channels</div>
+          <div class="muted" style="font-size:11px">Filtered to channels referenced by this entity's obligations</div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="rf-table">
+            <thead>
+              <tr>
+                <th style="width:200px">Channel</th>
+                <th>Description</th>
+                <th>Login URL</th>
+                <th style="text-align:right;width:120px">Usage</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // ─── Public API ────────────────────────────────────────────────
+  async function load(entity){
+    currentEntityKey = entity;
+    currentFilter = '';
+    const loader = document.getElementById('rfv2-loading');
+    if(loader) loader.style.display = 'block';
+    try{
+      const data = await loadEntity(entity);
+      lastData = data;
+      renderAll(data);
+    }catch(e){
+      console.error('rfDataDriven.load error:', e);
+      const ovr = document.getElementById('rfv2-pane-overview');
+      if(ovr) ovr.innerHTML = `<div class="card"><div class="rf-meta" style="color:var(--red)">Error loading data: ${esc(e.message || e)}</div></div>`;
+    }finally{
+      if(loader) loader.style.display = 'none';
+    }
+  }
+
+  function renderAll(data){
+    document.getElementById('rfv2-pane-overview').innerHTML    = renderOverview(data);
+    document.getElementById('rfv2-pane-conditions').innerHTML  = renderConditions(data);
+    document.getElementById('rfv2-pane-obligations').innerHTML = renderObligations(data, currentFilter);
+    document.getElementById('rfv2-pane-channels').innerHTML    = renderChannels(data);
+  }
+
+  function filterCategory(cat){
+    currentFilter = cat || '';
+    if(lastData){
+      document.getElementById('rfv2-pane-obligations').innerHTML =
+        renderObligations(lastData, currentFilter);
+    }
+  }
+
+  function toggleRow(tr){
+    const id = tr.getAttribute('data-id');
+    const detail = document.querySelector(`tr[data-detail-for="${id}"]`);
+    if(!detail) return;
+    if(detail.style.display === 'none'){
+      detail.style.display = '';
+    } else {
+      detail.style.display = 'none';
+    }
+  }
+
+  return { load, filterCategory, toggleRow };
+})();
+
+// ── Initialize on page load ───────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if(typeof currentEntity !== 'undefined' && currentEntity){
+    setTimeout(() => rfDataDriven.load(currentEntity), 100);
+  }
+});
+
 </script>
 </body>
 </html>
