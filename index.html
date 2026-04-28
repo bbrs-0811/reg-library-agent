@@ -214,17 +214,188 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
 .mono { font-family: 'SFMono-Regular','Consolas',monospace; font-size: 10px; }
 .muted { color: var(--ink3); }
 .strong { font-weight: 600; color: var(--navy); }
+
+/* ═══════════════════════════════════════════════════════════════
+   PORTAL v9 — Bloomberg Terminal Masthead + Collapsible Sidebar
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Sidebar — collapsible ── */
+.sidebar { 
+  transition: width 0.18s ease;
+  position: relative;
+}
+.sidebar.collapsed { width: 56px; min-width: 56px; }
+.sidebar.collapsed .sidebar-mark .bbg-name,
+.sidebar.collapsed .sidebar-mark .bbg-meta,
+.sidebar.collapsed .sidebar-mark .bbg-classes,
+.sidebar.collapsed .sidebar-mark .bbg-select,
+.sidebar.collapsed .nav-sect,
+.sidebar.collapsed .nav-item-text,
+.sidebar.collapsed .sidebar-foot {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.sidebar.collapsed .sidebar-mark { padding: 12px 6px; }
+.sidebar.collapsed .sidebar-mark .bbg-band { 
+  padding: 10px 4px; 
+  text-align: center; 
+}
+.sidebar.collapsed .bbg-tick { 
+  font-size: 11px; 
+  margin: 0 !important; 
+}
+.sidebar.collapsed .nav-item { padding: 12px 0; justify-content: center; text-align: center; }
+.sidebar.collapsed .nav-item .nav-pip { margin: 0; }
+
+/* Sidebar collapse toggle button */
+.sidebar-toggle {
+  position: absolute;
+  top: 16px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  background: var(--navy);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.18s, background 0.12s;
+  padding: 0;
+  font-family: var(--sans);
+  border-radius: 0;
+  font-weight: 600;
+  line-height: 1;
+}
+.sidebar-toggle:hover { background: var(--orange); }
+.sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); }
+
+/* ── Bloomberg Terminal Masthead ── */
+.bbg-band {
+  background: #0a1f2e;            /* deeper than --navy for the band feel */
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 14px 12px;
+  margin: -2px -2px 12px;
+  font-family: 'SF Mono', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  letter-spacing: 0.02em;
+  position: relative;
+}
+.bbg-band::before {
+  /* tiny orange tick mark in the corner — Bloomberg-style accent */
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 18px;
+  background: var(--orange);
+}
+.bbg-tick {
+  font-family: 'SF Mono', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.bbg-name {
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.bbg-meta {
+  font-family: 'SF Mono', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  color: #9eb5c9;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.bbg-classes {
+  margin-top: 6px;
+  font-family: 'SF Mono', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: #6b8195;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+.bbg-classes .bbg-class {
+  display: inline-block;
+  padding: 1px 5px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  margin: 1px 2px 1px 0;
+  color: #c9d4dc;
+}
+
+/* Override the existing entity-selector to look terminal-y */
+.bbg-select {
+  margin-top: 0 !important;
+  width: 100%;
+  padding: 7px 28px 7px 10px;
+  background: rgba(255,255,255,0.05) !important;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  font-size: 11px;
+  font-family: 'SF Mono', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+  cursor: pointer;
+  outline: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path fill=%22%23fff%22 d=%22M6 9L1 4h10z%22/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+  letter-spacing: 0.04em;
+}
+.bbg-select:focus {
+  border-color: var(--orange) !important;
+}
+
+/* Active row blinking dot — subtle cue this is a live system */
+.bbg-tick::after {
+  content: ' ●';
+  color: #4cd964;
+  font-size: 7px;
+  vertical-align: middle;
+  margin-left: 4px;
+  animation: bbg-blink 2.4s ease-in-out infinite;
+}
+@keyframes bbg-blink {
+  0%, 60%, 100% { opacity: 1; }
+  70%, 80% { opacity: 0.25; }
+}
+
 </style>
 </head>
 <body>
 <div class="shell">
 
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar" title="Collapse sidebar">‹</button>
     <div class="sidebar-mark">
-      <h1 id="entity-name">Phillip Trustee<br>Pte. Ltd.</h1>
-      <p id="entity-type">Regulatory Obligations</p>
-      <select id="entity-selector" onchange="switchEntity(this.value)" style="margin-top:10px;width:100%;padding:7px 28px 7px 10px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);font-size:12px;font-family:var(--sans);cursor:pointer;outline:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path fill=%22%23fff%22 d=%22M6 9L1 4h10z%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:10px">
+      <div class="bbg-band">
+        <div class="bbg-tick">[<span id="entity-short">PT</span>]</div>
+        <div class="bbg-name" id="entity-name">PHILLIP TRUSTEE PTE. LTD.</div>
+        <div class="bbg-meta" id="entity-type">TRUST CO · LICENSED</div>
+        <div class="bbg-classes" id="entity-classes"></div>
+      </div>
+      <select id="entity-selector" onchange="switchEntity(this.value)" class="bbg-select"><path fill=%22%23fff%22 d=%22M6 9L1 4h10z%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:10px">
         <option value="pspl" selected>Phillip Securities</option>
         <option value="pnpl">Phillip Nova</option>
         <option value="phillip_trustee">Phillip Trustee</option>
@@ -237,13 +408,13 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
     </div>
     <nav class="nav">
       <div class="nav-sect">Reference</div>
-      <div class="nav-item on" onclick="go('framework',this)"><span class="nav-pip"></span>Regulatory Framework</div>
+      <div class="nav-item on" onclick="go('framework',this)"><span class="nav-pip"></span><span class="nav-item-text">Regulatory Framework</span></div>
       <div class="nav-sect">Library</div>
-      <div class="nav-item" onclick="go('regs',this)"><span class="nav-pip"></span>Reg Library (<span id="nav-entity-short">PT</span>)</div>
-      <div class="nav-item" onclick="go('register',this)"><span class="nav-pip"></span>Regulation Register</div>
-      <div class="nav-item" onclick="go('ocm',this)"><span class="nav-pip"></span>OCM Mappings</div>
+      <div class="nav-item" onclick="go('regs',this)"><span class="nav-pip"></span><span class="nav-item-text">Regulation Library</span></div>
+      <div class="nav-item" onclick="go('register',this)"><span class="nav-pip"></span><span class="nav-item-text">Regulation Register</span></div>
+      <div class="nav-item" onclick="go('ocm',this)"><span class="nav-pip"></span><span class="nav-item-text">OCM Mappings</span></div>
       <div class="nav-sect">Analysis</div>
-      <div class="nav-item" onclick="go('gaps',this)"><span class="nav-pip"></span>Coverage Gaps</div>
+      <div class="nav-item" onclick="go('gaps',this)"><span class="nav-pip"></span><span class="nav-item-text">Coverage Gaps</span></div>
     </nav>
     <div class="sidebar-foot">Group Compliance Division<br>Refreshed: <span id="last-t">—</span></div>
   </div>
@@ -476,11 +647,27 @@ const WH   = {"apikey":SVC,"Authorization":"Bearer "+SVC,"Content-Type":"applica
 
 let regs=[], ocmData=[], auditChanges={};
 
+// ── Sidebar collapsible (v9) ──
+function toggleSidebar(){
+  const sb = document.getElementById('sidebar');
+  if(!sb) return;
+  sb.classList.toggle('collapsed');
+  try { sessionStorage.setItem('sidebar_collapsed', sb.classList.contains('collapsed') ? '1' : '0'); } catch(e){}
+}
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    if(sessionStorage.getItem('sidebar_collapsed') === '1'){
+      const sb = document.getElementById('sidebar');
+      if(sb) sb.classList.add('collapsed');
+    }
+  } catch(e){}
+});
+
 
 const ENTITIES = {
   phillip_trustee: {
     name: "Phillip Trustee Pte. Ltd.",
-    short: "Phillip Trustee",
+    short: "PT",
     type: "Licensed Trust Company",
     column: "phillip_trustee",
     entity: "phillip_trustee",
@@ -580,7 +767,7 @@ function clearFilters(page){
 // ── Navigation ────────────────────────────────────────────────────────────
 const PAGE_META = {
   framework:{title:"Regulatory Framework",sub:"Reference document — regulations, licence conditions, approvals, notifications and submission channels"},
-  regs:{title:"Reg Library (PT)",sub:"All 860 library rows where Phillip Trustee = y · Click any row to expand section detail and OCM coverage"},
+  regs:{title:"Regulation Library",sub:"All 860 library rows where Phillip Trustee = y · Click any row to expand section detail and OCM coverage"},
   register:{title:"Regulation Register",sub:"One entry per regulation code · Click to expand all sections and see who covers each one"},
   ocm:{title:"OCM Mappings",sub:"Source of truth — maps departments and chapters to regulation codes · Edit inline, save directly to Supabase"},
   gaps:{title:"Coverage Gaps",sub:"Regulations with no OCM mapping · OCM entries referencing unknown codes"},
@@ -1263,16 +1450,23 @@ function switchEntity(key){
     if(!e){ console.error('Unknown entity:', key); return; }
 
     const elName = document.getElementById('entity-name');
-    if(elName) elName.innerHTML = e.name.replace(' Pte. Ltd.','<br>Pte. Ltd.');
+    if(elName) elName.textContent = (e.name || '').toUpperCase();
+    
+    // Update Bloomberg masthead short-code
+    const elShort = document.getElementById('entity-short');
+    if(elShort) elShort.textContent = (e.short || key).toUpperCase();
+    
+    // Populate licence classes strip from licence_profiles when data loads.
+    // For now, leave it empty — rfDataDriven will populate after fetch.
 
     const elType = document.getElementById('entity-type');
-    if(elType) elType.textContent = e.type;
+    if(elType) elType.textContent = (e.type || '').toUpperCase();
 
     const elSub = document.getElementById('pg-sub');
     if(elSub) elSub.textContent = e.type + ' — ' + e.name;
 
     if(typeof PAGE_META !== 'undefined' && PAGE_META.regs){
-      PAGE_META.regs.title = 'Reg Library ('+e.short+')';
+      PAGE_META.regs.title = 'Regulation Library';
       PAGE_META.regs.sub   = 'Applicable regulations for '+e.name+' · Click any row to expand coverage details';
     }
 
@@ -1755,6 +1949,13 @@ const rfDataDriven = (function() {
     document.getElementById('rfv2-pane-conditions').innerHTML  = renderConditions(data);
     document.getElementById('rfv2-pane-obligations').innerHTML = renderObligations(data, currentFilter);
     document.getElementById('rfv2-pane-channels').innerHTML    = renderChannels(data);
+
+    // Populate the Bloomberg masthead licence-classes strip after data loads
+    const elClasses = document.getElementById('entity-classes');
+    if(elClasses){
+      const types = (data && data.licenceTypes) || [];
+      elClasses.innerHTML = types.map(t => `<span class="bbg-class">${esc(t)}</span>`).join(' ');
+    }
   }
 
   function filterCategory(cat){
