@@ -930,7 +930,7 @@ async function loadAll(){
       const ra=await fetch(`${SB}/audit_log?select=regulation_code,run_timestamp,scenario&run_status=eq.success&order=run_timestamp.desc&limit=500`,{headers:RH});
       if(ra.ok){
         const auditRows=await ra.json();
-        auditRows.filter(row=>['B','C','D','E','F'].includes(row.scenario)).forEach(row=>{
+        auditRows.filter(row=>['B','C','D','E','F','M'].includes(row.scenario)).forEach(row=>{
           if(!auditChanges[row.regulation_code]||row.run_timestamp>auditChanges[row.regulation_code]){
             auditChanges[row.regulation_code]=row.run_timestamp;
           }
