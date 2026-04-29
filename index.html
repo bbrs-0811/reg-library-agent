@@ -164,7 +164,69 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
 .inline-input { width: 100%; padding: 4px 7px; border: 1px solid var(--navy2); font-size: 12px; font-family: var(--sans); background: #fff; outline: none; color: var(--ink); }
 .inline-input:focus { border-color: var(--navy); box-shadow: 0 0 0 2px rgba(28,46,74,0.1); }
 .inline-select { width: 100%; padding: 4px 7px; border: 1px solid var(--navy2); font-size: 12px; font-family: var(--sans); background: #fff; outline: none; color: var(--ink); cursor: pointer; }
-.edit-actions { display: flex; gap: 5px; }
+.edit-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.edit-actions.ocm-edit-panel { display:grid; grid-template-columns: 1fr 1fr; gap:6px; min-width:140px; }
+.edit-actions.ocm-edit-panel .ocm-action-btn { width:100%; }
+.edit-actions.ocm-edit-panel .span-2 { grid-column: span 2; }
+
+/* ── OCM action column ── */
+.ocm-actions-cell { width: 150px; min-width: 150px; vertical-align: middle !important; }
+.ocm-action-panel { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.ocm-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.ocm-action-btn { height: 28px; padding: 0 9px; border: 1px solid var(--rule); background: #fff; color: var(--navy); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.01em; cursor: pointer; transition: all 0.12s ease; text-align:center; white-space:nowrap; }
+.ocm-action-btn:hover { border-color: var(--navy2); background: var(--cream2); }
+.ocm-action-btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+.ocm-action-btn.primary:hover { background: var(--navy2); border-color: var(--navy2); }
+.ocm-action-btn.copy { color: var(--teal); }
+.ocm-action-btn.copy:hover { border-color: var(--teal); background: #eef5f4; }
+.ocm-action-btn.review { color: var(--amber); border-color: #e0c98a; background: var(--amber-bg); }
+.ocm-action-btn.review:hover { background: #fbefd5; }
+.ocm-action-btn.danger { color: var(--red); border-color:#e8c4c4; background:var(--red-bg); }
+.ocm-action-btn.danger:hover { background:#fae0e0; border-color:#dca8a8; }
+.ocm-action-btn.ghost { color:var(--ink3); background:#fff; }
+.ocm-action-btn.ghost:hover { color:var(--navy); background:var(--cream2); }
+/* OCM filter toolbar: keep Add Mapping visually anchored with the filters */
+.ocm-filters {
+  display:grid;
+  grid-template-columns: minmax(220px,1.15fr) minmax(200px,1.25fr) minmax(145px,.75fr) minmax(260px,2fr) minmax(145px,.8fr) 158px;
+  gap:10px;
+  padding:14px 20px;
+  align-items:center;
+}
+.ocm-filters input, .ocm-filters select { width:100%; min-width:0; height:36px; }
+.ocm-filters .filter-clear { grid-column:1 / -1; margin-top:-4px; }
+.ocm-add-btn {
+  margin-left:0 !important;
+  height:38px;
+  width:158px;
+  justify-content:center;
+  font-weight:700;
+  align-self:center;
+  padding:0 16px;
+}
+.ocm-add-btn::before { content:'+'; font-weight:700; margin-right:4px; }
+@media (max-width: 1180px){
+  .ocm-filters { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .ocm-add-btn { width:100%; }
+}
+#ocm-tbl th:last-child, #ocm-tbl td:last-child { text-align:left; }
+.ocm-reviewed { font-size: 10px; color: var(--ink3); line-height: 1.25; padding-top: 1px; border-top: 1px solid var(--rule2); text-align: left; }
+.ocm-reviewed span { display: block; color: var(--ink3); font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 1px; }
+
+
+/* ── Mapping quality indicators ── */
+.pill.library-gap { background: var(--amber-bg); color: var(--amber); border-color: #e0c98a; }
+.pill.external { background: #eef5f4; color: var(--teal); border-color: #a8ccc8; }
+.pill.issue { background: var(--red-bg); color: var(--red); border-color: #e8c4c4; }
+.ocm-quality-bar { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 16px; }
+.ocm-quality-card { background:#fff; padding:12px 16px; cursor:pointer; transition:background .12s,border-color .12s; border-top:3px solid transparent; }
+.ocm-quality-card:hover { background:var(--cream); }
+.ocm-quality-card.on { border-top-color:var(--orange); background:var(--cream2); }
+.ocm-quality-card .label { font-size:9px; font-weight:700; color:var(--ink3); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
+.ocm-quality-card .num { font-family:var(--serif); font-size:21px; font-weight:700; color:var(--navy); line-height:1; }
+.ocm-quality-card .hint { font-size:10px; color:var(--ink3); margin-top:5px; }
+.ocm-quality-card.gap .num { color:var(--amber); }
+.ocm-quality-card.external .num { color:var(--teal); }
 
 /* ── Inner tabs (Page 1) ── */
 .rf-tab-bar { display: flex; gap: 0; border-bottom: 2px solid var(--navy); background: var(--cream2); }
@@ -390,12 +452,12 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
     <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar" title="Collapse sidebar">‹</button>
     <div class="sidebar-mark">
       <div class="bbg-band">
-        <div class="bbg-tick">[<span id="entity-short">PT</span>]</div>
-        <div class="bbg-name" id="entity-name">PHILLIP TRUSTEE PTE. LTD.</div>
-        <div class="bbg-meta" id="entity-type">TRUST CO · LICENSED</div>
+        <div class="bbg-tick">[<span id="entity-short">PSPL</span>]</div>
+        <div class="bbg-name" id="entity-name">PHILLIP SECURITIES PTE. LTD.</div>
+        <div class="bbg-meta" id="entity-type">CMS LICENCE (DEALING IN SECURITIES) · SGX MEMBER</div>
         <div class="bbg-classes" id="entity-classes"></div>
       </div>
-      <select id="entity-selector" onchange="switchEntity(this.value)" class="bbg-select"><path fill=%22%23fff%22 d=%22M6 9L1 4h10z%22/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:10px">
+      <select id="entity-selector" onchange="switchEntity(this.value)" class="bbg-select">
         <option value="pspl" selected>Phillip Securities</option>
         <option value="pnpl">Phillip Nova</option>
         <option value="phillip_trustee">Phillip Trustee</option>
@@ -424,7 +486,7 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
     <div class="topbar">
       <div class="topbar-left">
         <h2 id="pg-title">Regulatory Framework</h2>
-        <p id="pg-sub">MAS regulatory obligations applicable to Phillip Trustee Pte. Ltd.</p>
+        <p id="pg-sub">MAS regulatory obligations applicable to Phillip Securities Pte. Ltd.</p>
       </div>
       <div class="topbar-right" id="pg-actions">
         <button class="btn small" onclick="loadAll()">&#8635; Refresh</button>
@@ -531,15 +593,26 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
 
       <!-- ═══ PAGE 3 — OCM MAPPINGS ═══ -->
       <div class="tab" id="tab-ocm">
+        <div class="ocm-quality-bar">
+          <div class="ocm-quality-card on" id="oq-valid" onclick="setOcmQuality('valid_mapping')">
+            <div class="label">Mapped Controls</div><div class="num" id="oq-valid-n">—</div><div class="hint">Matched to Regulation Library</div>
+          </div>
+          <div class="ocm-quality-card gap" id="oq-gap" onclick="setOcmQuality('library_gap')">
+            <div class="label">Library Gaps</div><div class="num" id="oq-gap-n">—</div><div class="hint">OCM code not yet in library</div>
+          </div>
+          <div class="ocm-quality-card external" id="oq-external" onclick="setOcmQuality('external_reference')">
+            <div class="label">External / Pending Onboarding</div><div class="num" id="oq-external-n">—</div><div class="hint">Valid reference, future library backlog</div>
+          </div>
+        </div>
         <div class="card">
-          <div class="filters">
+          <div class="filters ocm-filters">
             <input type="text" id="o-q" placeholder="Search department, chapter, process, code..." oninput="renderOCM();updateClearBtn('o-clear')">
             <select id="o-dept" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All departments</option></select>
             <select id="o-chap" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All chapters</option></select>
             <select id="o-code" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All regulation codes</option></select>
-            <select id="o-stale" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All mappings</option><option value="stale">Needs review</option><option value="ok">Up to date</option></select>
+            <select id="o-stale" onchange="renderOCM();updateClearBtn('o-clear')"><option value="">All review status</option><option value="stale">Needs review</option><option value="ok">Up to date</option></select>
             <span class="filter-clear" id="o-clear" onclick="clearFilters('ocm')">✕ Clear filters</span>
-            <button class="btn small primary" onclick="ocmAddRow()" style="margin-left:auto">+ Add Mapping</button>
+            <button class="btn small primary ocm-add-btn" onclick="ocmAddRow()">Add Mapping</button>
           </div>
           <div class="tbl-wrap">
             <table class="data" id="ocm-tbl">
@@ -548,9 +621,10 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
                 <th style="width:65px">Chapter</th>
                 <th style="width:210px">Process</th>
                 <th style="width:110px">Regulation Code</th>
+                <th style="width:120px">Mapping Type</th>
                 <th style="width:200px">Regulation ID / Section</th>
                 <th>Notes</th>
-                <th style="width:90px">Actions</th>
+                <th style="width:150px;text-align:left">Actions</th>
               </tr></thead>
               <tbody id="o-body"></tbody>
             </table>
@@ -563,12 +637,11 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
       <div class="tab" id="tab-gaps">
         <div style="background:var(--cream2);border:1px solid var(--rule);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--ink2);line-height:1.65">
           <strong style="color:var(--navy)">How to read this page:</strong>
-          Section 1 lists regulation codes in the PT library with no OCM entry — these are genuine compliance gaps that need a department and chapter assigned.
-          Section 2 lists OCM entries referencing codes that don't exist in the PT library — these are data quality issues to clean up.
+          Section 1 lists entity regulations with no OCM coverage. Section 2 lists OCM references that look like missing library entries. Section 3 lists valid external / pending-onboarding references; these are backlog items, not errors.
         </div>
         <div class="card">
-        <div class="sect-div amber">
-            <span>&#9650; Regulations with no OCM mapping</span>
+          <div class="sect-div amber">
+            <span>&#9650; Entity regulations with no OCM mapping</span>
             <span id="g1-count" class="sect-badge amber"></span>
           </div>
           <div class="tbl-wrap">
@@ -585,21 +658,40 @@ table.data tr.new-row td { background: #f0f6ff; border-bottom: 2px solid var(--n
           </div>
         </div>
         <div class="card">
-          <div class="sect-div red">
-            <span>&#9650; OCM mappings referencing regulations outside Phillip Trustee</span>
-            <span id="g2-count" class="sect-badge red"></span>
+          <div class="sect-div amber">
+            <span>&#9650; Library gaps — OCM references not yet found in Regulation Library</span>
+            <span id="g2-count" class="sect-badge amber"></span>
           </div>
           <div class="tbl-wrap">
             <table class="data">
               <thead><tr>
                 <th style="width:110px">Department</th>
                 <th style="width:65px">Chapter</th>
-                <th style="width:200px">Process</th>
-                <th style="width:100px">Reg Code</th>
+                <th style="width:220px">Process</th>
+                <th style="width:130px">Reg Code</th>
                 <th style="width:160px">Regulation ID</th>
-                <th style="width:80px">Issue</th>
+                <th>Notes</th>
               </tr></thead>
               <tbody id="g2-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sect-div">
+            <span>&#9650; External / pending library onboarding references</span>
+            <span id="g3-count" class="sect-badge amber"></span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="data">
+              <thead><tr>
+                <th style="width:110px">Department</th>
+                <th style="width:65px">Chapter</th>
+                <th style="width:220px">Process</th>
+                <th style="width:130px">Reference Code</th>
+                <th style="width:160px">Regulation ID</th>
+                <th>Notes</th>
+              </tr></thead>
+              <tbody id="g3-body"></tbody>
             </table>
           </div>
         </div>
@@ -692,7 +784,7 @@ const ENTITIES = {
   pnpl: {
     name: "Phillip Nova Pte. Ltd.",
     short: "PNPL",
-    type: "CMS Licence (Dealing in Capital Markets Products — Futures & Derivatives)",
+    type: "CMS Licence (Dealing in Capital Markets Products — Futures & Derivatives) · SGX-DT Member",
     column: "pnpl",
     entity: "pnpl",
     source: "Group Compliance Division — PNPL OCM (Mar 2026)"
@@ -767,19 +859,38 @@ function clearFilters(page){
 // ── Navigation ────────────────────────────────────────────────────────────
 const PAGE_META = {
   framework:{title:"Regulatory Framework",sub:"Reference document — regulations, licence conditions, approvals, notifications and submission channels"},
-  regs:{title:"Regulation Library",sub:"All 860 library rows where Phillip Trustee = y · Click any row to expand section detail and OCM coverage"},
+  regs:{title:"Regulation Library",sub:"Applicable regulations for the selected entity · Click any row to expand section detail and OCM coverage"},
   register:{title:"Regulation Register",sub:"One entry per regulation code · Click to expand all sections and see who covers each one"},
-  ocm:{title:"OCM Mappings",sub:"Maps departments and chapters to regulation codes"},
-  gaps:{title:"Coverage Gaps",sub:"Regulations with no OCM mapping · OCM entries referencing unknown codes"},
+  ocm:{title:"OCM Mappings",sub:"Mapped controls, library gaps and external references · Edit inline, save directly to Supabase"},
+  gaps:{title:"Coverage Exceptions",sub:"True coverage gaps, missing library entries and pending-onboarding references"},
 };
 
+let currentPage = 'framework';
+function entityLabel(){
+  const e = ENTITIES[currentEntity] || {};
+  return e.name || currentEntity;
+}
+function pageMeta(name){
+  const e = ENTITIES[currentEntity] || {};
+  const base = PAGE_META[name] || PAGE_META.framework;
+  if(name === 'regs') return {title:base.title, sub:`Applicable regulations for ${e.name || 'selected entity'} · Click any row to expand coverage details`};
+  if(name === 'register') return {title:base.title, sub:`Consolidated regulation register for ${e.name || 'selected entity'} · Section-level coverage shown where mapped`};
+  if(name === 'ocm') return {title:base.title, sub:`OCM chapter mappings for ${e.name || 'selected entity'} · Add, duplicate or edit mappings inline`};
+  if(name === 'gaps') return {title:base.title, sub:`Coverage and data-quality exceptions for ${e.name || 'selected entity'}`};
+  if(name === 'framework') return {title:base.title, sub:`${e.type || 'Selected entity'} — ${e.name || ''}`};
+  return base;
+}
+function navFor(page){
+  return [...document.querySelectorAll('.nav-item')].find(n => (n.getAttribute('onclick') || '').includes(`go('${page}'`));
+}
 
 function go(name,el){
+  currentPage = name;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
   document.getElementById('tab-'+name).classList.add('on');
-  if(el) el.classList.add('on');
-  const m=PAGE_META[name];
+  (el || navFor(name))?.classList.add('on');
+  const m=pageMeta(name);
   document.getElementById('pg-title').textContent=m.title;
   document.getElementById('pg-sub').textContent=m.sub;
   if(name==='gaps') renderGaps();
@@ -793,6 +904,13 @@ function setStat(cls,dc,msg){
   document.getElementById('sdot').className='sdot '+dc;
   document.getElementById('smsg').textContent=msg;
 }
+async function responseError(res, fallback){
+  try{
+    const txt = await res.text();
+    if(txt) return `${fallback} (${res.status}) — ${txt.slice(0,240)}`;
+  }catch(e){}
+  return `${fallback} (${res?.status || 'unknown'})`;
+}
 
 // ── Load all data ────────────────────────────────────────────────────────
 async function loadAll(){
@@ -800,9 +918,10 @@ async function loadAll(){
   try{
     const [r1,r2]=await Promise.all([
       fetch(`${SB}/regulatory_library?${ENTITIES[currentEntity].column}=eq.y&select=regulation_id,regulation_code,regulation,regulator,content_type,regulation_reference,section_title,description,status,implementation_date,topic,sub_topic,url,update_date&order=regulation_id.asc&limit=5000`,{headers:RH}),
-      fetch(`${SB}/ocm_mappings?entity=eq.${ENTITIES[currentEntity].entity}&select=*&order=department.asc,chapter.asc&limit=10000`,{headers:RH}),
+      fetch(`${SB}/v_ocm_mappings_classified?entity=eq.${ENTITIES[currentEntity].entity}&select=*&order=department.asc,chapter.asc&limit=10000`,{headers:RH}),
     ]);
-    if(!r1.ok||!r2.ok) throw new Error();
+    if(!r1.ok) throw new Error(await responseError(r1,'Regulatory library load failed'));
+    if(!r2.ok) throw new Error(await responseError(r2,'OCM mappings load failed'));
     regs=await r1.json();
     ocmData=await r2.json();
     // Fetch audit_log separately so it never breaks main load
@@ -828,7 +947,6 @@ async function loadAll(){
   }
   populateFilters();
   updateKPIs();
-  if(window.rfDataDriven) rfDataDriven.load(currentEntity);
   renderRegs();
   renderOCM();
 }
@@ -837,44 +955,100 @@ async function loadAll(){
 
 
 // ── Reg Library ────────────────────────────────────────────────────────────
+// ── Mapping quality helpers ───────────────────────────────────────────────
+let ocmQualityFilter = 'valid_mapping';
+function normaliseQuality(q){ return q || 'valid_mapping'; }
+function qualityCounts(){
+  return {
+    valid_mapping: ocmData.filter(r=>normaliseQuality(r.mapping_quality)==='valid_mapping').length,
+    library_gap: ocmData.filter(r=>normaliseQuality(r.mapping_quality)==='library_gap').length,
+    external_reference: ocmData.filter(r=>normaliseQuality(r.mapping_quality)==='external_reference').length
+  };
+}
+function mappingQualityLabel(q){
+  q = normaliseQuality(q);
+  if(q==='valid_mapping') return 'Mapped';
+  if(q==='library_gap') return 'Library Gap';
+  if(q==='external_reference') return 'External';
+  if(q==='review_required') return 'Review';
+  return 'Unknown';
+}
+function mappingQualityPill(q){
+  q = normaliseQuality(q);
+  if(q==='valid_mapping') return '<span class="pill cov">✓ Mapped</span>';
+  if(q==='library_gap') return '<span class="pill library-gap">⚠ Library Gap</span>';
+  if(q==='external_reference') return '<span class="pill external">↗ External</span>';
+  if(q==='review_required') return '<span class="pill issue">Review</span>';
+  return '<span class="pill issue">Unknown</span>';
+}
+function setOcmQuality(q){
+  ocmQualityFilter = q;
+  ['valid_mapping','library_gap','external_reference'].forEach(k=>{
+    const el=document.getElementById(k==='valid_mapping'?'oq-valid':k==='library_gap'?'oq-gap':'oq-external');
+    if(el) el.classList.toggle('on', k===q);
+  });
+  renderOCM();
+}
+function refreshQualityCards(){
+  const c=qualityCounts();
+  const map={ 'oq-valid-n':c.valid_mapping, 'oq-gap-n':c.library_gap, 'oq-external-n':c.external_reference };
+  Object.entries(map).forEach(([id,n])=>{const el=document.getElementById(id); if(el) el.textContent=n;});
+}
+
 function getCoverage(code, regulation_id){
   // If regulation_id provided, return mappings that either:
   // 1. Match the specific regulation_id (precise pin), OR
   // 2. Have null regulation_id for this code (blanket coverage)
   if(regulation_id){
-    return ocmData.filter(r=>r.regulation_code===code&&(r.regulation_id===regulation_id||!r.regulation_id));
+    return ocmData.filter(r=>normaliseQuality(r.mapping_quality)==='valid_mapping'&&r.regulation_code===code&&(r.regulation_id===regulation_id||!r.regulation_id));
   }
-  return ocmData.filter(r=>r.regulation_code===code);
+  return ocmData.filter(r=>normaliseQuality(r.mapping_quality)==='valid_mapping'&&r.regulation_code===code);
 }
 function getUniqCodes(){return[...new Set(regs.map(r=>r.regulation_code))];}
-function getOcmCodes(){return new Set(ocmData.map(r=>r.regulation_code));}
+function getOcmCodes(){return new Set(ocmData.filter(r=>normaliseQuality(r.mapping_quality)==='valid_mapping').map(r=>r.regulation_code));}
+
+function coverageSummary(){
+  const codes=getUniqCodes();
+  const perCode=codes.map(code=>{
+    const rows=regs.filter(r=>r.regulation_code===code);
+    const coveredRows=rows.filter(r=>getCoverage(code,r.regulation_id).length>0).length;
+    return {code,total:rows.length,covered:coveredRows,full:rows.length>0&&coveredRows===rows.length,partial:coveredRows>0&&coveredRows<rows.length,none:coveredRows===0};
+  });
+  return {
+    codes,
+    perCode,
+    fullCodes:perCode.filter(x=>x.full).length,
+    partialCodes:perCode.filter(x=>x.partial).length,
+    gapCodes:perCode.filter(x=>x.none).length,
+    coveredRows:regs.filter(r=>getCoverage(r.regulation_code,r.regulation_id).length>0).length,
+    gapRows:regs.filter(r=>getCoverage(r.regulation_code,r.regulation_id).length===0).length
+  };
+}
 
 function updateKPIs(){
-  const codes=getUniqCodes(), oc=getOcmCodes();
-  const covCodes=codes.filter(c=>oc.has(c)).length;
-  const gapCodes=codes.length-covCodes;
-  const codePct=codes.length>0?Math.round(covCodes/codes.length*100):0;
-  const covRows=regs.filter(r=>oc.has(r.regulation_code)).length;
-  const gapRows=regs.length-covRows;
-  const rowPct=regs.length>0?Math.round(covRows/regs.length*100):0;
+  const cs=coverageSummary();
+  refreshQualityCards();
   document.getElementById('k-total').textContent=regs.length;
   const ocmCountEl=document.getElementById('k-ocm-count');
   if(ocmCountEl) ocmCountEl.textContent=ocmData.length;
   const reviewCount=ocmData.filter(r=>{const lc=auditChanges[r.regulation_code];return lc&&r.last_reviewed_at&&new Date(lc)>new Date(r.last_reviewed_at);}).length;
   const reviewEl=document.getElementById('k-review');
   if(reviewEl) reviewEl.textContent=reviewCount;
-  document.getElementById('k-gap-codes').textContent=gapCodes;
-  document.getElementById('k-gap-codes-total').textContent=codes.length;
+  document.getElementById('k-gap-codes').textContent=cs.gapCodes;
+  document.getElementById('k-gap-codes-total').textContent=cs.codes.length;
   const gapPctEl=document.getElementById('k-gap-pct');
-  if(gapPctEl) gapPctEl.textContent=codes.length>0?`(${Math.round(gapCodes/codes.length*100)}%)`:'';
+  if(gapPctEl) gapPctEl.textContent=cs.codes.length>0?`(${Math.round(cs.gapCodes/cs.codes.length*100)}%)`:'';
   const gapRowEl=document.getElementById('k-gap');
-  if(gapRowEl) gapRowEl.textContent=gapRows;
+  if(gapRowEl) gapRowEl.textContent=cs.gapRows;
   const gapRowTotalEl=document.getElementById('k-gap-total');
   if(gapRowTotalEl) gapRowTotalEl.textContent=regs.length;
   const gapRowPctEl=document.getElementById('k-gap-row-pct');
-  if(gapRowPctEl) gapRowPctEl.textContent=regs.length>0?`(${Math.round(gapRows/regs.length*100)}%)`:'';
-  const kbar=document.getElementById('k-bar'); if(kbar) kbar.style.width=codePct+'%';
+  if(gapRowPctEl) gapRowPctEl.textContent=regs.length>0?`(${Math.round(cs.gapRows/regs.length*100)}%)`:'';
+  const gapTile=document.getElementById('k-gap-tile');
+  if(gapTile) gapTile.title=`${cs.fullCodes} fully covered code(s), ${cs.partialCodes} partially covered code(s), ${cs.gapCodes} unmapped code(s)`;
+  const kbar=document.getElementById('k-bar'); if(kbar) kbar.style.width=(cs.codes.length?Math.round(cs.fullCodes/cs.codes.length*100):0)+'%';
 }
+
 
 function populateFilters(){
   const types=[...new Set(regs.map(r=>r.content_type).filter(Boolean))].sort();
@@ -885,7 +1059,7 @@ function populateFilters(){
   document.getElementById('o-dept').innerHTML='<option value="">All departments</option>'+depts.map(d=>`<option>${d}</option>`).join('');
   const chaps=[...new Set(ocmData.map(r=>r.chapter).filter(Boolean))].sort((a,b)=>{const n=x=>parseInt(x)||0;return n(a)-n(b)||a.localeCompare(b);});
   document.getElementById('o-chap').innerHTML='<option value="">All chapters</option>'+chaps.map(c=>`<option>${c}</option>`).join('');
-  const codes=getUniqCodes().sort();
+  const codes=[...new Set(ocmData.map(r=>r.regulation_code).filter(Boolean))].sort();
   document.getElementById('o-code').innerHTML='<option value="">All regulation codes</option>'+codes.map(c=>`<option>${c}</option>`).join('');
   document.getElementById('rr-type').innerHTML='<option value="">All types</option>'+types.map(t=>`<option>${t}</option>`).join('');
 }
@@ -917,7 +1091,7 @@ async function markAllReviewed(code,event){
     ocmData.forEach(r=>{ if(r.regulation_code===code){ r.last_reviewed_at=now2; r.updated_at=now2; } });
     toast('ok',`All OCM mappings for ${code} marked as reviewed.`);
     renderRegs(); renderOCM(); renderRegister();
-  }catch(e){toast('err','Update failed.');}
+  }catch(e){console.error(e);toast('err',e.message || 'Update failed.');}
 }
 
 
@@ -954,7 +1128,7 @@ function renderRegs(){
     if(fs&&r.status!==fs) return false;
     if(ftopic&&r.topic!==ftopic) return false;
     if(fsub&&r.sub_topic!==fsub) return false;
-    const cov=getCoverage(r.regulation_code);
+    const cov=getCoverage(r.regulation_code,r.regulation_id);
     if(focm==='cov'&&cov.length===0) return false;
     if(focm==='gap'&&cov.length>0) return false;
     if(q&&![r.regulation_id,r.regulation_code,r.regulation,r.section_title,r.content_type].join(' ').toLowerCase().includes(q)) return false;
@@ -964,7 +1138,7 @@ function renderRegs(){
   // Group by regulation_code for expand
   const seen=new Set();
   const tbody=document.getElementById('r-body');
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" class="empty"><div class="empty-icon">⚗</div><div class="empty-msg">No regulations match your filters. Try adjusting or <span style="cursor:pointer;text-decoration:underline;color:var(--navy)" onclick="clearFilters('regs')">clearing all filters</span>.</div></td></tr>`;document.getElementById('r-count').innerHTML='';return;}
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="8" class="empty"><div class="empty-icon">⚗</div><div class="empty-msg">No regulations match your filters. Try adjusting or <span style="cursor:pointer;text-decoration:underline;color:var(--navy)" onclick="clearFilters('regs')">clearing all filters</span>.</div></td></tr>`;document.getElementById('r-count').innerHTML='';return;}
 
   let html='';
   rows.forEach(r=>{
@@ -988,7 +1162,7 @@ function renderRegs(){
     html+=`<tr class="expand-trigger ${isGap?'gap-row':''}" onclick="toggleExpand('${expandId}',this)">
       <td class="mono">${r.regulation_id||''}</td>
       <td class="strong">${r.regulation_code||''}</td>
-      <td style="max-width:200px"><div style="font-weight:500;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.regulation||''}">${r.regulation||''}</div><div style="font-size:11px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.section_title||''}</div></td>
+      <td style="max-width:200px"><div style="font-weight:500;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(r.regulation||'')}">${r.regulation||''}</div><div style="font-size:11px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.section_title||''}</div>${r.url?`<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:10px;color:var(--teal);text-decoration:underline">Source ↗</a>`:''}</td>
       <td><span class="pill type">${r.content_type||''}</span></td>
       <td><span class="pill ${r.status==='Active'?'active':'deleted'}">${r.status||''}</span></td>
       <td><span class="pill ${covered?'cov':'gap'}">${covered?'&#10003; Covered':'&#9888; Gap'}</span></td>
@@ -1041,6 +1215,7 @@ function renderOCM(){
   const libCodes=new Set(regs.map(r=>r.regulation_code));
 
   let rows=ocmData.filter(r=>{
+    if(normaliseQuality(r.mapping_quality)!==ocmQualityFilter) return false;
     if(fd&&r.department!==fd) return false;
     if(fc&&r.chapter!==fc) return false;
     if(fcode&&r.regulation_code!==fcode) return false;
@@ -1051,7 +1226,7 @@ function renderOCM(){
   });
 
   const tbody=document.getElementById('o-body');
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" class="empty"><div class="empty-icon">📋</div><div class="empty-msg">${ocmData.length===0?'No OCM mappings yet. Click <strong>+ Add Mapping</strong> to create the first one.':'No mappings match your filters. Try adjusting or <span style=\'cursor:pointer;text-decoration:underline;color:var(--navy)\' onclick=\'clearFilters("ocm")\'>clearing all filters</span>.'}</div></td></tr>`;document.getElementById('o-count').innerHTML='';return;}
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="8" class="empty"><div class="empty-icon">📋</div><div class="empty-msg">${ocmData.length===0?'No OCM mappings yet. Click <strong>+ Add Mapping</strong> to create the first one.':'No mappings match your filters. Try adjusting or <span style=\'cursor:pointer;text-decoration:underline;color:var(--navy)\' onclick=\'clearFilters("ocm")\'>clearing all filters</span>.'}</div></td></tr>`;document.getElementById('o-count').innerHTML='';return;}
 
   let html='';
   rows.forEach(r=>{
@@ -1067,6 +1242,7 @@ function renderOCM(){
             ${codes.map(c=>`<option ${c===r.regulation_code?'selected':''}>${c}</option>`).join('')}
           </select>
         </td>
+        <td>${mappingQualityPill(r.mapping_quality)}</td>
         <td>
           <select class="inline-select" id="ed-rid-${r.id}">
             <option value="">Select section...</option>
@@ -1074,10 +1250,10 @@ function renderOCM(){
           </select>
         </td>
         <td><input class="inline-input" id="ed-notes-${r.id}" value="${r.notes||''}" placeholder="Notes (optional)"></td>
-        <td><div class="edit-actions">
-          <button class="btn small primary" onclick="ocmSaveEdit('${r.id}')">Save</button>
-          <button class="btn small" onclick="ocmCancelEdit('${r.id}')">✕</button>
-          <button class="btn small danger" onclick="ocmDelete('${r.id}')">Del</button>
+        <td class="ocm-actions-cell"><div class="edit-actions ocm-edit-panel">
+          <button class="ocm-action-btn primary" onclick="ocmSaveEdit('${r.id}')" title="Save this mapping">Save</button>
+          <button class="ocm-action-btn ghost" onclick="ocmCancelEdit('${r.id}')" title="Cancel editing">Cancel</button>
+          <button class="ocm-action-btn danger span-2" onclick="ocmDelete('${r.id}')" title="Delete this mapping">Delete</button>
         </div></td>
       </tr>`;
     } else if(r._new){
@@ -1090,13 +1266,14 @@ function renderOCM(){
           <label style="font-size:10px;color:var(--ink3);display:flex;align-items:center;gap:4px;cursor:pointer;margin-bottom:3px"><input type="checkbox" id="new-free-${r.id}" ${r._freetext?'checked':''} onchange="ocmToggleFree('${r.id}',false)" style="width:auto;margin:0"> Not in library</label>
           ${r._freetext?`<input class="inline-input" id="new-code-${r.id}" value="${r.regulation_code||''}" placeholder="Type code e.g. INT-POL-01">`:`<select class="inline-select" id="new-code-${r.id}" onchange="ocmCodeSelected('${r.id}',false)"><option value="">Select code...</option>${codes.map(c=>`<option ${c===r.regulation_code?'selected':''}>${c}</option>`).join('')}</select>`}
         </td>
+        <td>${mappingQualityPill(r.mapping_quality)}</td>
         <td>
           ${r._freetext?`<input class="inline-input" id="new-rid-${r.id}" value="${r.regulation_id||''}" placeholder="Reference e.g. Para 3">`:`<select class="inline-select" id="new-rid-${r.id}"><option value="">Select section...</option>${r.regulation_code?regs.filter(x=>x.regulation_code===r.regulation_code).map(x=>`<option value="${x.regulation_id}">${x.regulation_id} — ${x.section_title||x.regulation_reference||''}</option>`).join(''):''}</select>`}
         </td>
         <td><input class="inline-input" id="new-notes-${r.id}" value="${r.notes||''}" placeholder="Notes (optional)"></td>
-        <td><div class="edit-actions">
-          <button class="btn small primary" onclick="ocmSaveNew('${r.id}')">Save</button>
-          <button class="btn small" onclick="ocmCancelNew('${r.id}')">✕</button>
+        <td class="ocm-actions-cell"><div class="edit-actions ocm-edit-panel">
+          <button class="ocm-action-btn primary" onclick="ocmSaveNew('${r.id}')" title="Save this new mapping">Save</button>
+          <button class="ocm-action-btn ghost" onclick="ocmCancelNew('${r.id}')" title="Discard this new row">Cancel</button>
         </div></td>
       </tr>`;
     } else {
@@ -1114,15 +1291,21 @@ function renderOCM(){
         <td style="font-weight:700;color:var(--navy)">${r.chapter}</td>
         <td style="font-size:12px">${r.process}${staleTag}</td>
         <td><span class="strong">${r.regulation_code}</span>${notInLibTag}</td>
+        <td>${mappingQualityPill(r.mapping_quality)}</td>
         <td style="font-size:11px;color:var(--ink3)">${r.regulation_id||'—'}${secTitle?`<br><span style="color:var(--ink3)">${secTitle}</span>`:''}</td>
         <td style="font-size:11px;color:var(--ink3)">${r.notes||'—'}</td>
-        <td>
-          <button class="btn small" onclick="ocmStartEdit('${r.id}')">Edit</button>
-          ${stale?`<div style="display:flex;gap:4px;margin-top:3px">
-            <button class="btn small" style="font-size:10px;border-color:var(--amber);color:var(--amber)" onclick="ocmMarkReviewed('${r.id}')">Mark reviewed</button>
-            <button class="btn small" style="font-size:10px;border-color:var(--amber);color:var(--amber)" onclick="markAllReviewed('${r.regulation_code}',event)" title="Mark all OCM rows for ${r.regulation_code} as reviewed">Mark all</button>
-          </div>`:''}
-          <div style="font-size:10px;color:var(--ink3);margin-top:2px">Reviewed: ${lastReviewed}</div>
+        <td class="ocm-actions-cell">
+          <div class="ocm-action-panel">
+            <div class="ocm-action-row">
+              <button class="ocm-action-btn primary" onclick="ocmStartEdit('${r.id}')" title="Edit this mapping">Edit</button>
+              <button class="ocm-action-btn copy" onclick="ocmDuplicate('${r.id}')" title="Copy this row into a new editable mapping">Copy</button>
+            </div>
+            ${stale?`<div class="ocm-action-row">
+              <button class="ocm-action-btn review" onclick="ocmMarkReviewed('${r.id}')" title="Mark this mapping as reviewed">Review</button>
+              <button class="ocm-action-btn review" onclick="markAllReviewed('${r.regulation_code}',event)" title="Mark all OCM rows for ${r.regulation_code} as reviewed">All</button>
+            </div>`:''}
+            <div class="ocm-reviewed"><span>Reviewed</span>${lastReviewed}</div>
+          </div>
         </td>
       </tr>`;
     }
@@ -1130,19 +1313,19 @@ function renderOCM(){
   tbody.innerHTML=html;
   const depts=[...new Set(rows.map(r=>r.department).filter(Boolean))].length;
   const codes=[...new Set(rows.map(r=>r.regulation_code).filter(Boolean))].length;
-  document.getElementById('o-count').innerHTML=`${rows.length} of ${ocmData.length} mappings &nbsp;·&nbsp; ${depts} department${depts!==1?'s':''} &nbsp;·&nbsp; ${codes} regulation code${codes!==1?'s':''}`;
+  document.getElementById('o-count').innerHTML=`${mappingQualityLabel(ocmQualityFilter)} view: ${rows.length} row${rows.length!==1?'s':''} &nbsp;·&nbsp; ${depts} department${depts!==1?'s':''} &nbsp;·&nbsp; ${codes} regulation code${codes!==1?'s':''}`;
 }
 
 async function ocmMarkReviewed(id){
   try{
     const now=new Date().toISOString();
     const res=await fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'PATCH',headers:WH,body:JSON.stringify({last_reviewed_at:now,updated_at:now})});
-    if(!res.ok) throw new Error();
+    if(!res.ok) throw new Error(await responseError(res,'Update failed'));
     const idx=ocmData.findIndex(r=>r.id===id);
     if(idx!==-1) ocmData[idx]={...ocmData[idx],last_reviewed_at:now,updated_at:now};
     toast('ok','Marked as reviewed.');
     renderRegs(); renderOCM(); renderRegister();
-  }catch(e){toast('err','Update failed.');}
+  }catch(e){console.error(e);toast('err',e.message || 'Update failed.');}
 }
 
 function ocmCodeSelected(id, isEdit){
@@ -1154,20 +1337,20 @@ function ocmCodeSelected(id, isEdit){
     regs.filter(r=>r.regulation_code===code).map(r=>`<option value="${r.regulation_id}">${r.regulation_id} — ${r.section_title||r.regulation_reference||''}</option>`).join('');
 }
 
-function ocmAddRow(){
+function ocmAddRow(seed={}){
   const id='new-'+Date.now();
-  ocmData.unshift({id,_new:true,department:'',chapter:'',process:'',regulation_code:'',regulation_id:'',notes:'',entity:'phillip_trustee'});
+  ocmData.unshift({id,_new:true,department:seed.department||'',chapter:seed.chapter||'',process:seed.process||'',regulation_code:seed.regulation_code||'',regulation_id:seed.regulation_id||'',notes:seed.notes||'',entity:currentEntity});
   renderOCM();
   setTimeout(()=>document.getElementById('new-dept-'+id)?.focus(),50);
 }
 function ocmAddRowForCode(code){
-  go('ocm',document.querySelector('.nav-item:nth-child(5)'));
-  setTimeout(()=>{
-    const id='new-'+Date.now();
-    ocmData.unshift({id,_new:true,department:'',chapter:'',process:'',regulation_code:code,regulation_id:'',notes:'',entity:'phillip_trustee'});
-    renderOCM();
-    setTimeout(()=>document.getElementById('new-dept-'+id)?.focus(),50);
-  },100);
+  go('ocm',navFor('ocm'));
+  setTimeout(()=>ocmAddRow({regulation_code:code}),100);
+}
+function ocmDuplicate(id){
+  const src=ocmData.find(r=>r.id===id);
+  if(!src) return;
+  ocmAddRow({department:src.department||'',chapter:src.chapter||'',process:src.process||'',regulation_code:src.regulation_code||'',regulation_id:src.regulation_id||'',notes:src.notes||''});
 }
 function ocmStartEdit(id){
   const idx=ocmData.findIndex(r=>r.id===id);
@@ -1184,6 +1367,17 @@ function ocmCancelNew(id){
   ocmData=ocmData.filter(r=>r.id!==id);
   renderOCM();
 }
+function validateMappingInput({chap,proc,code,rid}){
+  if(!chap||!proc||!code) return 'Chapter, process and regulation code are required.';
+  const matchingCodeRows=regs.filter(r=>r.regulation_code===code);
+  if(matchingCodeRows.length && rid && !matchingCodeRows.some(r=>r.regulation_id===rid)){
+    return `Selected Regulation ID does not belong to ${code}.`;
+  }
+  if(!matchingCodeRows.length && rid && !confirm(`${code} is not in the selected entity library. Save as an external/non-library mapping?`)){
+    return 'Save cancelled.';
+  }
+  return '';
+}
 
 async function ocmSaveNew(id){
   const dept=document.getElementById('new-dept-'+id)?.value.trim();
@@ -1192,14 +1386,15 @@ async function ocmSaveNew(id){
   const code=document.getElementById('new-code-'+id)?.value;
   const rid=document.getElementById('new-rid-'+id)?.value;
   const notes=document.getElementById('new-notes-'+id)?.value.trim();
-  if(!chap||!proc||!code){toast('err','Chapter, process and regulation code are required.');return;}
+  const validationMsg=validateMappingInput({chap,proc,code,rid});
+  if(validationMsg){toast('err',validationMsg);return;}
   try{
-    const now=new Date().toISOString();const body={entity:currentEntity,department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,last_reviewed_at:now};
+    const now=new Date().toISOString();const isInLib=regs.some(r=>r.regulation_code===code);const body={entity:currentEntity,department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,last_reviewed_at:now,mapping_status:isInLib?'mapped':'external_reference'};
     const res=await fetch(`${SB}/ocm_mappings`,{method:'POST',headers:WH,body:JSON.stringify(body)});
-    if(!res.ok) throw new Error();
+    if(!res.ok) throw new Error(await responseError(res,'Save failed'));
     toast('ok','Mapping added.');
     await loadAll();
-  }catch(e){toast('err','Save failed.');}
+  }catch(e){console.error(e);toast('err',e.message || 'Save failed.');}
 }
 
 async function ocmSaveEdit(id){
@@ -1209,27 +1404,27 @@ async function ocmSaveEdit(id){
   const code=document.getElementById('ed-code-'+id)?.value;
   const rid=document.getElementById('ed-rid-'+id)?.value;
   const notes=document.getElementById('ed-notes-'+id)?.value.trim();
-  if(!chap||!proc||!code){toast('err','Chapter, process and regulation code are required.');return;}
+  const validationMsg=validateMappingInput({chap,proc,code,rid});
+  if(validationMsg){toast('err',validationMsg);return;}
   try{
-    const now=new Date().toISOString();const body={department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,updated_at:now,last_reviewed_at:now};
+    const now=new Date().toISOString();const isInLib=regs.some(r=>r.regulation_code===code);const body={department:dept||null,chapter:chap,process:proc,regulation_code:code,regulation_id:rid||null,notes:notes||null,updated_at:now,last_reviewed_at:now,mapping_status:isInLib?'mapped':'external_reference'};
     const res=await fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'PATCH',headers:WH,body:JSON.stringify(body)});
-    if(!res.ok) throw new Error();
+    if(!res.ok) throw new Error(await responseError(res,'Update failed'));
     toast('ok','Mapping updated.');
     await loadAll();
-  }catch(e){toast('err','Update failed.');}
+  }catch(e){console.error(e);toast('err',e.message || 'Update failed.');}
 }
 
 async function ocmDelete(id){
   if(!confirm('Delete this OCM mapping?')) return;
   try{
     const res=await fetch(`${SB}/ocm_mappings?id=eq.${id}`,{method:'DELETE',headers:WH});
-    if(!res.ok) throw new Error();
+    if(!res.ok) throw new Error(await responseError(res,'Delete failed'));
     toast('ok','Mapping deleted.');
     await loadAll();
-  }catch(e){toast('err','Delete failed.');}
-  // Register filters (same type list as regs)
-  document.getElementById('rr-type').innerHTML='<option value="">All types</option>'+types.map(t=>`<option>${t}</option>`).join('');
+  }catch(e){console.error(e);toast('err',e.message || 'Delete failed.');}
 }
+
 
 // ── Regulation Register ──────────────────────────────────────────────────────
 function renderRegister(){
@@ -1366,17 +1561,15 @@ function renderRegister(){
 
 
 function renderGaps(){
-  const codes=getUniqCodes();
   const oc=getOcmCodes();
-  const ptIds=new Set(regs.map(r=>r.regulation_id));
-  const ptCodes=new Set(regs.map(r=>r.regulation_code));
+  const entName=entityLabel();
 
-  // Section 1 — no OCM mapping
-  const gaps=codes.filter(c=>!oc.has(c));
+  // Section 1 — entity library rows/codes with no valid OCM mapping
+  const gaps=getUniqCodes().filter(c=>!oc.has(c));
   document.getElementById('g1-count').textContent=gaps.length+' gap'+(gaps.length!==1?'s':'');
   const g1=document.getElementById('g1-body');
   if(!gaps.length){
-    g1.innerHTML=`<tr><td colspan="5" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">All applicable regulations have at least one OCM mapping.</div></td></tr>`;
+    g1.innerHTML=`<tr><td colspan="5" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">All applicable regulations have at least one valid OCM mapping.</div></td></tr>`;
   } else {
     g1.innerHTML=gaps.map(c=>{
       const row=regs.find(r=>r.regulation_code===c)||{};
@@ -1390,32 +1583,40 @@ function renderGaps(){
     }).join('');
   }
 
-  // Section 2 — orphaned mappings
-  const orphans=ocmData.filter(m=>{
-    if(m.regulation_id && !ptIds.has(m.regulation_id)) return true;
-    if(!ptCodes.has(m.regulation_code)) return true;
-    return false;
-  });
-  document.getElementById('g2-count').textContent=orphans.length+' orphan'+(orphans.length!==1?'s':'');
+  // Section 2 — library gaps: OCM refers to codes not yet in regulatory_library
+  const libGaps=ocmData.filter(m=>normaliseQuality(m.mapping_quality)==='library_gap');
+  document.getElementById('g2-count').textContent=libGaps.length+' row'+(libGaps.length!==1?'s':'');
   const g2=document.getElementById('g2-body');
-  if(!orphans.length){
-    g2.innerHTML=`<tr><td colspan="6" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">All OCM mappings reference valid Phillip Trustee regulations.</div></td></tr>`;
+  if(!libGaps.length){
+    g2.innerHTML=`<tr><td colspan="6" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">No OCM references are missing from the ${entName} library.</div></td></tr>`;
   } else {
-    g2.innerHTML=orphans.map(m=>{
-      const inPTCodes=ptCodes.has(m.regulation_code);
-      const issue=!inPTCodes?'Code not in PT library':'Regulation ID not found';
-      return`<tr class="orphan-row">
-        <td style="font-weight:500">${m.department||'—'}</td>
-        <td style="font-weight:700;color:var(--navy)">${m.chapter}</td>
-        <td style="font-size:11px">${m.process}</td>
-        <td class="strong">${m.regulation_code}</td>
-        <td class="mono" style="font-size:10px">${m.regulation_id||'—'}</td>
-        <td><span class="pill gap">${issue}</span></td>
-      </tr>`;
-    }).join('');
+    g2.innerHTML=libGaps.map(m=>`<tr class="gap-row">
+      <td style="font-weight:500">${m.department||'—'}</td>
+      <td style="font-weight:700;color:var(--navy)">${m.chapter||'—'}</td>
+      <td style="font-size:11px">${m.process||'—'}</td>
+      <td class="strong">${m.regulation_code||'—'}</td>
+      <td class="mono" style="font-size:10px">${m.regulation_id||'—'}</td>
+      <td style="font-size:11px;color:var(--ink3)">${m.notes||'Add / standardise this code in the Regulation Library'}</td>
+    </tr>`).join('');
+  }
+
+  // Section 3 — external references / future onboarding backlog
+  const externals=ocmData.filter(m=>normaliseQuality(m.mapping_quality)==='external_reference');
+  document.getElementById('g3-count').textContent=externals.length+' row'+(externals.length!==1?'s':'');
+  const g3=document.getElementById('g3-body');
+  if(!externals.length){
+    g3.innerHTML=`<tr><td colspan="6" class="empty"><div style="color:var(--green);font-size:18px;margin-bottom:6px">✓</div><div style="color:var(--green);font-weight:500">No external / pending-onboarding references for ${entName}.</div></td></tr>`;
+  } else {
+    g3.innerHTML=externals.map(m=>`<tr>
+      <td style="font-weight:500">${m.department||'—'}</td>
+      <td style="font-weight:700;color:var(--navy)">${m.chapter||'—'}</td>
+      <td style="font-size:11px">${m.process||'—'}</td>
+      <td class="strong">${m.regulation_code||'—'}</td>
+      <td class="mono" style="font-size:10px">${m.regulation_id||'—'}</td>
+      <td style="font-size:11px;color:var(--ink3)">${m.notes||'Pending future library onboarding'}</td>
+    </tr>`).join('');
   }
 }
-
 
 function toast(type,msg){
   const t=document.getElementById('toast');
@@ -1449,52 +1650,34 @@ function switchEntity(key){
     const e = ENTITIES[key];
     if(!e){ console.error('Unknown entity:', key); return; }
 
+    const selector=document.getElementById('entity-selector');
+    if(selector && selector.value !== key) selector.value = key;
+
     const elName = document.getElementById('entity-name');
     if(elName) elName.textContent = (e.name || '').toUpperCase();
-    
-    // Update Bloomberg masthead short-code
     const elShort = document.getElementById('entity-short');
     if(elShort) elShort.textContent = (e.short || key).toUpperCase();
-    
-    // Populate licence classes strip from licence_profiles when data loads.
-    // For now, leave it empty — rfDataDriven will populate after fetch.
-
     const elType = document.getElementById('entity-type');
     if(elType) elType.textContent = (e.type || '').toUpperCase();
-
-    const elSub = document.getElementById('pg-sub');
-    if(elSub) elSub.textContent = e.type + ' — ' + e.name;
-
-    if(typeof PAGE_META !== 'undefined' && PAGE_META.regs){
-      PAGE_META.regs.title = 'Regulation Library';
-      PAGE_META.regs.sub   = 'Applicable regulations for '+e.name+' · Click any row to expand coverage details';
-    }
-
-    const navShort = document.getElementById('nav-entity-short');
-    if(navShort) navShort.textContent = e.short;
     const kSub = document.getElementById('k-total-sub');
     if(kSub) kSub.textContent = 'rows where ' + e.short + ' = y';
 
-    const tabRegs = document.getElementById('tab-regs');
-    if(tabRegs && tabRegs.classList.contains('on')){
-      const pgT = document.getElementById('pg-title');
-      if(pgT) pgT.textContent = PAGE_META.regs.title;
-      if(elSub) elSub.textContent = PAGE_META.regs.sub;
-    }
+    const m = pageMeta(currentPage);
+    const pgT = document.getElementById('pg-title');
+    const pgS = document.getElementById('pg-sub');
+    if(pgT) pgT.textContent = m.title;
+    if(pgS) pgS.textContent = m.sub;
 
-    // Reset RF to Overview tab
     const firstTab = document.querySelector('#tab-framework .rf-inner-tab');
     if(firstTab && typeof rfTab === 'function') rfTab('overview', firstTab);
 
-    // Trigger RF data-driven load directly
     if(typeof rfDataDriven !== 'undefined' && rfDataDriven && rfDataDriven.load){
       rfDataDriven.load(key);
     }
-
-    // Also reload regs/ocm tabs data
     if(typeof loadAll === 'function') loadAll();
   } catch(err){
     console.error('switchEntity error:', err);
+    toast('err', err.message || 'Entity switch failed.');
   }
 }
 
@@ -1593,6 +1776,7 @@ const rfDataDriven = (function() {
     const matches = [];
     for(const om of ocmData){
       if(om.entity !== entity) continue;
+      if(normaliseQuality(om.mapping_quality)!=='valid_mapping') continue;
       const isPrecise = om.regulation_id && om.regulation_id === regulationId;
       const isBroad   = !isPrecise && om.regulation_code && om.regulation_code === regulationCode;
       if(isPrecise || isBroad){
