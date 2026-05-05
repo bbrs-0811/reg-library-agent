@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulation Library — Phillip Group Compliance</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --navy:    #1c2e4a;
+  --navy2:   #2a4169;
+  --navy-deep: #0a1f2e;
+  --orange:  #c8521a;
+  --orange2: #a84415;
+  --cream:   #f7f4ef;
+  --cream2:  #f0ece4;
+  --cream3:  #e8e2d8;
+  --ink:     #1a1a1a;
+  --ink2:    #3d3d3d;
+  --ink3:    #6b6b6b;
+  --rule:    #d4cdc2;
+  --rule2:   #e8e2d8;
+  --green:   #2a5c3f;
+  --green-bg:#eef6f1;
+  --amber:   #8c6d2f;
+  --amber-bg:#fdf5e6;
+  --red:     #7a2525;
+  --red-bg:  #fdf0f0;
+  --serif:   'Libre Baskerville', Georgia, serif;
+  --sans:    'Source Sans 3', 'Segoe UI', Arial, sans-serif;
+  --mono:    'SF Mono', 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.app {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+  transition: grid-template-columns 0.18s ease;
+}
+.app.sidebar-collapsed {
+  grid-template-columns: 56px 1fr;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--navy);
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-toggle {
+  position: absolute;
+  top: 16px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  background: var(--navy);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.18s, background 0.12s;
+  padding: 0;
+  font-family: var(--sans);
+  border-radius: 0;
+  font-weight: 600;
+  line-height: 1;
+}
+.sidebar-toggle:hover { background: var(--orange); }
+.app.sidebar-collapsed .sidebar-toggle { transform: rotate(180deg); }
+
+.sidebar-mark {
+  padding: 14px 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bbg-band {
+  background: var(--navy-deep);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 14px 12px;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+  position: relative;
+}
+.bbg-band::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 18px;
+  background: var(--orange);
+}
+.bbg-tick {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.bbg-tick::after {
+  content: ' ●';
+  color: #4cd964;
+  font-size: 7px;
+  vertical-align: middle;
+  margin-left: 4px;
+  animation: bbg-blink 2.4s ease-in-out infinite;
+}
+@keyframes bbg-blink {
+  0%, 60%, 100% { opacity: 1; }
+  70%, 80% { opacity: 0.25; }
+}
+.bbg-name {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.bbg-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: #9eb5c9;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* Sidebar nav */
+.nav { padding: 12px 0; flex: 1; }
+.nav-sect {
+  padding: 12px 18px 4px;
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  color: rgba(255,255,255,0.78);
+  cursor: pointer;
+  font-size: 12px;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.04); color: #fff; }
+.nav-item.on {
+  border-left-color: var(--orange);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+.nav-pip {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.nav-item.on .nav-pip { background: var(--orange); }
+
+.sidebar-foot {
+  padding: 14px 18px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Collapsed state */
+.app.sidebar-collapsed .bbg-name,
+.app.sidebar-collapsed .bbg-meta,
+.app.sidebar-collapsed .nav-sect,
+.app.sidebar-collapsed .nav-item-text,
+.app.sidebar-collapsed .sidebar-foot {
+  display: none;
+}
+.app.sidebar-collapsed .sidebar-mark { padding: 12px 6px; }
+.app.sidebar-collapsed .bbg-band { padding: 10px 4px; text-align: center; }
+.app.sidebar-collapsed .bbg-tick { font-size: 11px; margin: 0; }
+.app.sidebar-collapsed .nav-item { padding: 12px 0; justify-content: center; }
+.app.sidebar-collapsed .nav-item .nav-pip { margin: 0; }
+
+/* ── Main content ── */
+main { display: flex; flex-direction: column; min-width: 0; }
+
+.topbar {
+  padding: 14px 24px 12px;
+  background: var(--cream);
+  border-bottom: 3px solid var(--orange);
+}
+.topbar h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+.topbar .sub {
+  font-size: 11px;
+  color: var(--ink3);
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+}
+
+.statusbar {
+  background: var(--cream2);
+  border-bottom: 1px solid var(--rule2);
+  padding: 5px 24px;
+  font-size: 11px;
+  color: var(--ink3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.statusbar .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--ink3);
+  display: inline-block;
+}
+.statusbar.connected .dot { background: var(--green); animation: pulse 2.4s ease-in-out infinite; }
+.statusbar.error .dot { background: var(--red); }
+@keyframes pulse {
+  0%, 60%, 100% { opacity: 1; }
+  70%, 80% { opacity: 0.4; }
+}
+
+/* ── Page body ── */
+.page { padding: 20px 24px 24px; flex: 1; }
+
+/* ── Hero search ── */
+.hero {
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.hero-row { display: flex; gap: 14px; align-items: center; }
+.hero-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--rule);
+  background: var(--cream);
+  padding: 10px 14px;
+  font-family: var(--sans);
+  transition: border-color 0.12s;
+}
+.hero-search:focus-within { border-color: var(--navy); background: #fff; }
+.hero-search svg { width: 16px; height: 16px; color: var(--ink3); flex-shrink: 0; }
+.hero-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink);
+}
+.hero-search input::placeholder { color: var(--ink3); }
+.hero-clear {
+  background: transparent;
+  border: none;
+  color: var(--ink3);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+}
+.hero-clear:hover { color: var(--orange); }
+
+/* ── Summary cards ── */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-bottom: 16px;
+}
+.sc {
+  background: #fff;
+  border: 0;
+  border-top: 3px solid transparent;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.sc:hover { background: var(--cream); }
+.sc.on { border-top-color: var(--orange); background: var(--cream2); }
+.sc-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ink3);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.sc-num {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0;
+  line-height: 1.05;
+  margin-top: 7px;
+}
+.sc-num.or { color: var(--orange); }
+.sc-num.gr { color: var(--green); }
+.sc-num.am { color: var(--amber); }
+.sc-num.rd { color: var(--red); }
+.sc-hint {
+  font-size: 10px;
+  color: var(--ink3);
+  margin-top: 5px;
+  letter-spacing: 0.005em;
+  line-height: 1.25;
+}
+
+/* ── Filters bar ── */
+.filters {
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 48px minmax(120px, .75fr) minmax(155px, .95fr) minmax(180px, 1.45fr) minmax(120px, .75fr) minmax(150px, .9fr) 138px;
+  align-items: center;
+  gap: 8px;
+}
+.filters-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink3);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.filter-select {
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  font-family: var(--sans);
+  font-size: 12px;
+  padding: 0 28px 0 9px;
+  border: 1px solid var(--rule);
+  background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path fill="%236b6b6b" d="M6 9L1 4h10z"/></svg>') no-repeat right 9px center / 8px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  color: var(--ink);
+  outline: none;
+}
+.filter-select:hover { border-color: var(--ink3); }
+.filter-select:focus { border-color: var(--navy); }
+.filter-clear {
+  height: 30px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  color: var(--ink2);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0 12px;
+  white-space: nowrap;
+  justify-self: end;
+  width: 138px;
+}
+.filter-clear:hover { color: var(--orange); border-color: var(--orange); background: var(--cream2); }
+@media (max-width: 1180px) {
+  .filters { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .filters-label { grid-column: 1 / -1; }
+  .filter-clear { justify-self: stretch; width: auto; }
+}
+@media (max-width: 760px) {
+  .filters { grid-template-columns: 1fr; }
+}
+
+/* ── Table ── */
+.table-wrap {
+  background: #fff;
+  border: 1px solid var(--rule);
+  overflow-x: auto;
+}
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--rule2);
+  background: var(--cream2);
+  font-size: 11px;
+  color: var(--ink3);
+  letter-spacing: 0.005em;
+}
+.table-toolbar .count { font-weight: 600; color: var(--navy); }
+.table-toolbar .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.lib-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.lib-table thead th {
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  padding: 9px 12px;
+  background: var(--navy);
+  border-bottom: 1px solid var(--navy2);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.lib-table thead th:hover { background: var(--navy2); color: #fff; }
+.lib-table thead th .sort-arrow {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 9px;
+  color: rgba(255,255,255,0.7);
+  opacity: 0.55;
+}
+.lib-table thead th.sorted .sort-arrow { color: #fff; opacity: 1; }
+.lib-table tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--rule2);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.lib-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.08s;
+}
+.lib-table tbody tr:hover { background: var(--cream); }
+.lib-table tbody tr.selected { background: var(--orange-bg); }
+
+.code-cell {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--navy);
+  white-space: nowrap;
+}
+.ref-cell {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink3);
+}
+.title-cell {
+  font-weight: 500;
+  color: var(--ink);
+}
+.title-cell .desc {
+  display: block;
+  margin-top: 2px;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--ink3);
+  font-style: italic;
+}
+.entities-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.ent-pip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 2px 5px;
+  border: 1px solid var(--rule);
+  color: var(--ink3);
+  background: var(--cream);
+  text-transform: uppercase;
+}
+.ent-pip.on {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+.status-pip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+.status-pip.active   { background: var(--green-bg); color: var(--green); }
+.status-pip.repealed { background: var(--cream2);   color: var(--ink3); }
+.status-pip.review   { background: var(--amber-bg); color: var(--amber); }
+.status-pip.archived { background: var(--red-bg); color: var(--red); }
+.status-cell { display:flex; flex-direction:column; gap:4px; align-items:flex-start; }
+.record-pip { display:inline-block; font-size:9px; font-weight:600; letter-spacing:0.06em; padding:1px 6px; text-transform:uppercase; border:1px solid var(--rule); background:#fff; color:var(--ink3); }
+.record-pip.published { background:var(--green-bg); color:var(--green); border-color:#b8dac8; }
+.record-pip.draft { background:var(--amber-bg); color:var(--amber); border-color:#e0c98a; }
+.record-pip.archived { background:var(--red-bg); color:var(--red); border-color:#e8c4c4; }
+
+.ocm-pip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+.ocm-pip.covered { background: var(--green-bg); color: var(--green); }
+.ocm-pip.gap     { background: var(--amber-bg); color: var(--amber); }
+
+/* ── Pagination ── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-top: 1px solid var(--rule);
+  background: var(--cream);
+  font-size: 11px;
+  color: var(--ink3);
+}
+.pagination-buttons { display: flex; gap: 4px; }
+.pg-btn {
+  background: #fff;
+  border: 1px solid var(--rule);
+  color: var(--ink2);
+  cursor: pointer;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-family: var(--sans);
+}
+.pg-btn:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
+.pg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.pg-btn.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* ── Drawer ── */
+.drawer-backdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(20, 30, 45, 0.45);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s, visibility 0.18s;
+}
+.drawer-backdrop.open { opacity: 1; visibility: visible; }
+.drawer {
+  position: fixed;
+  top: 0; right: -640px;
+  width: 620px;
+  max-width: 92vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 201;
+  box-shadow: -3px 0 12px rgba(0,0,0,0.08);
+  transition: right 0.22s ease;
+  display: flex;
+  flex-direction: column;
+}
+.drawer.open { right: 0; }
+.drawer-head {
+  padding: 18px 24px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.drawer-head .meta { flex: 1; min-width: 0; }
+.drawer-head .code {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--orange);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.drawer-head .title {
+  margin-top: 4px;
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+  word-break: break-word;
+}
+.drawer-close {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink3);
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.drawer-close:hover { color: var(--orange); border-color: var(--orange); }
+.drawer-body { padding: 22px 24px; flex: 1; overflow-y: auto; }
+.drawer-section {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule2);
+}
+.drawer-section:last-child { border-bottom: none; }
+.drawer-section h3 {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink3);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+.drawer-field {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 12px;
+  padding: 5px 0;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.drawer-field .k { color: var(--ink3); font-weight: 500; }
+.drawer-field .v { color: var(--ink); word-break: break-word; }
+.drawer-field .v.mono { font-family: var(--mono); font-size: 11px; }
+.drawer-field .v a { color: var(--navy); }
+.drawer-applicability {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.drawer-applicability .ent-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  background: #fff;
+  font-size: 11px;
+  font-family: var(--sans);
+  text-align: left;
+  user-select: none;
+}
+.drawer-applicability .ent-toggle:hover { border-color: var(--navy); }
+.drawer-applicability .ent-toggle.on {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+.drawer-applicability .ent-toggle.on .ent-name { color: rgba(255,255,255,0.7); }
+.drawer-applicability .ent-short {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.drawer-applicability .ent-name {
+  font-size: 10px;
+  color: var(--ink3);
+  margin-top: 1px;
+}
+.drawer-foot {
+  padding: 14px 24px;
+  border-top: 1px solid var(--rule);
+  background: var(--cream);
+  font-size: 10px;
+  color: var(--ink3);
+  letter-spacing: 0.04em;
+}
+.drawer-foot .lock-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.drawer-foot .lock-icon { font-size: 12px; }
+
+.btn-primary {
+  background: var(--orange);
+  color: #fff;
+  border: 1px solid var(--orange);
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: var(--sans);
+  border-radius: 0;
+}
+.btn-primary:hover { background: var(--orange2); border-color: var(--orange2); }
+
+.btn-danger {
+  background: transparent;
+  color: var(--red);
+  border: 1px solid var(--red);
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: var(--sans);
+  border-radius: 0;
+}
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-danger:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Create Modal ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 30, 45, 0.5);
+  z-index: 300;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s, visibility 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop.open { opacity: 1; visibility: visible; }
+.modal {
+  background: #fff;
+  border: 1px solid var(--rule);
+  width: 640px;
+  max-width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.2s;
+}
+.modal-backdrop.open .modal { transform: translateY(0); }
+.modal-head {
+  padding: 18px 24px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.modal-head h2 {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+.modal-body {
+  padding: 22px 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+.modal-foot {
+  padding: 14px 24px;
+  border-top: 1px solid var(--rule);
+  background: var(--cream);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.field-group {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+.field-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-top: 7px;
+}
+.field-group label .req { color: var(--red); }
+.field-input {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  background: #fff;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.12s;
+}
+.field-input:focus { border-color: var(--orange); }
+.field-input.area { resize: vertical; min-height: 70px; line-height: 1.5; }
+.field-row-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.entity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.entity-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  font-size: 11px;
+  user-select: none;
+  background: #fff;
+}
+.entity-check input { cursor: pointer; }
+.entity-check:hover { border-color: var(--navy); }
+.entity-check.on {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+.btn {
+  background: var(--navy);
+  color: #fff;
+  border: 1px solid var(--navy);
+  padding: 7px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.btn:hover { background: var(--navy2); }
+.btn.outline { background: transparent; color: var(--ink2); border-color: var(--rule); }
+.btn.outline:hover { color: var(--navy); border-color: var(--navy); }
+
+.muted { color: var(--ink3); }
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink3);
+  font-size: 13px;
+}
+.empty .hint { margin-top: 6px; font-size: 11px; }
+
+/* ── Loading state ── */
+.loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--ink3);
+}
+.spinner {
+  display: inline-block;
+  width: 22px; height: 22px;
+  border: 2px solid var(--rule);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 1180px) {
+  .summary { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 700px) {
+  .summary { grid-template-columns: 1fr; }
+  .app { grid-template-columns: 56px 1fr; }
+  .app .nav-item-text, .app .bbg-name, .app .bbg-meta, .app .nav-sect, .app .sidebar-foot { display: none; }
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 10px 18px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  z-index: 999;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  border: 1px solid;
+  font-family: var(--sans);
+  max-width: 420px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast-ok { background: #2c4d39; color: #fff; border-color: #1d3527; }
+.toast-err { background: #8d2929; color: #fff; border-color: #5e1818; }
+.toast-info { background: var(--navy); color: #fff; border-color: var(--navy-deep); }
+
+/* ── Edit mode in drawer ── */
+.edit-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  background: #fff;
+  color: var(--ink2);
+  cursor: pointer;
+  font-family: var(--sans);
+  user-select: none;
+}
+.edit-toggle:hover { border-color: var(--navy); color: var(--navy); }
+.edit-toggle.on {
+  background: var(--orange);
+  color: #fff;
+  border-color: var(--orange);
+}
+.edit-toggle.on::before {
+  content: '●';
+  color: #fff;
+  font-size: 8px;
+  animation: bbg-blink 2s ease-in-out infinite;
+}
+
+.drawer.edit-mode .drawer-applicability .ent-toggle { cursor: pointer; }
+.drawer.edit-mode .drawer-field .v.editable {
+  cursor: text;
+  border-bottom: 1px dashed var(--rule);
+  padding-bottom: 1px;
+  transition: border-color 0.12s;
+}
+.drawer.edit-mode .drawer-field .v.editable:hover { border-bottom-color: var(--orange); }
+.drawer.edit-mode .drawer-field .v.editable:focus {
+  outline: none;
+  background: #fff8ee;
+  border-bottom-color: var(--orange);
+  border-bottom-width: 2px;
+}
+.drawer.edit-mode .drawer-field .v.editable[contenteditable="true"] { display: block; min-height: 18px; }
+.drawer:not(.edit-mode) .drawer-applicability .ent-toggle { cursor: default; }
+
+.field-saving {
+  position: relative;
+}
+.field-saving::after {
+  content: '';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px; height: 10px;
+  border: 2px solid var(--rule);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.refresh-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  padding: 5px 11px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.refresh-btn:hover { color: var(--navy); border-color: var(--navy); }
+.refresh-btn:disabled { opacity: 0.4; cursor: wait; }
+
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Collapse sidebar">‹</button>
+    <div class="sidebar-mark">
+      <div class="bbg-band">
+        <div class="bbg-tick">[OVERVIEW]</div>
+        <div class="bbg-name">LIBRARY WORKBENCH</div>
+        <div class="bbg-meta">PHILLIP GROUP · CRUD LAYER</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-sect">Workbench</div>
+      <a class="nav-item on" href="library.html">
+        <span class="nav-pip"></span>
+        <span class="nav-item-text">Regulation Library</span>
+      </a>
+      <a class="nav-item" href="index.html">
+        <span class="nav-pip"></span>
+        <span class="nav-item-text">Entity Compliance Portal</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div>v2.0 · Master Library CRUD</div>
+      <div style="margin-top:4px;opacity:0.7">Apr 2026 · applicability build</div>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main>
+    <div class="topbar">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="flex:1;min-width:0">
+          <h1>Regulation Library</h1>
+          <div class="sub">Master CRUD layer for regulatory entries · Governance-enabled source fields and entity applicability</div>
+        </div>
+        <button class="btn-primary" onclick="openCreateModal()" style="flex-shrink:0">+ New Regulation</button>
+      </div>
+    </div>
+
+    <div class="statusbar" id="statusbar">
+      <span class="dot"></span>
+      <span id="status-text">Connecting…</span>
+      <span style="margin-left:auto" class="muted" id="status-time"></span>
+      <button class="refresh-btn" onclick="reloadData()" id="refresh-btn" style="margin-left:12px">⟳ Refresh</button>
+    </div>
+
+    <div class="page">
+      <!-- ── Hero search ── -->
+      <div class="hero">
+        <div class="hero-row">
+          <div class="hero-search">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M14 14L11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input id="search" type="text" placeholder="Search across all regulations — code, title, regulator, topic, description…" autocomplete="off">
+            <button class="hero-clear" onclick="clearSearch()" id="search-clear" style="display:none">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Summary cards ── -->
+      <div class="summary" id="summary">
+        <div class="sc" data-card="all" onclick="setCardFilter('all')">
+          <div class="sc-label">Total Entries</div>
+          <div class="sc-num" id="sc-total">—</div>
+          <div class="sc-hint">Across the entire library</div>
+        </div>
+        <div class="sc" data-card="mas-notices" onclick="setCardFilter('mas-notices')">
+          <div class="sc-label">MAS Notices</div>
+          <div class="sc-num or" id="sc-mas">—</div>
+          <div class="sc-hint">MAS · content type Notice</div>
+        </div>
+        <div class="sc" data-card="acts" onclick="setCardFilter('acts')">
+          <div class="sc-label">Acts &amp; Regs</div>
+          <div class="sc-num or" id="sc-acts">—</div>
+          <div class="sc-hint">Primary legislation</div>
+        </div>
+        <div class="sc" data-card="no-scope" onclick="setCardFilter('no-scope')">
+          <div class="sc-label">No Entity Scope</div>
+          <div class="sc-num am" id="sc-no-scope">—</div>
+          <div class="sc-hint">Entries not tagged to any entity</div>
+        </div>
+        <div class="sc" data-card="non-active" onclick="setCardFilter('non-active')">
+          <div class="sc-label">Non-Active / Review</div>
+          <div class="sc-num rd" id="sc-non-active">—</div>
+          <div class="sc-hint">Record lifecycle, review or non-active legal status</div>
+        </div>
+      </div>
+
+      <!-- ── Filters ── -->
+      <div class="filters">
+        <span class="filters-label">Filter</span>
+        <select class="filter-select" id="f-regulator" onchange="applyFilters()">
+          <option value="">All regulators</option>
+        </select>
+        <select class="filter-select" id="f-entity" onchange="applyFilters()">
+          <option value="">All entities</option>
+        </select>
+        <select class="filter-select" id="f-topic" onchange="applyFilters()">
+          <option value="">All topics</option>
+        </select>
+        <select class="filter-select" id="f-status" onchange="applyFilters()">
+          <option value="">All statuses</option>
+        </select>
+        <select class="filter-select" id="f-type" onchange="applyFilters()">
+          <option value="">All content types</option>
+        </select>
+        <button class="filter-clear" onclick="clearAllFilters()">Clear filters</button>
+      </div>
+
+      <!-- ── Table ── -->
+      <div class="table-wrap" id="table-wrap">
+        <div class="table-toolbar">
+          <span><span class="count" id="row-count">—</span> entries shown</span>
+          <span class="right" id="active-filter-summary"></span>
+        </div>
+        <div id="table-host">
+          <div class="loading"><div class="spinner"></div><div style="margin-top:12px">Loading regulation library…</div></div>
+        </div>
+        <div class="pagination" id="pagination" style="display:none">
+          <div id="pg-info">—</div>
+          <div class="pagination-buttons" id="pg-buttons"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ── Create Modal ── -->
+<div class="modal-backdrop" id="create-modal-backdrop" onclick="if(event.target.classList.contains('modal-backdrop')) closeCreateModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>+ New Regulation</h2>
+      <button class="drawer-close" onclick="closeCreateModal()" title="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label>Code <span class="req">*</span></label>
+        <input class="field-input" id="cm-code" placeholder="e.g. FAA-N16, MAS Notice 626">
+      </div>
+      <div class="field-group">
+        <label>Reference</label>
+        <input class="field-input" id="cm-reference" placeholder="e.g. Section 14, Paragraph 3.2">
+      </div>
+      <div class="field-group">
+        <label>Title <span class="req">*</span></label>
+        <input class="field-input" id="cm-title" placeholder="Full title of the regulation">
+      </div>
+      <div class="field-group">
+        <label>Section title</label>
+        <input class="field-input" id="cm-section-title" placeholder="Optional sub-section heading">
+      </div>
+      <div class="field-group">
+        <label>Description</label>
+        <textarea class="field-input area" id="cm-description" placeholder="Brief description of the regulation"></textarea>
+      </div>
+      <div class="field-group">
+        <label>Regulator <span class="req">*</span></label>
+        <input class="field-input" id="cm-regulator" placeholder="e.g. MAS, ACRA, IMAS, GIA, SGX" list="cm-regulator-list">
+        <datalist id="cm-regulator-list"></datalist>
+      </div>
+      <div class="field-group">
+        <label>Content type</label>
+        <input class="field-input" id="cm-content-type" placeholder="e.g. Act, Notice, Guidelines, Code" list="cm-content-type-list">
+        <datalist id="cm-content-type-list"></datalist>
+      </div>
+      <div class="field-group">
+        <label>Topic</label>
+        <div class="field-row-grid">
+          <input class="field-input" id="cm-topic" placeholder="Topic" list="cm-topic-list">
+          <input class="field-input" id="cm-subtopic" placeholder="Sub-topic">
+        </div>
+        <datalist id="cm-topic-list"></datalist>
+      </div>
+      <div class="field-group">
+        <label>Status</label>
+        <select class="field-input" id="cm-status">
+          <option value="Active">Active</option>
+          <option value="Under Review">Under Review</option>
+          <option value="Repealed">Repealed</option>
+          <option value="Superseded">Superseded</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Source URL</label>
+        <input class="field-input" id="cm-url" placeholder="https://...">
+      </div>
+      <div class="field-group">
+        <label>Implementation date</label>
+        <input class="field-input" id="cm-impl-date" type="date">
+      </div>
+      <div class="field-group">
+        <label>Effective / repeal date</label>
+        <input class="field-input" id="cm-effective-date" placeholder="e.g. 1 January 2026 / Repealed on ...">
+      </div>
+      <div class="field-group">
+        <label>Remarks</label>
+        <textarea class="field-input area" id="cm-remarks" placeholder="Internal notes or source comments"></textarea>
+      </div>
+      <div class="field-group">
+        <label>Applicable to</label>
+        <div class="entity-grid" id="cm-entities"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn outline" onclick="closeCreateModal()">Cancel</button>
+      <button class="btn-primary" onclick="submitCreate()" id="cm-submit">Create regulation</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Drawer ── -->
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="meta">
+      <div class="code" id="d-code">—</div>
+      <div class="title" id="d-title">—</div>
+    </div>
+    <button class="btn-danger" id="archive-btn" onclick="archiveCurrent()" style="display:none">🗑 Archive</button>
+    <button class="edit-toggle" id="edit-toggle" onclick="toggleEditMode()" title="Toggle edit mode">Edit</button>
+    <button class="drawer-close" onclick="closeDrawer()" title="Close (Esc)">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body">
+    <!-- Populated by JS -->
+  </div>
+  <div class="drawer-foot">
+    <div class="lock-note" id="drawer-foot-note">
+      <span class="lock-icon">🔓</span>
+      <span>View mode · click <strong>Edit</strong> to modify this regulation</span>
+    </div>
+  </div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  REGULATION LIBRARY — Phillip Group Compliance
+//  
+//  Master Regulation Library CRUD layer at scale (3,000+ rows).
+//  Focus: source entry fields + entity applicability.
+//  OCM mappings are intentionally handled in the entity Compliance Portal.
+// ═══════════════════════════════════════════════════════════════
+
+const SB   = "https://bqmcwmwfcochzkcuvwso.supabase.co/rest/v1";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbWN3bXdmY29jaHprY3V2d3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0ODMyMDQsImV4cCI6MjA5MDA1OTIwNH0.g-ZkIZWgyCWdv-1irdoG5ZIvI5kx-2SlSpJr2zaNWCI";
+const RH   = {"apikey": ANON, "Authorization": "Bearer " + ANON};
+const SVC  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbWN3bXdmY29jaHprY3V2d3NvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDQ4MzIwNCwiZXhwIjoyMDkwMDU5MjA0fQ.IlDV02a167FzrQ5tHDPRy6X-e1NgicJqx7i0rF-Ekuk";
+const WH   = {"apikey": SVC, "Authorization": "Bearer " + SVC, "Content-Type": "application/json", "Prefer": "return=representation"};
+
+// ── Material fields trigger an audit_log row (= Review Pending in index.html) ──
+// Non-material edits (description, topic, URL, etc.) save silently.
+const MATERIAL_FIELDS = new Set([
+  'create','archive',
+  'pspl','pnpl','pcm','ppe','quann_prestige','phillip_financial','psr','phillip_trustee','finance_buddy',
+  'regulation_code','regulation','regulator','content_type','regulation_reference','section_title',
+  'description','topic','sub_topic','status','record_status','review_status','implementation_date','effective_repeal_date','update_date','url','remarks'
+]);
+
+function recordStatusLabel(value){
+  const v = String(value || 'published').toLowerCase();
+  if(v === 'archived') return 'Archived';
+  if(v === 'draft') return 'Draft';
+  return 'Live';
+}
+
+function reviewStatusLabel(value){
+  const v = String(value || 'not_required').toLowerCase();
+  if(v === 'not_required') return 'Not required';
+  return v.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function displayFieldValue(column, value){
+  if(column === 'record_status') return recordStatusLabel(value);
+  if(column === 'review_status') return reviewStatusLabel(value);
+  return value || '';
+}
+
+function normaliseFieldValue(column, value){
+  let v = String(value || '').trim();
+  if(column === 'record_status'){
+    const low = v.toLowerCase();
+    if(low === 'live' || low === 'published') return 'published';
+    if(low === 'archived') return 'archived';
+    if(low === 'draft') return 'draft';
+    return low || 'published';
+  }
+  if(column === 'review_status'){
+    const low = v.toLowerCase().replace(/ /g, '_');
+    return low || 'not_required';
+  }
+  return v;
+}
+
+// Human-readable label for what changed, used in audit_log.summary
+function describeChange(column, oldVal, newVal, regulationCode){
+  if(column === 'create') return `Created new library entry for ${regulationCode}`;
+  if(column === 'archive') return `Archived library entry ${regulationCode}`;
+  if(column === 'record_status') return `Record status changed from "${recordStatusLabel(oldVal)}" to "${recordStatusLabel(newVal)}" for ${regulationCode}`;
+  if(column === 'review_status') return `Review status changed from "${oldVal || '(empty)'}" to "${newVal || '(empty)'}" for ${regulationCode}`;
+  if(ENTITY_KEYS.includes(column)){
+    const ent = ENTITIES[column].short;
+    if(newVal === 'y' && oldVal !== 'y') return `${ent} added as applicable to ${regulationCode}`;
+    if(oldVal === 'y' && newVal !== 'y') return `${ent} removed from applicability of ${regulationCode}`;
+    return `${ent} applicability changed for ${regulationCode}`;
+  }
+  if(column === 'status'){
+    return `Regulatory status changed from "${oldVal || '(empty)'}" to "${newVal || '(empty)'}" for ${regulationCode}`;
+  }
+  return `Field "${column}" updated for ${regulationCode}`;
+}
+
+function getActorName(){
+  let actor = '';
+  try { actor = localStorage.getItem('lib_workbench_actor') || ''; } catch(e){}
+  if(!actor){
+    actor = prompt('Your name / initials for audit log:', 'Compliance');
+    actor = (actor || '').trim() || 'Compliance';
+    try { localStorage.setItem('lib_workbench_actor', actor); } catch(e){}
+  }
+  return actor;
+}
+
+function requestChangeReason(column, oldVal, newVal){
+  if(!MATERIAL_FIELDS.has(column)) return {ok:true, reason:null};
+  const label = column === 'archive' ? 'Archive entry' : column === 'create' ? 'Create entry' : `Change ${column}`;
+  const oldDisplay = column === 'record_status' || column === 'archive' ? recordStatusLabel(oldVal) : (oldVal ?? '(empty)');
+  const newDisplay = column === 'record_status' || column === 'archive' ? recordStatusLabel(newVal) : (newVal ?? '(empty)');
+  const msg = `${label}\n\nOld: ${oldDisplay}\nNew: ${newDisplay}\n\nEnter reason for audit log:`;
+  const reason = prompt(msg, 'Compliance review update');
+  if(reason === null || !reason.trim()){
+    toast('err', 'Change cancelled — audit reason required');
+    return {ok:false, reason:null};
+  }
+  return {ok:true, reason:reason.trim()};
+}
+
+// Write an audit_log row for a material change.
+// Returns silently on failure — audit log is best-effort, the field save is the source of truth.
+async function writeAuditLog(row, column, oldVal, newVal, changeReason){
+  if(!MATERIAL_FIELDS.has(column)) return;  // non-material: skip
+  try {
+    const actor = getActorName();
+    const operation = column === 'create' ? 'create' : (column === 'archive' ? 'archive' : 'update');
+    const payload = {
+      run_timestamp: new Date().toISOString(),
+      source_filename: 'Regulation Library',
+      scenario: 'M',
+      regulation_code: row.regulation_code || null,
+      regulation_id: row.regulation_id || null,
+      regulation_name: row.regulation || row.section_title || null,
+      operation,
+      old_values: {[column]: oldVal},
+      new_values: {[column]: newVal},
+      run_status: 'success',
+      summary: describeChange(column, oldVal, newVal, row.regulation_code || row.regulation_id),
+      table_name: 'regulatory_library',
+      record_id: row.regulation_id || null,
+      field_name: column,
+      changed_by: actor,
+      change_reason: changeReason || null,
+      approval_status: 'pending'
+    };
+    const res = await fetch(SB + '/audit_log', {
+      method: 'POST',
+      headers: WH,
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok){
+      const txt = await res.text().catch(() => '');
+      console.warn('audit_log write failed:', res.status, txt.slice(0, 200));
+    }
+  } catch(err){
+    console.warn('audit_log write error:', err);
+  }
+}
+
+// ── Entity registry — keep in sync with index.html ENTITIES ──
+const ENTITIES = {
+  pspl:              { short: "PSPL",  short_name: "Phillip Securities", column: "pspl" },
+  pnpl:              { short: "PNPL",  short_name: "Phillip Nova",       column: "pnpl" },
+  pcm:               { short: "PCM",   short_name: "Phillip Capital Mgmt", column: "pcm" },
+  ppe:               { short: "PPE",   short_name: "Phillip Private Equity", column: "ppe" },
+  quann_prestige:    { short: "QUANN", short_name: "Quann Prestige",     column: "quann_prestige" },
+  phillip_financial: { short: "PFN",   short_name: "Phillip Financial",  column: "phillip_financial" },
+  psr:               { short: "PSR",   short_name: "Phillip Securities Research", column: "psr" },
+  phillip_trustee:   { short: "PT",    short_name: "Phillip Trustee",    column: "phillip_trustee" },
+  finance_buddy:     { short: "FBPL",  short_name: "Finance Buddy",      column: "finance_buddy" }
+};
+const ENTITY_KEYS = Object.keys(ENTITIES);
+
+// ── State ──
+let regs = [];
+let filtered = [];
+let currentPage = 1;
+const PAGE_SIZE = 50;
+let sortKey = 'regulation_code';
+let sortDir = 'asc';
+let cardFilter = null;  // null | 'all' | 'mas-notices' | 'acts' | 'no-scope' | 'non-active'
+let activeRow = null;
+let editMode = false;     // toggled from drawer
+let pendingSaves = 0;
+
+// ── Toast notifications ──
+function toast(kind, msg, ms){
+  const existing = document.querySelector('.toast');
+  if(existing) existing.remove();
+  const t = document.createElement('div');
+  t.className = 'toast toast-' + kind;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 220); }, ms || 2400);
+}
+
+// ── HTML escape helper ──
+function esc(s){
+  if(s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ── Sidebar collapse ──
+function toggleSidebar(){
+  const app = document.getElementById('app');
+  app.classList.toggle('sidebar-collapsed');
+  try { sessionStorage.setItem('lib_sidebar_collapsed', app.classList.contains('sidebar-collapsed') ? '1' : '0'); } catch(e){}
+}
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    if(sessionStorage.getItem('lib_sidebar_collapsed') === '1'){
+      document.getElementById('app').classList.add('sidebar-collapsed');
+    }
+  } catch(e){}
+});
+
+// ── Status helpers ──
+function setStatus(state, txt){
+  const sb = document.getElementById('statusbar');
+  sb.classList.remove('connected','error');
+  if(state) sb.classList.add(state);
+  document.getElementById('status-text').textContent = txt;
+  document.getElementById('status-time').textContent = new Date().toLocaleTimeString('en-SG',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DATA LOAD
+// ═══════════════════════════════════════════════════════════════
+async function loadAll(){
+  setStatus('', 'Loading library…');
+  try {
+    const res = await fetch(`${SB}/regulatory_library?select=regulation_id,regulation_code,regulation,regulator,content_type,regulation_reference,section_title,description,status,implementation_date,effective_repeal_date,remarks,topic,sub_topic,url,update_date,created_at,updated_at,updated_by,record_status,review_status,last_reviewed_at,last_reviewed_by,pspl,pnpl,pcm,ppe,quann_prestige,phillip_financial,psr,phillip_trustee,finance_buddy&order=regulation_code.asc&limit=10000`, {headers:RH});
+    if(!res.ok) throw new Error(`Library load failed (${res.status})`);
+    regs = await res.json();
+
+    setStatus('connected', `Connected · ${regs.length.toLocaleString()} library rows · master CRUD layer`);
+    populateFilterDropdowns();
+    refreshSummary();
+    applyFilters();
+  } catch(err){
+    console.error(err);
+    setStatus('error', `Error: ${err.message}`);
+    document.getElementById('table-host').innerHTML = `<div class="empty">Failed to load library data.<div class="hint">${esc(err.message)}</div></div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SUMMARY CARDS
+// ═══════════════════════════════════════════════════════════════
+function hasAnyEntityScope(r){
+  return ENTITY_KEYS.some(k => r[ENTITIES[k].column] === 'y');
+}
+
+function isNonActiveStatus(r){
+  const s = (r.status || 'Active').toLowerCase();
+  const rs = (r.record_status || 'published').toLowerCase();
+  const review = (r.review_status || 'not_required').toLowerCase();
+  return rs !== 'published' || review === 'pending' || review === 'review_required' || s !== 'active' || s.includes('review') || s.includes('repeal') || s.includes('delete') || s.includes('supersed');
+}
+
+function refreshSummary(){
+  const total = regs.length;
+  const mas = regs.filter(r => r.regulator === 'MAS' && (r.content_type || '').toLowerCase().includes('notice')).length;
+  const acts = regs.filter(r => {
+    const ct = (r.content_type || '').toLowerCase();
+    return ct === 'act' || ct.includes('regulation') || ct === 'regulations';
+  }).length;
+  const noScope = regs.filter(r => !hasAnyEntityScope(r)).length;
+  const nonActive = regs.filter(isNonActiveStatus).length;
+
+  document.getElementById('sc-total').textContent      = total.toLocaleString();
+  document.getElementById('sc-mas').textContent        = mas.toLocaleString();
+  document.getElementById('sc-acts').textContent       = acts.toLocaleString();
+  document.getElementById('sc-no-scope').textContent   = noScope.toLocaleString();
+  document.getElementById('sc-non-active').textContent = nonActive.toLocaleString();
+}
+
+function setCardFilter(key){
+  // Toggle off if already active
+  if(cardFilter === key){
+    cardFilter = null;
+  } else {
+    cardFilter = key;
+  }
+  document.querySelectorAll('.sc').forEach(el => {
+    el.classList.toggle('on', el.dataset.card === cardFilter);
+  });
+  currentPage = 1;
+  applyFilters();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FILTER POPULATION
+// ═══════════════════════════════════════════════════════════════
+function populateFilterDropdowns(){
+  const uniq = (key) => [...new Set(regs.map(r => r[key]).filter(Boolean))].sort();
+  const fillSelect = (id, values) => {
+    const sel = document.getElementById(id);
+    const cur = sel.value;
+    const firstOpt = sel.options[0].outerHTML;
+    sel.innerHTML = firstOpt + values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    sel.value = cur;
+  };
+  fillSelect('f-regulator', uniq('regulator'));
+  fillSelect('f-topic', uniq('topic'));
+  fillSelect('f-status', uniq('status'));
+  fillSelect('f-type', uniq('content_type'));
+
+  // Entity dropdown — enumerate ENTITY_KEYS
+  const eSel = document.getElementById('f-entity');
+  eSel.innerHTML = '<option value="">All entities</option>' +
+    ENTITY_KEYS.map(k => `<option value="${k}">${esc(ENTITIES[k].short)} — ${esc(ENTITIES[k].short_name)}</option>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FILTER + SEARCH + SORT PIPELINE
+// ═══════════════════════════════════════════════════════════════
+function applyFilters(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const fReg  = document.getElementById('f-regulator').value;
+  const fEnt  = document.getElementById('f-entity').value;
+  const fTop  = document.getElementById('f-topic').value;
+  const fStat = document.getElementById('f-status').value;
+  const fType = document.getElementById('f-type').value;
+
+  document.getElementById('search-clear').style.display = q ? 'inline-block' : 'none';
+
+  let pool = regs.slice();
+
+  // Card filter
+  if(cardFilter === 'mas-notices'){
+    pool = pool.filter(r => r.regulator === 'MAS' && (r.content_type || '').toLowerCase().includes('notice'));
+  } else if(cardFilter === 'acts'){
+    pool = pool.filter(r => {
+      const ct = (r.content_type || '').toLowerCase();
+      return ct === 'act' || ct.includes('regulation') || ct === 'regulations';
+    });
+  } else if(cardFilter === 'no-scope'){
+    pool = pool.filter(r => !hasAnyEntityScope(r));
+  } else if(cardFilter === 'non-active'){
+    pool = pool.filter(isNonActiveStatus);
+  }
+
+  // Search
+  if(q){
+    pool = pool.filter(r => {
+      const blob = [r.regulation_code, r.regulation, r.regulator, r.topic, r.sub_topic,
+                    r.section_title, r.description, r.regulation_reference, r.content_type]
+                    .filter(Boolean).join(' ').toLowerCase();
+      return blob.includes(q);
+    });
+  }
+
+  // Filter chips
+  if(fReg)  pool = pool.filter(r => r.regulator === fReg);
+  if(fTop)  pool = pool.filter(r => r.topic === fTop);
+  if(fStat) pool = pool.filter(r => r.status === fStat);
+  if(fType) pool = pool.filter(r => r.content_type === fType);
+  if(fEnt)  pool = pool.filter(r => r[ENTITIES[fEnt].column] === 'y');
+
+  // Sort
+  pool.sort((a, b) => {
+    const av = a[sortKey] ?? '';
+    const bv = b[sortKey] ?? '';
+    if(av < bv) return sortDir === 'asc' ? -1 : 1;
+    if(av > bv) return sortDir === 'asc' ?  1 : -1;
+    return 0;
+  });
+
+  filtered = pool;
+  // Reset page if current page is now out of range
+  const maxPage = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if(currentPage > maxPage) currentPage = 1;
+  renderTable();
+  renderPagination();
+  renderActiveFilterSummary();
+}
+
+function clearAllFilters(){
+  ['f-regulator','f-entity','f-topic','f-status','f-type'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('search').value = '';
+  cardFilter = null;
+  document.querySelectorAll('.sc').forEach(el => el.classList.remove('on'));
+  currentPage = 1;
+  applyFilters();
+}
+
+function clearSearch(){
+  document.getElementById('search').value = '';
+  applyFilters();
+}
+
+function renderActiveFilterSummary(){
+  const parts = [];
+  if(cardFilter) parts.push(`card: ${cardFilter}`);
+  ['f-regulator','f-entity','f-topic','f-status','f-type'].forEach(id => {
+    const v = document.getElementById(id).value;
+    if(v){
+      const label = id.replace('f-','');
+      const display = id === 'f-entity' ? (ENTITIES[v]?.short || v) : v;
+      parts.push(`${label}: ${display}`);
+    }
+  });
+  document.getElementById('active-filter-summary').textContent = parts.length ? `Filters: ${parts.join(' · ')}` : '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  TABLE RENDERING
+// ═══════════════════════════════════════════════════════════════
+function renderTable(){
+  const total = filtered.length;
+  document.getElementById('row-count').textContent = total.toLocaleString();
+
+  if(total === 0){
+    document.getElementById('table-host').innerHTML = `<div class="empty">No entries match the current filters.<div class="hint">Try clearing a filter or refining your search.</div></div>`;
+    document.getElementById('pagination').style.display = 'none';
+    return;
+  }
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, total);
+  const pageRows = filtered.slice(start, end);
+
+  const sortArrow = (k) => sortKey === k ? `<span class="sort-arrow">${sortDir === 'asc' ? '▲' : '▼'}</span>` : `<span class="sort-arrow">▴▾</span>`;
+  const sortClass = (k) => sortKey === k ? 'sorted' : '';
+
+  const html = `
+    <table class="lib-table">
+      <thead>
+        <tr>
+          <th class="${sortClass('regulation_code')}" onclick="setSort('regulation_code')" style="width:130px">Code ${sortArrow('regulation_code')}</th>
+          <th class="${sortClass('regulation_reference')}" onclick="setSort('regulation_reference')" style="width:80px">Ref ${sortArrow('regulation_reference')}</th>
+          <th class="${sortClass('regulation')}" onclick="setSort('regulation')">Title ${sortArrow('regulation')}</th>
+          <th class="${sortClass('regulator')}" onclick="setSort('regulator')" style="width:80px">Regulator ${sortArrow('regulator')}</th>
+          <th class="${sortClass('content_type')}" onclick="setSort('content_type')" style="width:110px">Type ${sortArrow('content_type')}</th>
+          <th class="${sortClass('topic')}" onclick="setSort('topic')" style="width:140px">Topic ${sortArrow('topic')}</th>
+          <th style="width:200px">Entities</th>
+          <th class="${sortClass('status')}" onclick="setSort('status')" style="width:90px">Status ${sortArrow('status')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${pageRows.map(r => renderRow(r)).join('')}
+      </tbody>
+    </table>
+  `;
+  document.getElementById('table-host').innerHTML = html;
+  document.getElementById('pagination').style.display = 'flex';
+}
+
+function renderRow(r){
+  // Entity pips
+  const entHtml = ENTITY_KEYS.map(k => {
+    const on = r[ENTITIES[k].column] === 'y';
+    return on ? `<span class="ent-pip on" title="${esc(ENTITIES[k].short_name)}">${esc(ENTITIES[k].short)}</span>` : '';
+  }).filter(Boolean).join('');
+
+  const status = (r.status || 'Active').toLowerCase();
+  const recordStatus = (r.record_status || 'published').toLowerCase();
+  const statusClass = recordStatus === 'archived' ? 'archived' : (status === 'active' ? 'active' : (status.includes('delete') || status.includes('repeal') ? 'repealed' : 'review'));
+  const statusText = r.status || 'Active';
+  const recordText = recordStatusLabel(r.record_status);
+
+  return `
+    <tr onclick="openDrawer('${esc(r.regulation_id)}')" data-id="${esc(r.regulation_id)}">
+      <td><span class="code-cell">${esc(r.regulation_code || '—')}</span></td>
+      <td><span class="ref-cell">${esc(r.regulation_reference || '—')}</span></td>
+      <td>
+        <div class="title-cell">${esc(r.regulation || r.section_title || r.regulation_code || '—')}
+        ${r.section_title && r.section_title !== r.regulation ? `<span class="desc">§ ${esc(r.section_title)}</span>` : ''}
+        </div>
+      </td>
+      <td>${esc(r.regulator || '—')}</td>
+      <td>${esc(r.content_type || '—')}</td>
+      <td>${esc(r.topic || r.sub_topic || '—')}</td>
+      <td><div class="entities-cell">${entHtml || '<span class="muted" style="font-size:10px">none</span>'}</div></td>
+      <td><div class="status-cell"><span class="status-pip ${statusClass}">${esc(statusText)}</span><span class="record-pip ${esc(recordStatus)}">${esc(recordText)}</span></div></td>
+    </tr>
+  `;
+}
+
+function setSort(key){
+  if(sortKey === key){
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortKey = key;
+    sortDir = 'asc';
+  }
+  applyFilters();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PAGINATION
+// ═══════════════════════════════════════════════════════════════
+function renderPagination(){
+  const total = filtered.length;
+  const maxPage = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const start = (currentPage - 1) * PAGE_SIZE + 1;
+  const end = Math.min(currentPage * PAGE_SIZE, total);
+
+  document.getElementById('pg-info').textContent = total > 0
+    ? `Showing ${start.toLocaleString()}–${end.toLocaleString()} of ${total.toLocaleString()}`
+    : '';
+
+  // Build page button range — always show first, last, current ± 2
+  const buttons = [];
+  const pushBtn = (label, page, opts={}) => {
+    const disabled = opts.disabled ? 'disabled' : '';
+    const on = opts.on ? 'on' : '';
+    buttons.push(`<button class="pg-btn ${on}" ${disabled} onclick="goToPage(${page})">${esc(label)}</button>`);
+  };
+  const pushEllipsis = () => buttons.push(`<span style="padding:5px 4px;color:var(--ink3)">…</span>`);
+
+  pushBtn('‹', currentPage - 1, {disabled: currentPage === 1});
+
+  const pages = new Set([1, maxPage, currentPage - 1, currentPage, currentPage + 1]);
+  const sortedPages = [...pages].filter(p => p >= 1 && p <= maxPage).sort((a,b) => a - b);
+  let prev = 0;
+  for(const p of sortedPages){
+    if(p - prev > 1) pushEllipsis();
+    pushBtn(p.toString(), p, {on: p === currentPage});
+    prev = p;
+  }
+
+  pushBtn('›', currentPage + 1, {disabled: currentPage === maxPage});
+
+  document.getElementById('pg-buttons').innerHTML = buttons.join('');
+}
+
+function goToPage(p){
+  const maxPage = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  currentPage = Math.max(1, Math.min(p, maxPage));
+  renderTable();
+  renderPagination();
+  document.querySelector('.table-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  DRAWER (row detail)
+// ═══════════════════════════════════════════════════════════════
+function openDrawer(regulationId){
+  const r = regs.find(x => x.regulation_id === regulationId);
+  if(!r) return;
+  activeRow = r;
+
+  // Highlight selected row
+  document.querySelectorAll('.lib-table tbody tr').forEach(tr => tr.classList.remove('selected'));
+  const tr = document.querySelector(`.lib-table tbody tr[data-id="${CSS.escape(regulationId)}"]`);
+  if(tr) tr.classList.add('selected');
+
+  document.getElementById('d-code').textContent = r.regulation_code || '—';
+  const titleEl = document.getElementById('d-title');
+  titleEl.textContent = r.regulation || r.section_title || '—';
+  titleEl.dataset.editId = 'regulation-field';
+  titleEl.dataset.column = 'regulation';
+
+  // Applicability only — OCM mapping detail intentionally belongs in the entity portal
+  const applicableCount = ENTITY_KEYS.filter(k => r[ENTITIES[k].column] === 'y').length;
+  const applicabilityHtml = ENTITY_KEYS.map(k => {
+    const on = r[ENTITIES[k].column] === 'y';
+    return `
+      <div class="ent-toggle ${on ? 'on' : ''}" data-entity="${esc(k)}" title="${on ? 'Applicable' : 'Not applicable'}">
+        <div>
+          <div class="ent-short">${esc(ENTITIES[k].short)}</div>
+          <div class="ent-name">${esc(ENTITIES[k].short_name)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('drawer-body').innerHTML = `
+    <div class="drawer-section">
+      <h3>Identification</h3>
+      <div class="drawer-field"><div class="k">Regulation ID</div><div class="v mono">${esc(r.regulation_id)}</div></div>
+      <div class="drawer-field"><div class="k">Code</div><div class="v mono" data-edit-id="code-field">${esc(r.regulation_code || '')}</div></div>
+      <div class="drawer-field"><div class="k">Reference</div><div class="v mono" data-edit-id="reference-field">${esc(r.regulation_reference || '')}</div></div>
+      <div class="drawer-field"><div class="k">Section title</div><div class="v" data-edit-id="sectiontitle-field">${esc(r.section_title || '')}</div></div>
+      <div class="drawer-field"><div class="k">Regulator</div><div class="v" data-edit-id="regulator-field">${esc(r.regulator || '')}</div></div>
+      <div class="drawer-field"><div class="k">Content type</div><div class="v" data-edit-id="contenttype-field">${esc(r.content_type || '')}</div></div>
+      <div class="drawer-field"><div class="k">Regulatory status</div><div class="v" data-edit-id="status-field">${esc(r.status || 'Active')}</div></div>
+      <div class="drawer-field"><div class="k">Record status</div><div class="v" data-edit-id="recordstatus-field">${esc(recordStatusLabel(r.record_status))}</div></div>
+      <div class="drawer-field"><div class="k">Review status</div><div class="v" data-edit-id="reviewstatus-field">${esc(reviewStatusLabel(r.review_status))}</div></div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Description</h3>
+      <div style="font-size:12.5px;line-height:1.6;white-space:pre-wrap" data-edit-id="description-field">${esc(r.description || '')}</div>
+    </div>
+
+    <div class="drawer-section">
+      <h3>Classification & source</h3>
+      <div class="drawer-field"><div class="k">Topic</div><div class="v" data-edit-id="topic-field">${esc(r.topic || '')}</div></div>
+      <div class="drawer-field"><div class="k">Sub-topic</div><div class="v" data-edit-id="subtopic-field">${esc(r.sub_topic || '')}</div></div>
+      <div class="drawer-field"><div class="k">Implementation date</div><div class="v" data-edit-id="impldate-field">${esc(r.implementation_date || '')}</div></div>
+      <div class="drawer-field"><div class="k">Effective / repeal date</div><div class="v" data-edit-id="effectivedate-field">${esc(r.effective_repeal_date || '')}</div></div>
+      <div class="drawer-field"><div class="k">Update date</div><div class="v" data-edit-id="updatedate-field">${esc(r.update_date || '')}</div></div>
+      <div class="drawer-field"><div class="k">Source URL</div><div class="v" data-edit-id="url-field">${esc(r.url || '')}</div></div>
+      <div class="drawer-field"><div class="k">Remarks</div><div class="v" data-edit-id="remarks-field">${esc(r.remarks || '')}</div></div>
+      ${r.created_at ? `<div class="drawer-field"><div class="k">Created at</div><div class="v muted">${esc(r.created_at)}</div></div>` : ''}
+      ${r.updated_at ? `<div class="drawer-field"><div class="k">Updated at</div><div class="v muted">${esc(r.updated_at)}</div></div>` : ''}
+      ${r.updated_by ? `<div class="drawer-field"><div class="k">Updated by</div><div class="v muted">${esc(r.updated_by)}</div></div>` : ''}
+    </div>
+
+    <div class="drawer-section">
+      <h3>Entity applicability</h3>
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:9px">${applicableCount} of ${ENTITY_KEYS.length} entities tagged as applicable. Toggle entity tags in edit mode.</div>
+      <div class="drawer-applicability">${applicabilityHtml}</div>
+    </div>
+  `;
+
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-backdrop').classList.add('open');
+}
+
+function closeDrawer(){
+  // Always exit edit mode when closing
+  if(editMode){
+    editMode = false;
+    document.getElementById('drawer').classList.remove('edit-mode');
+    document.getElementById('edit-toggle').classList.remove('on');
+    document.getElementById('edit-toggle').textContent = 'Edit';
+  }
+  document.getElementById('archive-btn').style.display = 'none';
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-backdrop').classList.remove('open');
+  document.querySelectorAll('.lib-table tbody tr').forEach(tr => tr.classList.remove('selected'));
+  activeRow = null;
+}
+
+window.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeDrawer();
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  BIND search input with debounce
+// ═══════════════════════════════════════════════════════════════
+let searchTimer = null;
+document.getElementById('search').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    currentPage = 1;
+    applyFilters();
+  }, 180);
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  EDIT MODE + WRITES (no auth, no audit — for testing only)
+// ═══════════════════════════════════════════════════════════════
+function toggleEditMode(){
+  if(!activeRow) return;
+  editMode = !editMode;
+  const drawer = document.getElementById('drawer');
+  const btn = document.getElementById('edit-toggle');
+  const note = document.getElementById('drawer-foot-note');
+  drawer.classList.toggle('edit-mode', editMode);
+  btn.classList.toggle('on', editMode);
+  btn.textContent = editMode ? 'Editing' : 'Edit';
+  if(editMode){
+    note.innerHTML = '<span class="lock-icon">✏️</span><span>Edit mode active · material changes require a reason and are audit logged</span>';
+    document.getElementById('archive-btn').style.display = '';
+    enableInlineEdits();
+    enableEntityToggles();
+  } else {
+    note.innerHTML = '<span class="lock-icon">🔓</span><span>View mode · click <strong>Edit</strong> to modify this regulation</span>';
+    document.getElementById('archive-btn').style.display = 'none';
+    disableInlineEdits();
+  }
+}
+
+function enableInlineEdits(){
+  // Make main source fields editable. OCM mappings are intentionally not edited here.
+  const editableFields = [
+    {selector: 'regulation-field',   column: 'regulation'},
+    {selector: 'code-field',         column: 'regulation_code'},
+    {selector: 'reference-field',    column: 'regulation_reference'},
+    {selector: 'sectiontitle-field', column: 'section_title'},
+    {selector: 'regulator-field',    column: 'regulator'},
+    {selector: 'contenttype-field',  column: 'content_type'},
+    {selector: 'description-field',  column: 'description'},
+    {selector: 'topic-field',        column: 'topic'},
+    {selector: 'subtopic-field',     column: 'sub_topic'},
+    {selector: 'status-field',       column: 'status'},
+    {selector: 'recordstatus-field', column: 'record_status'},
+    {selector: 'reviewstatus-field', column: 'review_status'},
+    {selector: 'impldate-field',     column: 'implementation_date'},
+    {selector: 'effectivedate-field',column: 'effective_repeal_date'},
+    {selector: 'updatedate-field',   column: 'update_date'},
+    {selector: 'url-field',          column: 'url'},
+    {selector: 'remarks-field',      column: 'remarks'}
+  ];
+  editableFields.forEach(({selector, column}) => {
+    const el = document.querySelector('[data-edit-id="'+selector+'"]');
+    if(!el) return;
+    el.contentEditable = 'true';
+    el.classList.add('editable');
+    el.dataset.column = column;
+    // Save on blur
+    el.addEventListener('blur', handleInlineSave, {once: false});
+  });
+}
+
+function disableInlineEdits(){
+  document.querySelectorAll('.drawer .editable').forEach(el => {
+    el.contentEditable = 'false';
+    el.classList.remove('editable');
+  });
+}
+
+async function handleInlineSave(ev){
+  if(!activeRow) return;
+  const el = ev.currentTarget;
+  const column = el.dataset.column;
+  const newVal = el.textContent.trim();
+  const oldVal = (activeRow[column] || '').toString().trim();
+  const normalisedNewVal = normaliseFieldValue(column, newVal);
+  if(normalisedNewVal === oldVal) {
+    el.textContent = displayFieldValue(column, oldVal);
+    return;
+  }
+
+  const saveVal = (normalisedNewVal === '' && column !== 'status' && column !== 'record_status' && column !== 'review_status') ? null : normalisedNewVal;
+  const reasonResult = requestChangeReason(column, oldVal || null, saveVal);
+  if(!reasonResult.ok){
+    el.textContent = displayFieldValue(column, oldVal);
+    return;
+  }
+
+  el.classList.add('field-saving');
+  try {
+    await saveField(activeRow.regulation_id, column, saveVal);
+    activeRow[column] = saveVal;
+    activeRow.updated_at = new Date().toISOString();
+    activeRow.updated_by = getActorName();
+    if(MATERIAL_FIELDS.has(column) && column !== 'review_status') activeRow.review_status = 'pending';
+    // Update the row in regs[] so the table reflects it on next render
+    const idx = regs.findIndex(r => r.regulation_id === activeRow.regulation_id);
+    if(idx >= 0){ regs[idx][column] = saveVal; regs[idx].updated_at = activeRow.updated_at; regs[idx].updated_by = activeRow.updated_by; if(MATERIAL_FIELDS.has(column) && column !== 'review_status') regs[idx].review_status = activeRow.review_status; }
+    await writeAuditLog(activeRow, column, oldVal || null, saveVal, reasonResult.reason);
+    toast('ok', `Saved · ${column} · audit logged`);
+    // Re-render the underlying table row + summary
+    refreshSummary();
+    renderTable();
+  } catch(err){
+    el.textContent = displayFieldValue(column, oldVal);  // revert
+    toast('err', `Save failed: ${err.message}`);
+  } finally {
+    el.classList.remove('field-saving');
+  }
+}
+
+function enableEntityToggles(){
+  document.querySelectorAll('.drawer-applicability .ent-toggle').forEach(el => {
+    el.onclick = handleEntityToggle;
+  });
+}
+
+async function handleEntityToggle(ev){
+  if(!activeRow || !editMode) return;
+  const el = ev.currentTarget;
+  const entityKey = el.dataset.entity;
+  const column = ENTITIES[entityKey].column;
+  const wasOn = el.classList.contains('on');
+  const newVal = wasOn ? null : 'y';
+
+  const oldVal = wasOn ? 'y' : null;
+  const reasonResult = requestChangeReason(column, oldVal, newVal);
+  if(!reasonResult.ok) return;
+
+  el.classList.add('field-saving');
+  // Optimistic UI
+  el.classList.toggle('on', !wasOn);
+  try {
+    await saveField(activeRow.regulation_id, column, newVal);
+    activeRow[column] = newVal;
+    activeRow.updated_at = new Date().toISOString();
+    activeRow.updated_by = getActorName();
+    activeRow.review_status = 'pending';
+    const idx = regs.findIndex(r => r.regulation_id === activeRow.regulation_id);
+    if(idx >= 0){ regs[idx][column] = newVal; regs[idx].updated_at = activeRow.updated_at; regs[idx].updated_by = activeRow.updated_by; regs[idx].review_status = 'pending'; }
+    // Audit: entity toggle is material — write audit_log row
+    await writeAuditLog(activeRow, column, oldVal, newVal, reasonResult.reason);
+    toast('ok', `${ENTITIES[entityKey].short} ${wasOn ? 'removed' : 'tagged'} · audit logged`);
+    refreshSummary();
+    renderTable();
+  } catch(err){
+    // Revert
+    el.classList.toggle('on', wasOn);
+    toast('err', `Save failed: ${err.message}`);
+  } finally {
+    el.classList.remove('field-saving');
+  }
+}
+
+async function saveField(regulationId, column, value){
+  pendingSaves++;
+  const body = {
+    [column]: value,
+    updated_at: new Date().toISOString(),
+    updated_by: getActorName()
+  };
+  if(MATERIAL_FIELDS.has(column) && column !== 'review_status') body.review_status = 'pending';
+  const url = `${SB}/regulatory_library?regulation_id=eq.${encodeURIComponent(regulationId)}`;
+  const res = await fetch(url, {method: 'PATCH', headers: WH, body: JSON.stringify(body)});
+  pendingSaves--;
+  if(!res.ok){
+    const txt = await res.text().catch(() => '');
+    throw new Error(`HTTP ${res.status}${txt ? ' — ' + txt.slice(0, 120) : ''}`);
+  }
+  return res.json();
+}
+
+async function reloadData(){
+  const btn = document.getElementById('refresh-btn');
+  btn.disabled = true;
+  btn.textContent = '⟳ Loading…';
+  try {
+    await loadAll();
+    toast('ok', 'Data refreshed');
+  } catch(err){
+    toast('err', `Refresh failed: ${err.message}`);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⟳ Refresh';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CREATE — New Regulation
+// ═══════════════════════════════════════════════════════════════
+function openCreateModal(){
+  // Populate datalists from existing data
+  const uniq = (key) => [...new Set(regs.map(r => r[key]).filter(Boolean))].sort();
+  const fillDatalist = (id, values) => {
+    document.getElementById(id).innerHTML = values.map(v => `<option value="${esc(v)}">`).join('');
+  };
+  fillDatalist('cm-regulator-list', uniq('regulator'));
+  fillDatalist('cm-content-type-list', uniq('content_type'));
+  fillDatalist('cm-topic-list', uniq('topic'));
+
+  // Clear all fields
+  ['cm-code','cm-reference','cm-title','cm-section-title','cm-description',
+   'cm-regulator','cm-content-type','cm-topic','cm-subtopic','cm-url','cm-impl-date','cm-effective-date','cm-remarks'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('cm-status').value = 'Active';
+
+  // Build entity checkboxes
+  document.getElementById('cm-entities').innerHTML = ENTITY_KEYS.map(k => `
+    <label class="entity-check" data-entity-key="${esc(k)}">
+      <input type="checkbox" id="cm-ent-${esc(k)}">
+      <span><strong>${esc(ENTITIES[k].short)}</strong> <span style="opacity:0.7">${esc(ENTITIES[k].short_name)}</span></span>
+    </label>
+  `).join('');
+  // Wire highlight-on-check
+  document.querySelectorAll('#cm-entities .entity-check').forEach(el => {
+    const cb = el.querySelector('input');
+    cb.addEventListener('change', () => el.classList.toggle('on', cb.checked));
+  });
+
+  document.getElementById('create-modal-backdrop').classList.add('open');
+  setTimeout(() => document.getElementById('cm-code').focus(), 100);
+}
+
+function closeCreateModal(){
+  document.getElementById('create-modal-backdrop').classList.remove('open');
+}
+
+async function submitCreate(){
+  const code = document.getElementById('cm-code').value.trim();
+  const title = document.getElementById('cm-title').value.trim();
+  const regulator = document.getElementById('cm-regulator').value.trim();
+
+  // Validation
+  if(!code){ toast('err', 'Code is required'); document.getElementById('cm-code').focus(); return; }
+  if(!title){ toast('err', 'Title is required'); document.getElementById('cm-title').focus(); return; }
+  if(!regulator){ toast('err', 'Regulator is required'); document.getElementById('cm-regulator').focus(); return; }
+
+  const reasonResult = requestChangeReason('create', null, code);
+  if(!reasonResult.ok) return;
+  const actor = getActorName();
+
+  const submitBtn = document.getElementById('cm-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating…';
+
+  // Generate a regulation_id — use a code-based unique key
+  // Format: <CODE_SLUG>-<TIMESTAMP6>
+  const slug = code.toUpperCase().replace(/[^A-Z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+  const stamp = Date.now().toString(36).slice(-6).toUpperCase();
+  const regId = slug + '-' + stamp;
+
+  // Build payload
+  const payload = {
+    regulation_id: regId,
+    regulation_code: code,
+    regulation: title,
+    regulator: regulator,
+    regulation_reference: document.getElementById('cm-reference').value.trim() || null,
+    section_title: document.getElementById('cm-section-title').value.trim() || null,
+    description: document.getElementById('cm-description').value.trim() || null,
+    content_type: document.getElementById('cm-content-type').value.trim() || null,
+    topic: document.getElementById('cm-topic').value.trim() || null,
+    sub_topic: document.getElementById('cm-subtopic').value.trim() || null,
+    status: document.getElementById('cm-status').value || 'Active',
+    record_status: 'published',
+    review_status: 'pending',
+    updated_at: new Date().toISOString(),
+    updated_by: actor,
+    url: document.getElementById('cm-url').value.trim() || null,
+    implementation_date: document.getElementById('cm-impl-date').value || null,
+    effective_repeal_date: document.getElementById('cm-effective-date').value.trim() || null,
+    remarks: document.getElementById('cm-remarks').value.trim() || null
+  };
+  // Entity flags
+  ENTITY_KEYS.forEach(k => {
+    const cb = document.getElementById('cm-ent-' + k);
+    payload[ENTITIES[k].column] = cb && cb.checked ? 'y' : null;
+  });
+
+  try {
+    const res = await fetch(SB + '/regulatory_library', {
+      method: 'POST',
+      headers: WH,
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok){
+      const txt = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status} — ${txt.slice(0, 200)}`);
+    }
+    const created = await res.json();
+    const newRow = Array.isArray(created) ? created[0] : created;
+
+    // Add to local data
+    regs.unshift(newRow);
+
+    // Audit log — Create is material by definition
+    await writeAuditLog(newRow, 'create', null, code, reasonResult.reason).catch(()=>{}); 
+
+    toast('ok', `Created · ${code}`);
+    closeCreateModal();
+    refreshSummary();
+    populateFilterDropdowns();
+    applyFilters();
+    // Open the new row in drawer
+    setTimeout(() => openDrawer(regId), 200);
+  } catch(err){
+    toast('err', `Create failed: ${err.message}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Create regulation';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ARCHIVE — Soft-delete by moving the record to archived
+// ═══════════════════════════════════════════════════════════════
+async function archiveCurrent(){
+  if(!activeRow) return;
+  const code = activeRow.regulation_code || activeRow.regulation_id;
+  const confirmMsg = `Archive "${code}"?\n\nThis will move the record to Archived. The legal/regulatory status remains unchanged.`;
+  if(!confirm(confirmMsg)) return;
+
+  const oldStatus = activeRow.record_status || 'published';
+  const reasonResult = requestChangeReason('archive', oldStatus, 'archived');
+  if(!reasonResult.ok) return;
+  const archiveBtn = document.getElementById('archive-btn');
+  archiveBtn.disabled = true;
+  archiveBtn.textContent = 'Archiving…';
+
+  try {
+    await saveField(activeRow.regulation_id, 'record_status', 'archived');
+    activeRow.record_status = 'archived';
+    activeRow.updated_at = new Date().toISOString();
+    activeRow.updated_by = getActorName();
+    activeRow.review_status = 'pending';
+    const idx = regs.findIndex(r => r.regulation_id === activeRow.regulation_id);
+    if(idx >= 0){ regs[idx].record_status = 'archived'; regs[idx].updated_at = activeRow.updated_at; regs[idx].updated_by = activeRow.updated_by; regs[idx].review_status = 'pending'; }
+    // Audit (record_status is material)
+    await writeAuditLog(activeRow, 'archive', oldStatus, 'archived', reasonResult.reason);
+    toast('ok', `Archived · ${code}`);
+    closeDrawer();
+    refreshSummary();
+    applyFilters();
+  } catch(err){
+    toast('err', `Archive failed: ${err.message}`);
+    archiveBtn.disabled = false;
+    archiveBtn.textContent = '🗑 Archive';
+  }
+}
+
+// Esc closes Create modal too
+window.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if(document.getElementById('create-modal-backdrop').classList.contains('open')){
+      closeCreateModal();
+    }
+  }
+});
+
+// ── Boot ──
+loadAll();
+</script>
+</body>
+</html>
